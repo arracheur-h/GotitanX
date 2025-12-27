@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitanX - Détection IP</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #000000;
+            --bg-card: #0a0a0a;
+            --accent: #00ff88;
+            --accent-glow: rgba(0, 255, 136, 0.3);
+            --text: #ffffff;
+            --text-dim: #cccccc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Effet d'arrière-plan avec étoiles */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .star {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+            animation: twinkle linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { 
+                opacity: 0.4;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 1;
+                transform: scale(1.8);
+            }
+        }
+
+        @keyframes moveRandom {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(var(--x1), var(--y1)); }
+            50% { transform: translate(var(--x2), var(--y2)); }
+            75% { transform: translate(var(--x3), var(--y3)); }
+            100% { transform: translate(0, 0); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 30px;
+            padding: 60px 40px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 0 2px rgba(255, 255, 255, 0.3);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            animation: apparition 0.8s ease-out;
+        }
+
+        @keyframes apparition {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        h1 {
+            font-weight: 800;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            color: #ffffff;
+            text-shadow: 
+                0 0 10px rgba(255, 255, 255, 0.8),
+                0 0 20px rgba(255, 255, 255, 0.6),
+                3px 3px 15px rgba(255, 0, 0, 0.8),
+                5px 5px 20px rgba(255, 0, 0, 0.6);
+        }
+
+        .subtitle {
+            color: var(--text-dim);
+            font-size: 1.1em;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        /* Zone d'affichage de l'IP */
+        .ip-display {
+            background: var(--bg-dark);
+            border: 2px solid #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            position: relative;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+
+        .ip-label {
+            color: var(--text-dim);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .ip-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--accent);
+            text-shadow: 0 0 20px var(--accent-glow);
+            margin: 15px 0;
+            word-break: break-all;
+        }
+
+        .loading {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        /* Informations supplémentaires */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            background: var(--bg-dark);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            border-color: #ffffff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            transform: translateY(-5px);
+        }
+
+        .info-label {
+            color: var(--text-dim);
+            font-size: 0.85em;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-value {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text);
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        /* Bouton de rafraîchissement */
+        .refresh-btn {
+            background: linear-gradient(135deg, var(--accent), #7877c6);
+            color: var(--bg-dark);
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px var(--accent-glow);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+
+        .refresh-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Message d'erreur */
+        .error {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 40px;
+            color: var(--text-dim);
+            font-size: 0.9em;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .card {
+                padding: 40px 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .ip-value {
+                font-size: 1.8em;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animation de chargement */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--text-dim);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>GitanX</h1>
+
+            <div class="ip-display">
+                <div class="ip-value" id="ip-address">
+                    <span class="loading">Chargement<span class="spinner"></span></span>
+                </div>
+            </div>
+
+            <div class="info-grid" id="info-grid" style="display: none;">
+                <div class="info-card">
+                    <div class="info-label">Ville</div>
+                    <div class="info-value" id="city">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Pays</div>
+                    <div class="info-value" id="country">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Région</div>
+                    <div class="info-value" id="region">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Fuseau Horaire</div>
+                    <div class="info-value" id="timezone">-</div>
+                </div>
+            </div>
+
+            <button class="refresh-btn" onclick="obtenirIP()">🔄 Actualiser</button>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour obtenir l'adresse IP
+        async function obtenirIP() {
+            const ipElement = document.getElementById('ip-address');
+            const infoGrid = document.getElementById('info-grid');
+            
+            // Afficher le chargement
+            ipElement.innerHTML = '<span class="loading">Chargement<span class="spinner"></span></span>';
+            infoGrid.style.display = 'none';
+
+            try {
+                // Appel à l'API ipify pour obtenir l'IP
+                const reponseIP = await fetch('https://api.ipify.org?format=json');
+                const donneesIP = await reponseIP.json();
+                const ip = donneesIP.ip;
+
+                // Afficher l'IP
+                ipElement.textContent = ip;
+
+                // Obtenir des informations supplémentaires sur l'IP
+                try {
+                    const reponseInfo = await fetch(`https://ipapi.co/${ip}/json/`);
+                    const donneesInfo = await reponseInfo.json();
+
+                    // Afficher les informations
+                    document.getElementById('city').textContent = donneesInfo.city || 'Non disponible';
+                    document.getElementById('country').textContent = `${donneesInfo.country_name || '-'} ${donneesInfo.country_emoji || ''}`;
+                    document.getElementById('region').textContent = donneesInfo.region || 'Non disponible';
+                    document.getElementById('timezone').textContent = donneesInfo.timezone || 'Non disponible';
+
+                    infoGrid.style.display = 'grid';
+                } catch (erreurInfo) {
+                    console.log('Impossible de récupérer les informations détaillées');
+                    // On affiche quand même l'IP même si les infos détaillées échouent
+                }
+
+            } catch (erreur) {
+                // En cas d'erreur
+                ipElement.innerHTML = '<span class="error">❌ Impossible de récupérer l\'IP</span>';
+                console.error('Erreur:', erreur);
+            }
+        }
+
+        // Obtenir l'IP au chargement de la page
+        window.addEventListener('load', function() {
+            obtenirIP();
+            
+            // Mettre en plein écran automatiquement
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(err => {
+                    console.log('Plein écran non disponible:', err);
+                });
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+        });
+
+        // Message dans la console
+        console.log('🌐 Site de détection d\'IP');
+        console.log('💻 Ce site utilise l\'API ipify.org pour détecter votre adresse IP publique');
+
+        // Créer des étoiles animées de manière aléatoire
+        function creerEtoiles() {
+            const nombreEtoiles = 150;
+            const body = document.body;
+
+            for (let i = 0; i < nombreEtoiles; i++) {
+                const etoile = document.createElement('div');
+                etoile.className = 'star';
+                
+                // Position aléatoire
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                etoile.style.left = x + 'px';
+                etoile.style.top = y + 'px';
+                
+                // Taille aléatoire (2-4px pour plus de visibilité)
+                const taille = Math.random() * 2 + 2;
+                etoile.style.width = taille + 'px';
+                etoile.style.height = taille + 'px';
+                
+                // Durée d'animation aléatoire pour le scintillement
+                const dureeScintillement = Math.random() * 3 + 2;
+                etoile.style.animationDuration = dureeScintillement + 's';
+                
+                // Délai aléatoire pour désynchroniser les étoiles
+                etoile.style.animationDelay = Math.random() * 3 + 's';
+                
+                // Mouvement aléatoire
+                const x1 = (Math.random() - 0.5) * 100;
+                const y1 = (Math.random() - 0.5) * 100;
+                const x2 = (Math.random() - 0.5) * 100;
+                const y2 = (Math.random() - 0.5) * 100;
+                const x3 = (Math.random() - 0.5) * 100;
+                const y3 = (Math.random() - 0.5) * 100;
+                
+                etoile.style.setProperty('--x1', x1 + 'px');
+                etoile.style.setProperty('--y1', y1 + 'px');
+                etoile.style.setProperty('--x2', x2 + 'px');
+                etoile.style.setProperty('--y2', y2 + 'px');
+                etoile.style.setProperty('--x3', x3 + 'px');
+                etoile.style.setProperty('--y3', y3 + 'px');
+                
+                const dureeMouvement = Math.random() * 20 + 10;
+                etoile.style.animation = `twinkle ${dureeScintillement}s linear infinite, moveRandom ${dureeMouvement}s ease-in-out infinite`;
+                etoile.style.animationDelay = `${Math.random() * 3}s, ${Math.random() * 5}s`;
+                
+                body.appendChild(etoile);
+            }
+        }
+
+        // Créer les étoiles au chargement
+        creerEtoiles();
+    </script>
+</body>
+</html>
