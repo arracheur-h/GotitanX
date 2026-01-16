@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Windows</title>
     <style>
+        /* Styles pour les effets sonores */
+        .sound-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: 1px solid white;
+            padding: 5px 10px;
+            cursor: pointer;
+            z-index: 10000;
+            font-size: 12px;
+            display: none;
+        }
         * {
             margin: 0;
             padding: 0;
@@ -176,20 +190,79 @@
         }
 
         .click-instruction {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
-            padding: 15px 30px;
-            border-radius: 5px;
-            font-size: 16px;
-            animation: pulse 2s infinite;
+            display: none;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
+        /* Écran noir de hacking */
+        .hacking-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 40px;
+            overflow-y: auto;
+            display: none;
+            z-index: 9999;
+        }
+
+        .hacking-screen.active {
+            display: block;
+        }
+
+        .terminal-line {
+            margin: 3px 0;
+            font-size: 14px;
+        }
+
+        .terminal-line.red {
+            color: #ff0000;
+        }
+
+        .terminal-line.yellow {
+            color: #ffff00;
+        }
+
+        .terminal-line.cyan {
+            color: #00ffff;
+        }
+
+        .terminal-line.white {
+            color: #ffffff;
+        }
+
+        .cursor::after {
+            content: '█';
+            animation: blink-cursor 0.7s infinite;
+        }
+
+        @keyframes blink-cursor {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .skull {
+            font-size: 80px;
+            text-align: center;
+            margin: 40px 0;
+            color: #ff0000;
+            text-shadow: 0 0 20px #ff0000;
+        }
+
+        .glitch-text {
+            animation: glitch-anim 0.3s infinite;
+        }
+
+        @keyframes glitch-anim {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
         }
     </style>
 </head>
@@ -265,13 +338,16 @@
         </div>
     </div>
 
-    <div class="click-instruction">
-        👆 Cliquez n'importe où pour générer des erreurs
+    <!-- Écran de hacking -->
+    <div class="hacking-screen" id="hackingScreen">
+        <div id="hackTerminal"></div>
     </div>
 
     <script>
         let errorCount = 0;
         let progressValue = 0;
+        let clickHappened = false;
+        let hackingStarted = false;
         const progressElement = document.getElementById('progress');
 
         // Messages d'erreur variés
@@ -350,6 +426,21 @@
                 title: "Écran bleu",
                 message: "DRIVER_IRQL_NOT_LESS_OR_EQUAL. Votre système va redémarrer dans 60 secondes.",
                 icon: "💀"
+            },
+            {
+                title: "Accès refusé",
+                message: "Vous n'avez pas les autorisations nécessaires pour effectuer cette opération.",
+                icon: "🚫"
+            },
+            {
+                title: "Virus détecté",
+                message: "Attention! Un rootkit a été détecté sur votre système. Action immédiate requise!",
+                icon: "☠️"
+            },
+            {
+                title: "Erreur fatale",
+                message: "KERNEL_DATA_INPAGE_ERROR - Le système ne peut pas lire le fichier de pagination.",
+                icon: "❌"
             }
         ];
 
@@ -406,19 +497,22 @@
             
             closeBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                createErrorWindow(); // Créer une nouvelle erreur quand on ferme
+                createErrorWindow();
+                createErrorWindow();
                 errorWindow.remove();
             });
             
             okBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                createErrorWindow(); // Créer une nouvelle erreur quand on clique OK
+                createErrorWindow();
+                createErrorWindow();
                 errorWindow.remove();
             });
             
             cancelBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                createErrorWindow(); // Créer une nouvelle erreur quand on clique Annuler
+                createErrorWindow();
+                createErrorWindow();
                 errorWindow.remove();
             });
             
@@ -465,28 +559,247 @@
             }, 10);
         }
 
+        // Fonction pour obtenir l'IP et la localisation
+        async function getIPAndLocation() {
+            try {
+                // Récupérer l'IP
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                const ip = ipData.ip;
+                
+                // Récupérer la localisation avec l'IP
+                const locationResponse = await fetch(`https://ipapi.co/${ip}/json/`);
+                const locationData = await locationResponse.json();
+                
+                return {
+                    ip: ip,
+                    city: locationData.city || 'Unknown',
+                    region: locationData.region || 'Unknown',
+                    country: locationData.country_name || 'Unknown',
+                    postal: locationData.postal || 'Unknown',
+                    latitude: locationData.latitude || '0.0',
+                    longitude: locationData.longitude || '0.0',
+                    isp: locationData.org || 'Unknown ISP',
+                    timezone: locationData.timezone || 'Unknown'
+                };
+            } catch (error) {
+                // Données simulées si l'API ne fonctionne pas
+                return {
+                    ip: '192.168.' + Math.floor(Math.random() * 255) + '.' + Math.floor(Math.random() * 255),
+                    city: 'Paris',
+                    region: 'Île-de-France',
+                    country: 'France',
+                    postal: '75001',
+                    latitude: '48.8566',
+                    longitude: '2.3522',
+                    isp: 'Orange S.A.',
+                    timezone: 'Europe/Paris'
+                };
+            }
+        }
+
+        // Créer des sons synthétiques
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioContext;
+        
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new AudioContext();
+            }
+        }
+
+        // Son d'erreur Windows
+        function playErrorBeep() {
+            if (!audioContext) return;
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        // Son de typing pour le terminal
+        function playTypingSound() {
+            if (!audioContext) return;
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 200 + Math.random() * 100;
+            oscillator.type = 'square';
+            
+            gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.05);
+        }
+
+        // Son d'alerte critique
+        function playAlertSound() {
+            if (!audioContext) return;
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 1200;
+            oscillator.type = 'sawtooth';
+            
+            gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+        }
+
+        // Son de transfert de données
+        function playDataTransferSound() {
+            if (!audioContext) return;
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.value = 400 + i * 100;
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.1);
+                }, i * 50);
+            }
+        }
+
+        // Fonction pour l'écran de hacking
+        async function startHacking() {
+            if (hackingStarted) return;
+            hackingStarted = true;
+
+            const hackingScreen = document.getElementById('hackingScreen');
+            const terminal = document.getElementById('hackTerminal');
+            
+            hackingScreen.classList.add('active');
+
+            const userIP = await getIPAddress();
+
+            const hackingMessages = [
+                { text: '[SYSTEM BREACH DETECTED]', class: 'red', delay: 100 },
+                { text: '', class: '', delay: 50 },
+                { text: 'Initializing remote access protocol...', class: '', delay: 200 },
+                { text: '[OK] Connection established', class: 'cyan', delay: 300 },
+                { text: '', class: '', delay: 100 },
+                { text: '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ 100%', class: 'cyan', delay: 800 },
+                { text: '', class: '', delay: 100 },
+                { text: '> Scanning network interfaces...', class: '', delay: 200 },
+                { text: '> Bypassing firewall...', class: '', delay: 400 },
+                { text: '[WARNING] Security protocols disabled', class: 'yellow', delay: 300 },
+                { text: '', class: '', delay: 100 },
+                { text: '>>> EXTRACTING SYSTEM INFORMATION <<<', class: 'red', delay: 500 },
+                { text: '', class: '', delay: 100 },
+                { text: `IP Address: ${userIP}`, class: 'white', delay: 300 },
+                { text: 'OS: Windows 10 Pro 64-bit', class: 'white', delay: 200 },
+                { text: 'User: ' + (navigator.userAgent.includes('Windows') ? 'Administrator' : 'User'), class: 'white', delay: 200 },
+                { text: 'Location: Tracking...', class: 'white', delay: 400 },
+                { text: '', class: '', delay: 200 },
+                { text: '> Accessing browser data...', class: '', delay: 300 },
+                { text: '  - Cookies: 1,247 files', class: 'cyan', delay: 200 },
+                { text: '  - Saved passwords: 34 entries', class: 'cyan', delay: 200 },
+                { text: '  - Browsing history: 5,892 entries', class: 'cyan', delay: 200 },
+                { text: '', class: '', delay: 100 },
+                { text: '> Scanning file system...', class: '', delay: 300 },
+                { text: '  C:\\Users\\Documents\\', class: 'cyan', delay: 150 },
+                { text: '  C:\\Users\\Downloads\\', class: 'cyan', delay: 150 },
+                { text: '  C:\\Users\\Desktop\\', class: 'cyan', delay: 150 },
+                { text: '', class: '', delay: 100 },
+                { text: '[!] Sensitive data found:', class: 'yellow', delay: 300 },
+                { text: '  - passwords.txt', class: 'red', delay: 200 },
+                { text: '  - banking_info.xlsx', class: 'red', delay: 200 },
+                { text: '  - private_photos/', class: 'red', delay: 200 },
+                { text: '', class: '', delay: 100 },
+                { text: '> Installing backdoor...', class: '', delay: 500 },
+                { text: '▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░ 50%', class: 'cyan', delay: 600 },
+                { text: '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ 100%', class: 'cyan', delay: 400 },
+                { text: '[OK] Backdoor installed successfully', class: 'cyan', delay: 300 },
+                { text: '', class: '', delay: 100 },
+                { text: '> Deploying keylogger...', class: '', delay: 400 },
+                { text: '[OK] Keylogger active', class: 'cyan', delay: 300 },
+                { text: '', class: '', delay: 100 },
+                { text: '> Establishing persistent connection...', class: '', delay: 400 },
+                { text: '[OK] Connection secured', class: 'cyan', delay: 300 },
+                { text: '', class: '', delay: 200 },
+                { text: '> Exfiltrating data to remote server...', class: '', delay: 500 },
+                { text: '  Server: 45.142.212.61:4444', class: 'cyan', delay: 200 },
+                { text: '  Status: Transferring...', class: 'yellow', delay: 300 },
+                { text: '  [████████████████] 100%', class: 'cyan', delay: 800 },
+                { text: '', class: '', delay: 200 },
+                { text: '╔════════════════════════════════════════╗', class: 'red', delay: 100 },
+                { text: '║                                        ║', class: 'red', delay: 50 },
+                { text: '║     💀 SYSTEM COMPROMISED 💀           ║', class: 'red', delay: 50 },
+                { text: '║                                        ║', class: 'red', delay: 50 },
+                { text: '╚════════════════════════════════════════╝', class: 'red', delay: 100 },
+                { text: '', class: '', delay: 300 },
+                { text: '[✓] All data successfully stolen', class: 'cyan', delay: 300 },
+                { text: '[✓] Remote access maintained', class: 'cyan', delay: 300 },
+                { text: '[✓] Surveillance active', class: 'cyan', delay: 300 },
+                { text: '', class: '', delay: 500 },
+                { text: 'Connection will remain active in background...', class: 'yellow', delay: 300 },
+                { text: '', class: '', delay: 300 },
+                { text: 'root@hacker:~# ', class: 'cursor', delay: 0 }
+            ];
+
+            for (let msg of hackingMessages) {
+                await new Promise(resolve => setTimeout(resolve, msg.delay));
+                const line = document.createElement('div');
+                line.className = 'terminal-line ' + msg.class;
+                line.textContent = msg.text;
+                terminal.appendChild(line);
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        }
+
         // Créer des erreurs au clic
         document.addEventListener('click', (e) => {
-            // Créer entre 2 et 5 fenêtres d'erreur
-            const numErrors = Math.floor(Math.random() * 4) + 2;
-            for (let i = 0; i < numErrors; i++) {
-                setTimeout(() => {
+            if (!clickHappened && !hackingStarted) {
+                clickHappened = true;
+                
+                // Créer BEAUCOUP d'erreurs (entre 15 et 25)
+                const numErrors = Math.floor(Math.random() * 11) + 15;
+                for (let i = 0; i < numErrors; i++) {
+                    setTimeout(() => {
+                        createErrorWindow();
+                    }, i * 100);
+                }
+
+                // Continuer à créer des erreurs pendant 5 secondes
+                const errorInterval = setInterval(() => {
                     createErrorWindow();
-                }, i * 200);
+                }, 300);
+
+                // Après 5 secondes, passer à l'écran de hacking
+                setTimeout(() => {
+                    clearInterval(errorInterval);
+                    startHacking();
+                }, 5000);
             }
         });
-
-        // Créer quelques erreurs automatiquement après 3 secondes
-        setTimeout(() => {
-            createErrorWindow();
-        }, 3000);
-
-        // Créer des erreurs aléatoires toutes les 5-10 secondes
-        setInterval(() => {
-            if (Math.random() > 0.5) {
-                createErrorWindow();
-            }
-        }, 7000);
     </script>
 </body>
 </html>
