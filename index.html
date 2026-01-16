@@ -264,6 +264,102 @@
             80% { transform: translate(2px, -2px); }
             100% { transform: translate(0); }
         }
+
+        /* Deuxième écran bleu - destruction de données */
+        .final-bsod {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0078d7;
+            color: white;
+            padding: 80px;
+            display: none;
+            z-index: 10000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .final-bsod.active {
+            display: block;
+        }
+
+        .final-bsod .sad-face {
+            font-size: 150px;
+            margin-bottom: 40px;
+            font-weight: 300;
+            animation: shake-face 0.5s infinite;
+        }
+
+        @keyframes shake-face {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        .final-bsod h1 {
+            font-size: 48px;
+            font-weight: 300;
+            margin-bottom: 30px;
+            color: #ff0000;
+            text-shadow: 0 0 10px rgba(255,0,0,0.5);
+        }
+
+        .final-bsod .error-details {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            max-width: 900px;
+        }
+
+        .final-bsod .data-loss {
+            background: rgba(0,0,0,0.3);
+            padding: 30px;
+            margin: 30px 0;
+            border-left: 5px solid #ff0000;
+            max-width: 800px;
+        }
+
+        .final-bsod .data-loss h2 {
+            font-size: 24px;
+            color: #ff0000;
+            margin-bottom: 20px;
+        }
+
+        .final-bsod .data-loss ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .final-bsod .data-loss li {
+            padding: 8px 0;
+            font-size: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .final-bsod .data-loss li::before {
+            content: '❌ ';
+            color: #ff0000;
+            margin-right: 10px;
+        }
+
+        .final-bsod .warning-message {
+            font-size: 20px;
+            color: #ffff00;
+            margin-top: 40px;
+            animation: pulse-warning 1.5s infinite;
+        }
+
+        @keyframes pulse-warning {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .final-bsod .stop-code {
+            margin-top: 50px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body>
@@ -341,6 +437,53 @@
     <!-- Écran de hacking -->
     <div class="hacking-screen" id="hackingScreen">
         <div id="hackTerminal"></div>
+    </div>
+
+    <!-- Écran bleu final - destruction de données -->
+    <div class="final-bsod" id="finalBsod">
+        <div class="sad-face">:(</div>
+        <h1>ERREUR CRITIQUE : CORRUPTION TOTALE DU SYSTÈME</h1>
+        <div class="error-details">
+            Votre PC a subi une attaque malveillante qui a endommagé de façon irréversible<br>
+            les fichiers système critiques. Windows ne peut plus démarrer normalement.
+        </div>
+        
+        <div class="data-loss">
+            <h2>⚠️ DONNÉES DÉTRUITES DE MANIÈRE PERMANENTE :</h2>
+            <ul>
+                <li>Tous les documents personnels (Documents, Bureau, Téléchargements)</li>
+                <li>Photos et vidéos (0 fichiers récupérables sur 3,847)</li>
+                <li>Mots de passe et identifiants de connexion</li>
+                <li>Historique de navigation et cookies</li>
+                <li>Fichiers Microsoft Office (Word, Excel, PowerPoint)</li>
+                <li>Emails et contacts</li>
+                <li>Applications installées et leurs données</li>
+                <li>Fichiers système Windows (C:\Windows\System32\)</li>
+                <li>Partitions de disque dur (Secteurs de boot corrompus)</li>
+            </ul>
+        </div>
+
+        <div class="error-details">
+            <strong>RAPPORT DE WINDOWS DEFENDER :</strong><br><br>
+            L'analyse antivirus a détecté une menace de niveau critique (Trojan:Win32/Wacatac.H!ml)<br>
+            mais n'a PAS pu la neutraliser. Le malware s'est propagé dans les fichiers système<br>
+            avant que la quarantaine ne soit établie.
+            <br><br>
+            <strong style="color: #ff0000;">❌ Échec de la récupération : 0 fichiers sauvegardés</strong><br>
+            <strong style="color: #ff0000;">❌ Points de restauration système : Tous corrompus</strong><br>
+            <strong style="color: #ff0000;">❌ Sauvegarde Cloud : Synchronisation échouée</strong>
+        </div>
+
+        <div class="warning-message">
+            ⚠️ AVERTISSEMENT : Toute tentative de redémarrage pourrait endommager<br>
+            davantage le matériel. Une réinstallation complète de Windows est requise.
+        </div>
+
+        <div class="stop-code">
+            Code d'arrêt : CRITICAL_SYSTEM_CORRUPTION<br>
+            Échec : ntoskrnl.exe<br>
+            0x000000EF (0x0000000000000001, 0x0000000000000000, 0x0000000000000000)
+        </div>
     </div>
 
     <script>
@@ -688,6 +831,41 @@
             }
         }
 
+        // Fonction pour passer en plein écran
+        function requestFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(err => {
+                    console.log('Fullscreen request failed:', err);
+                });
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        }
+
+        // Fonction pour l'écran bleu final
+        function showFinalBsod() {
+            playAlertSound();
+            playAlertSound();
+            
+            setTimeout(() => {
+                const hackingScreen = document.getElementById('hackingScreen');
+                const finalBsod = document.getElementById('finalBsod');
+                
+                hackingScreen.classList.remove('active');
+                finalBsod.classList.add('active');
+                
+                // Jouer une série de sons d'alerte
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        playAlertSound();
+                    }, i * 500);
+                }
+            }, 1000);
+        }
+
         // Fonction pour l'écran de hacking
         async function startHacking() {
             if (hackingStarted) return;
@@ -697,82 +875,142 @@
             const terminal = document.getElementById('hackTerminal');
             
             hackingScreen.classList.add('active');
+            playAlertSound();
 
-            const userIP = await getIPAddress();
+            const locationData = await getIPAndLocation();
 
             const hackingMessages = [
-                { text: '[SYSTEM BREACH DETECTED]', class: 'red', delay: 100 },
-                { text: '', class: '', delay: 50 },
-                { text: 'Initializing remote access protocol...', class: '', delay: 200 },
-                { text: '[OK] Connection established', class: 'cyan', delay: 300 },
-                { text: '', class: '', delay: 100 },
-                { text: '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ 100%', class: 'cyan', delay: 800 },
-                { text: '', class: '', delay: 100 },
-                { text: '> Scanning network interfaces...', class: '', delay: 200 },
-                { text: '> Bypassing firewall...', class: '', delay: 400 },
-                { text: '[WARNING] Security protocols disabled', class: 'yellow', delay: 300 },
-                { text: '', class: '', delay: 100 },
-                { text: '>>> EXTRACTING SYSTEM INFORMATION <<<', class: 'red', delay: 500 },
-                { text: '', class: '', delay: 100 },
-                { text: `IP Address: ${userIP}`, class: 'white', delay: 300 },
-                { text: 'OS: Windows 10 Pro 64-bit', class: 'white', delay: 200 },
-                { text: 'User: ' + (navigator.userAgent.includes('Windows') ? 'Administrator' : 'User'), class: 'white', delay: 200 },
-                { text: 'Location: Tracking...', class: 'white', delay: 400 },
-                { text: '', class: '', delay: 200 },
-                { text: '> Accessing browser data...', class: '', delay: 300 },
-                { text: '  - Cookies: 1,247 files', class: 'cyan', delay: 200 },
-                { text: '  - Saved passwords: 34 entries', class: 'cyan', delay: 200 },
-                { text: '  - Browsing history: 5,892 entries', class: 'cyan', delay: 200 },
-                { text: '', class: '', delay: 100 },
-                { text: '> Scanning file system...', class: '', delay: 300 },
-                { text: '  C:\\Users\\Documents\\', class: 'cyan', delay: 150 },
-                { text: '  C:\\Users\\Downloads\\', class: 'cyan', delay: 150 },
-                { text: '  C:\\Users\\Desktop\\', class: 'cyan', delay: 150 },
-                { text: '', class: '', delay: 100 },
-                { text: '[!] Sensitive data found:', class: 'yellow', delay: 300 },
-                { text: '  - passwords.txt', class: 'red', delay: 200 },
-                { text: '  - banking_info.xlsx', class: 'red', delay: 200 },
-                { text: '  - private_photos/', class: 'red', delay: 200 },
-                { text: '', class: '', delay: 100 },
-                { text: '> Installing backdoor...', class: '', delay: 500 },
-                { text: '▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░ 50%', class: 'cyan', delay: 600 },
-                { text: '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ 100%', class: 'cyan', delay: 400 },
-                { text: '[OK] Backdoor installed successfully', class: 'cyan', delay: 300 },
-                { text: '', class: '', delay: 100 },
-                { text: '> Deploying keylogger...', class: '', delay: 400 },
-                { text: '[OK] Keylogger active', class: 'cyan', delay: 300 },
-                { text: '', class: '', delay: 100 },
-                { text: '> Establishing persistent connection...', class: '', delay: 400 },
-                { text: '[OK] Connection secured', class: 'cyan', delay: 300 },
-                { text: '', class: '', delay: 200 },
-                { text: '> Exfiltrating data to remote server...', class: '', delay: 500 },
-                { text: '  Server: 45.142.212.61:4444', class: 'cyan', delay: 200 },
-                { text: '  Status: Transferring...', class: 'yellow', delay: 300 },
-                { text: '  [████████████████] 100%', class: 'cyan', delay: 800 },
-                { text: '', class: '', delay: 200 },
-                { text: '╔════════════════════════════════════════╗', class: 'red', delay: 100 },
-                { text: '║                                        ║', class: 'red', delay: 50 },
-                { text: '║     💀 SYSTEM COMPROMISED 💀           ║', class: 'red', delay: 50 },
-                { text: '║                                        ║', class: 'red', delay: 50 },
-                { text: '╚════════════════════════════════════════╝', class: 'red', delay: 100 },
-                { text: '', class: '', delay: 300 },
-                { text: '[✓] All data successfully stolen', class: 'cyan', delay: 300 },
-                { text: '[✓] Remote access maintained', class: 'cyan', delay: 300 },
-                { text: '[✓] Surveillance active', class: 'cyan', delay: 300 },
-                { text: '', class: '', delay: 500 },
-                { text: 'Connection will remain active in background...', class: 'yellow', delay: 300 },
-                { text: '', class: '', delay: 300 },
-                { text: 'root@hacker:~# ', class: 'cursor', delay: 0 }
+                { text: '██████████████████████████████████████████', class: 'red', delay: 50, sound: 'alert' },
+                { text: '[!!! SYSTEM BREACH DETECTED !!!]', class: 'red', delay: 100, sound: 'alert' },
+                { text: '██████████████████████████████████████████', class: 'red', delay: 50, sound: null },
+                { text: '', class: '', delay: 200, sound: null },
+                { text: 'Initializing remote access protocol...', class: '', delay: 150, sound: 'type' },
+                { text: 'Establishing encrypted tunnel...', class: '', delay: 200, sound: 'type' },
+                { text: '[OK] Connection established', class: 'cyan', delay: 300, sound: null },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '▓▓▓▓▓▓░░░░░░░░░░░░░░ 30%', class: 'yellow', delay: 300, sound: null },
+                { text: '▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░ 60%', class: 'yellow', delay: 300, sound: null },
+                { text: '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ 100%', class: 'cyan', delay: 400, sound: null },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '> Scanning network topology...', class: '', delay: 200, sound: 'type' },
+                { text: '> Bypassing NAT firewall...', class: '', delay: 250, sound: 'type' },
+                { text: '> Exploiting port 445 (SMB)...', class: '', delay: 300, sound: 'type' },
+                { text: '[WARNING] Windows Defender disabled', class: 'yellow', delay: 300, sound: 'alert' },
+                { text: '[WARNING] Antivirus signatures bypassed', class: 'yellow', delay: 250, sound: null },
+                { text: '', class: '', delay: 150, sound: null },
+                { text: '════════════════════════════════════════', class: 'red', delay: 50, sound: null },
+                { text: '     TARGET INFORMATION ACQUIRED', class: 'red', delay: 100, sound: 'alert' },
+                { text: '════════════════════════════════════════', class: 'red', delay: 50, sound: null },
+                { text: '', class: '', delay: 150, sound: null },
+                { text: `IPv4 Address    : ${locationData.ip}`, class: 'white', delay: 200, sound: 'type' },
+                { text: `Geolocation     : ${locationData.city}, ${locationData.region}`, class: 'white', delay: 200, sound: 'type' },
+                { text: `Country         : ${locationData.country}`, class: 'white', delay: 200, sound: 'type' },
+                { text: `Postal Code     : ${locationData.postal}`, class: 'white', delay: 200, sound: 'type' },
+                { text: `Coordinates     : ${locationData.latitude}, ${locationData.longitude}`, class: 'white', delay: 200, sound: 'type' },
+                { text: `ISP Provider    : ${locationData.isp}`, class: 'white', delay: 200, sound: 'type' },
+                { text: `Timezone        : ${locationData.timezone}`, class: 'white', delay: 200, sound: 'type' },
+                { text: `OS              : ${navigator.platform}`, class: 'white', delay: 200, sound: 'type' },
+                { text: `Browser         : ${navigator.userAgent.split(' ').slice(-2).join(' ')}`, class: 'white', delay: 200, sound: 'type' },
+                { text: `Screen Res      : ${screen.width}x${screen.height}`, class: 'white', delay: 200, sound: 'type' },
+                { text: `Language        : ${navigator.language}`, class: 'white', delay: 200, sound: 'type' },
+                { text: '', class: '', delay: 150, sound: null },
+                { text: '[✓] Physical location triangulated', class: 'cyan', delay: 250, sound: null },
+                { text: '[✓] Network topology mapped', class: 'cyan', delay: 250, sound: null },
+                { text: '', class: '', delay: 200, sound: null },
+                { text: '> Penetrating system directories...', class: '', delay: 250, sound: 'type' },
+                { text: '  Accessing: C:\\Windows\\System32\\', class: 'cyan', delay: 150, sound: 'type' },
+                { text: '  Accessing: C:\\Users\\' + (navigator.platform.includes('Win') ? 'Administrator' : 'User') + '\\', class: 'cyan', delay: 150, sound: 'type' },
+                { text: '  Accessing: C:\\Program Files\\', class: 'cyan', delay: 150, sound: 'type' },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '> Extracting browser credentials...', class: '', delay: 300, sound: 'type' },
+                { text: '  [████████████████] Chrome - 23 passwords', class: 'yellow', delay: 300, sound: 'data' },
+                { text: '  [████████████████] Firefox - 17 passwords', class: 'yellow', delay: 300, sound: null },
+                { text: '  [████████████████] Edge - 31 passwords', class: 'yellow', delay: 300, sound: null },
+                { text: '  [████████████████] 1,847 cookies extracted', class: 'yellow', delay: 300, sound: null },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '> Scanning for sensitive files...', class: '', delay: 300, sound: 'type' },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '[!] CRITICAL FILES FOUND:', class: 'red', delay: 200, sound: 'alert' },
+                { text: '  ⚠ passwords.txt', class: 'red', delay: 150, sound: 'type' },
+                { text: '  ⚠ banking_credentials.xlsx', class: 'red', delay: 150, sound: 'type' },
+                { text: '  ⚠ crypto_wallet_keys.dat', class: 'red', delay: 150, sound: 'type' },
+                { text: '  ⚠ private_documents/', class: 'red', delay: 150, sound: 'type' },
+                { text: '  ⚠ tax_returns_2024.pdf', class: 'red', delay: 150, sound: 'type' },
+                { text: '  ⚠ personal_photos/ (847 files)', class: 'red', delay: 150, sound: 'type' },
+                { text: '', class: '', delay: 200, sound: null },
+                { text: '> Deploying persistent backdoor...', class: '', delay: 400, sound: 'type' },
+                { text: '  Installing: rootkit.sys', class: 'yellow', delay: 250, sound: 'type' },
+                { text: '  Installing: keylogger.dll', class: 'yellow', delay: 250, sound: 'type' },
+                { text: '  Installing: remote_shell.exe', class: 'yellow', delay: 250, sound: 'type' },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '▓▓▓▓▓▓░░░░░░░░░░░░░░ 30%', class: 'cyan', delay: 400, sound: null },
+                { text: '▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░ 60%', class: 'cyan', delay: 400, sound: null },
+                { text: '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ 100%', class: 'cyan', delay: 400, sound: null },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '[✓] Backdoor installed successfully', class: 'cyan', delay: 300, sound: null },
+                { text: '[✓] Persistence mechanism activated', class: 'cyan', delay: 300, sound: null },
+                { text: '[✓] Registry keys modified', class: 'cyan', delay: 300, sound: null },
+                { text: '', class: '', delay: 200, sound: null },
+                { text: '> Initiating data exfiltration...', class: '', delay: 300, sound: 'type' },
+                { text: '  Target Server: 185.220.101.47:4444', class: 'yellow', delay: 200, sound: 'type' },
+                { text: '  Protocol: Encrypted TOR relay', class: 'yellow', delay: 200, sound: 'type' },
+                { text: '  Status: Transferring...', class: 'yellow', delay: 250, sound: null },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '  [████░░░░░░░░░░░░░░] 2.3 GB / 8.7 GB', class: 'cyan', delay: 500, sound: 'data' },
+                { text: '  [████████░░░░░░░░░░] 4.8 GB / 8.7 GB', class: 'cyan', delay: 500, sound: 'data' },
+                { text: '  [████████████░░░░░░] 6.9 GB / 8.7 GB', class: 'cyan', delay: 500, sound: 'data' },
+                { text: '  [████████████████████] 8.7 GB / 8.7 GB', class: 'cyan', delay: 500, sound: 'data' },
+                { text: '', class: '', delay: 200, sound: null },
+                { text: '[✓] Data transfer complete', class: 'cyan', delay: 300, sound: null },
+                { text: '[✓] All traces removed from logs', class: 'cyan', delay: 300, sound: null },
+                { text: '', class: '', delay: 300, sound: null },
+                { text: '╔════════════════════════════════════════╗', class: 'red', delay: 50, sound: 'alert' },
+                { text: '║                                        ║', class: 'red', delay: 30, sound: null },
+                { text: '║        💀 SYSTEM COMPROMISED 💀        ║', class: 'red', delay: 30, sound: null },
+                { text: '║                                        ║', class: 'red', delay: 30, sound: null },
+                { text: '║   Your device is now under control    ║', class: 'red', delay: 30, sound: null },
+                { text: '║                                        ║', class: 'red', delay: 30, sound: null },
+                { text: '╚════════════════════════════════════════╝', class: 'red', delay: 50, sound: null },
+                { text: '', class: '', delay: 300, sound: null },
+                { text: 'BREACH SUMMARY:', class: 'yellow', delay: 200, sound: null },
+                { text: '  ✓ Remote access: ACTIVE', class: 'cyan', delay: 200, sound: 'type' },
+                { text: '  ✓ Keylogger: RUNNING', class: 'cyan', delay: 200, sound: 'type' },
+                { text: '  ✓ Screen capture: ENABLED', class: 'cyan', delay: 200, sound: 'type' },
+                { text: '  ✓ Webcam access: GRANTED', class: 'cyan', delay: 200, sound: 'type' },
+                { text: '  ✓ Microphone: ACTIVE', class: 'cyan', delay: 200, sound: 'type' },
+                { text: '  ✓ File system: FULL ACCESS', class: 'cyan', delay: 200, sound: 'type' },
+                { text: '', class: '', delay: 300, sound: null },
+                { text: '> Maintaining stealth mode...', class: 'yellow', delay: 300, sound: 'type' },
+                { text: '> Surveillance initiated...', class: 'yellow', delay: 300, sound: 'type' },
+                { text: '', class: '', delay: 400, sound: null },
+                { text: '[!] Connection will remain active in background', class: 'red', delay: 300, sound: 'alert' },
+                { text: '', class: '', delay: 400, sound: null },
+                { text: 'root@darknet:~# ', class: 'cursor', delay: 0, sound: null }
             ];
 
             for (let msg of hackingMessages) {
                 await new Promise(resolve => setTimeout(resolve, msg.delay));
+                
+                // Jouer le son approprié
+                if (msg.sound === 'type') {
+                    playTypingSound();
+                } else if (msg.sound === 'alert') {
+                    playAlertSound();
+                } else if (msg.sound === 'data') {
+                    playDataTransferSound();
+                }
+                
                 const line = document.createElement('div');
                 line.className = 'terminal-line ' + msg.class;
                 line.textContent = msg.text;
                 terminal.appendChild(line);
                 terminal.scrollTop = terminal.scrollHeight;
             }
+
+            // Après 3 secondes, afficher l'écran bleu final
+            setTimeout(() => {
+                showFinalBsod();
+            }, 3000);
         }
 
         // Créer des erreurs au clic
@@ -780,17 +1018,25 @@
             if (!clickHappened && !hackingStarted) {
                 clickHappened = true;
                 
+                // Passer en plein écran
+                requestFullscreen();
+                
+                // Initialiser l'audio au premier clic
+                initAudio();
+                
                 // Créer BEAUCOUP d'erreurs (entre 15 et 25)
                 const numErrors = Math.floor(Math.random() * 11) + 15;
                 for (let i = 0; i < numErrors; i++) {
                     setTimeout(() => {
                         createErrorWindow();
+                        playErrorBeep();
                     }, i * 100);
                 }
 
                 // Continuer à créer des erreurs pendant 5 secondes
                 const errorInterval = setInterval(() => {
                     createErrorWindow();
+                    playErrorBeep();
                 }, 300);
 
                 // Après 5 secondes, passer à l'écran de hacking
@@ -798,6 +1044,20 @@
                     clearInterval(errorInterval);
                     startHacking();
                 }, 5000);
+            }
+        });
+
+        // Empêcher de sortir du plein écran avec Echap (ne marche pas toujours pour des raisons de sécurité)
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement && clickHappened) {
+                // Essayer de remettre en plein écran
+                requestFullscreen();
+            }
+        });
+
+        document.addEventListener('webkitfullscreenchange', () => {
+            if (!document.webkitFullscreenElement && clickHappened) {
+                requestFullscreen();
             }
         });
     </script>
