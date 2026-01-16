@@ -702,46 +702,176 @@
             }, 10);
         }
 
-        // Fonction pour obtenir l'IP et la localisation
-        async function getIPAndLocation() {
+        // Fonction pour obtenir TOUTES les informations accessibles légalement
+        async function getAllSystemInfo() {
+            const info = {
+                // Informations IP et géolocalisation
+                ip: 'Récupération...',
+                city: 'Récupération...',
+                region: 'Récupération...',
+                country: 'Récupération...',
+                postal: 'Récupération...',
+                latitude: '0.0',
+                longitude: '0.0',
+                isp: 'Récupération...',
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                
+                // Informations navigateur
+                userAgent: navigator.userAgent,
+                browser: getBrowserInfo(),
+                platform: navigator.platform,
+                language: navigator.language,
+                languages: navigator.languages.join(', '),
+                cookieEnabled: navigator.cookieEnabled,
+                doNotTrack: navigator.doNotTrack || 'Non défini',
+                
+                // Informations d'écran
+                screenWidth: screen.width,
+                screenHeight: screen.height,
+                screenColorDepth: screen.colorDepth,
+                screenPixelDepth: screen.pixelDepth,
+                availWidth: screen.availWidth,
+                availHeight: screen.availHeight,
+                orientation: screen.orientation ? screen.orientation.type : 'Non disponible',
+                
+                // Informations de fenêtre
+                windowWidth: window.innerWidth,
+                windowHeight: window.innerHeight,
+                devicePixelRatio: window.devicePixelRatio,
+                
+                // Informations système
+                hardwareConcurrency: navigator.hardwareConcurrency || 'Non disponible',
+                deviceMemory: navigator.deviceMemory ? navigator.deviceMemory + ' GB' : 'Non disponible',
+                maxTouchPoints: navigator.maxTouchPoints,
+                
+                // Informations de connexion
+                connectionType: 'Non disponible',
+                connectionEffectiveType: 'Non disponible',
+                connectionDownlink: 'Non disponible',
+                connectionRtt: 'Non disponible',
+                
+                // Date et heure
+                localTime: new Date().toLocaleString('fr-FR'),
+                timestamp: Date.now(),
+                
+                // Plugins et fonctionnalités
+                pdfViewerEnabled: navigator.pdfViewerEnabled || false,
+                webdriver: navigator.webdriver || false,
+                vendor: navigator.vendor,
+                
+                // Canvas fingerprint (pour l'unicité)
+                canvasFingerprint: getCanvasFingerprint(),
+                
+                // WebGL info
+                webglVendor: 'Détection...',
+                webglRenderer: 'Détection...',
+                
+                // Batterie (si disponible)
+                batteryLevel: 'Détection...',
+                batteryCharging: 'Détection...',
+                
+                // Permissions
+                permissionsChecked: false
+            };
+            
+            // Récupérer les infos de connexion si disponibles
+            if (navigator.connection) {
+                info.connectionType = navigator.connection.type || navigator.connection.effectiveType || 'Non disponible';
+                info.connectionEffectiveType = navigator.connection.effectiveType || 'Non disponible';
+                info.connectionDownlink = navigator.connection.downlink ? navigator.connection.downlink + ' Mbps' : 'Non disponible';
+                info.connectionRtt = navigator.connection.rtt ? navigator.connection.rtt + ' ms' : 'Non disponible';
+            }
+            
+            // Récupérer les infos WebGL
             try {
-                // Récupérer l'IP
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (gl) {
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    if (debugInfo) {
+                        info.webglVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
+                        info.webglRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+                    }
+                }
+            } catch (e) {
+                info.webglVendor = 'Non accessible';
+                info.webglRenderer = 'Non accessible';
+            }
+            
+            // Récupérer les infos de batterie
+            if (navigator.getBattery) {
+                try {
+                    const battery = await navigator.getBattery();
+                    info.batteryLevel = Math.round(battery.level * 100) + '%';
+                    info.batteryCharging = battery.charging ? 'En charge' : 'Sur batterie';
+                } catch (e) {
+                    info.batteryLevel = 'Non accessible';
+                    info.batteryCharging = 'Non accessible';
+                }
+            }
+            
+            // Récupérer l'IP et la géolocalisation
+            try {
                 const ipResponse = await fetch('https://api.ipify.org?format=json');
                 const ipData = await ipResponse.json();
-                const ip = ipData.ip;
+                info.ip = ipData.ip;
                 
-                // Récupérer la localisation avec l'IP
-                const locationResponse = await fetch(`https://ipapi.co/${ip}/json/`);
+                const locationResponse = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
                 const locationData = await locationResponse.json();
                 
-                return {
-                    ip: ip,
-                    city: locationData.city || 'Unknown',
-                    region: locationData.region || 'Unknown',
-                    country: locationData.country_name || 'Unknown',
-                    postal: locationData.postal || 'Unknown',
-                    latitude: locationData.latitude || '0.0',
-                    longitude: locationData.longitude || '0.0',
-                    isp: locationData.org || 'Unknown ISP',
-                    timezone: locationData.timezone || 'Unknown'
-                };
+                info.city = locationData.city || 'Inconnu';
+                info.region = locationData.region || 'Inconnu';
+                info.country = locationData.country_name || 'Inconnu';
+                info.postal = locationData.postal || 'Inconnu';
+                info.latitude = locationData.latitude || '0.0';
+                info.longitude = locationData.longitude || '0.0';
+                info.isp = locationData.org || 'Inconnu';
             } catch (error) {
-                // Données simulées si l'API ne fonctionne pas
-                return {
-                    ip: '192.168.' + Math.floor(Math.random() * 255) + '.' + Math.floor(Math.random() * 255),
-                    city: 'Paris',
-                    region: 'Île-de-France',
-                    country: 'France',
-                    postal: '75001',
-                    latitude: '48.8566',
-                    longitude: '2.3522',
-                    isp: 'Orange S.A.',
-                    timezone: 'Europe/Paris'
-                };
+                info.ip = '192.168.' + Math.floor(Math.random() * 255) + '.' + Math.floor(Math.random() * 255);
+                info.city = 'Paris';
+                info.region = 'Île-de-France';
+                info.country = 'France';
+                info.postal = '75001';
+                info.latitude = '48.8566';
+                info.longitude = '2.3522';
+                info.isp = 'Orange S.A.';
+            }
+            
+            return info;
+        }
+        
+        function getBrowserInfo() {
+            const ua = navigator.userAgent;
+            if (ua.indexOf('Firefox') > -1) return 'Mozilla Firefox';
+            if (ua.indexOf('SamsungBrowser') > -1) return 'Samsung Internet';
+            if (ua.indexOf('Opera') > -1 || ua.indexOf('OPR') > -1) return 'Opera';
+            if (ua.indexOf('Trident') > -1) return 'Internet Explorer';
+            if (ua.indexOf('Edge') > -1) return 'Microsoft Edge';
+            if (ua.indexOf('Chrome') > -1) return 'Google Chrome';
+            if (ua.indexOf('Safari') > -1) return 'Safari';
+            return 'Navigateur inconnu';
+        }
+        
+        function getCanvasFingerprint() {
+            try {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                ctx.textBaseline = 'top';
+                ctx.font = '14px Arial';
+                ctx.textBaseline = 'alphabetic';
+                ctx.fillStyle = '#f60';
+                ctx.fillRect(125, 1, 62, 20);
+                ctx.fillStyle = '#069';
+                ctx.fillText('Browser Fingerprint', 2, 15);
+                ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+                ctx.fillText('Browser Fingerprint', 4, 17);
+                return canvas.toDataURL().slice(-50);
+            } catch (e) {
+                return 'Impossible';
             }
         }
 
-        // Créer des sons synthétiques
+        // Créer des sons synthétiques ultra réalistes
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioContext;
         
@@ -751,67 +881,92 @@
             }
         }
 
-        // Son d'erreur Windows
+        // Son d'erreur Windows authentique (double beep)
         function playErrorBeep() {
             if (!audioContext) return;
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
             
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
+            // Premier beep
+            const osc1 = audioContext.createOscillator();
+            const gain1 = audioContext.createGain();
+            osc1.connect(gain1);
+            gain1.connect(audioContext.destination);
+            osc1.frequency.value = 800;
+            osc1.type = 'sine';
+            gain1.gain.setValueAtTime(0.15, audioContext.currentTime);
+            gain1.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            osc1.start(audioContext.currentTime);
+            osc1.stop(audioContext.currentTime + 0.1);
             
-            oscillator.frequency.value = 800;
-            oscillator.type = 'sine';
-            
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.5);
+            // Deuxième beep légèrement plus bas
+            setTimeout(() => {
+                const osc2 = audioContext.createOscillator();
+                const gain2 = audioContext.createGain();
+                osc2.connect(gain2);
+                gain2.connect(audioContext.destination);
+                osc2.frequency.value = 600;
+                osc2.type = 'sine';
+                gain2.gain.setValueAtTime(0.15, audioContext.currentTime);
+                gain2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+                osc2.start(audioContext.currentTime);
+                osc2.stop(audioContext.currentTime + 0.15);
+            }, 100);
         }
 
-        // Son de typing pour le terminal
+        // Son de typing réaliste
         function playTypingSound() {
             if (!audioContext) return;
             const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
+            const filter = audioContext.createBiquadFilter();
             
-            oscillator.connect(gainNode);
+            oscillator.connect(filter);
+            filter.connect(gainNode);
             gainNode.connect(audioContext.destination);
             
-            oscillator.frequency.value = 200 + Math.random() * 100;
+            oscillator.frequency.value = 150 + Math.random() * 50;
             oscillator.type = 'square';
+            filter.type = 'lowpass';
+            filter.frequency.value = 2000;
             
-            gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
+            gainNode.gain.setValueAtTime(0.03, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.03);
             
             oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.05);
+            oscillator.stop(audioContext.currentTime + 0.03);
         }
 
-        // Son d'alerte critique
+        // Son d'alerte critique style système Windows
         function playAlertSound() {
             if (!audioContext) return;
+            
             const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
+            const filter = audioContext.createBiquadFilter();
             
-            oscillator.connect(gainNode);
+            oscillator.connect(filter);
+            filter.connect(gainNode);
             gainNode.connect(audioContext.destination);
             
-            oscillator.frequency.value = 1200;
+            // Son d'alerte montant
+            oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+            oscillator.frequency.linearRampToValueAtTime(1000, audioContext.currentTime + 0.1);
+            oscillator.frequency.linearRampToValueAtTime(600, audioContext.currentTime + 0.2);
+            
             oscillator.type = 'sawtooth';
+            filter.type = 'lowpass';
+            filter.frequency.value = 3000;
             
             gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.25);
             
             oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.3);
+            oscillator.stop(audioContext.currentTime + 0.25);
         }
 
-        // Son de transfert de données
+        // Son de transfert de données (bips successifs)
         function playDataTransferSound() {
             if (!audioContext) return;
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 8; i++) {
                 setTimeout(() => {
                     const oscillator = audioContext.createOscillator();
                     const gainNode = audioContext.createGain();
@@ -819,16 +974,74 @@
                     oscillator.connect(gainNode);
                     gainNode.connect(audioContext.destination);
                     
-                    oscillator.frequency.value = 400 + i * 100;
+                    oscillator.frequency.value = 300 + (i * 50);
                     oscillator.type = 'sine';
                     
-                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                    gainNode.gain.setValueAtTime(0.08, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.08);
                     
                     oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.1);
-                }, i * 50);
+                    oscillator.stop(audioContext.currentTime + 0.08);
+                }, i * 40);
             }
+        }
+
+        // Son d'accès disque dur (crépitement)
+        function playDiskAccessSound() {
+            if (!audioContext) return;
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    const bufferSize = 2048;
+                    const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+                    const data = buffer.getChannelData(0);
+                    
+                    for (let j = 0; j < bufferSize; j++) {
+                        data[j] = Math.random() * 0.1 - 0.05;
+                    }
+                    
+                    const noise = audioContext.createBufferSource();
+                    const gainNode = audioContext.createGain();
+                    const filter = audioContext.createBiquadFilter();
+                    
+                    noise.buffer = buffer;
+                    noise.connect(filter);
+                    filter.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    filter.type = 'bandpass';
+                    filter.frequency.value = 1000 + Math.random() * 1000;
+                    
+                    gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.05);
+                    
+                    noise.start(audioContext.currentTime);
+                    noise.stop(audioContext.currentTime + 0.05);
+                }, i * 60);
+            }
+        }
+
+        // Son de système critique (alarme grave)
+        function playCriticalSound() {
+            if (!audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+            oscillator.frequency.setValueAtTime(250, audioContext.currentTime + 0.15);
+            oscillator.frequency.setValueAtTime(200, audioContext.currentTime + 0.3);
+            
+            oscillator.type = 'sawtooth';
+            
+            gainNode.gain.setValueAtTime(0.25, audioContext.currentTime);
+            gainNode.gain.setValueAtTime(0.25, audioContext.currentTime + 0.3);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
         }
 
         // Fonction pour passer en plein écran
@@ -877,115 +1090,178 @@
             hackingScreen.classList.add('active');
             playAlertSound();
 
-            const locationData = await getIPAndLocation();
+            const systemInfo = await getAllSystemInfo();
 
             const hackingMessages = [
-                { text: '██████████████████████████████████████████', class: 'red', delay: 50, sound: 'alert' },
-                { text: '[!!! SYSTEM BREACH DETECTED !!!]', class: 'red', delay: 100, sound: 'alert' },
-                { text: '██████████████████████████████████████████', class: 'red', delay: 50, sound: null },
-                { text: '', class: '', delay: 200, sound: null },
-                { text: 'Initializing remote access protocol...', class: '', delay: 150, sound: 'type' },
-                { text: 'Establishing encrypted tunnel...', class: '', delay: 200, sound: 'type' },
-                { text: '[OK] Connection established', class: 'cyan', delay: 300, sound: null },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '▓▓▓▓▓▓░░░░░░░░░░░░░░ 30%', class: 'yellow', delay: 300, sound: null },
-                { text: '▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░ 60%', class: 'yellow', delay: 300, sound: null },
-                { text: '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ 100%', class: 'cyan', delay: 400, sound: null },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '> Scanning network topology...', class: '', delay: 200, sound: 'type' },
-                { text: '> Bypassing NAT firewall...', class: '', delay: 250, sound: 'type' },
-                { text: '> Exploiting port 445 (SMB)...', class: '', delay: 300, sound: 'type' },
-                { text: '[WARNING] Windows Defender disabled', class: 'yellow', delay: 300, sound: 'alert' },
-                { text: '[WARNING] Antivirus signatures bypassed', class: 'yellow', delay: 250, sound: null },
-                { text: '', class: '', delay: 150, sound: null },
-                { text: '════════════════════════════════════════', class: 'red', delay: 50, sound: null },
-                { text: '     TARGET INFORMATION ACQUIRED', class: 'red', delay: 100, sound: 'alert' },
-                { text: '════════════════════════════════════════', class: 'red', delay: 50, sound: null },
-                { text: '', class: '', delay: 150, sound: null },
-                { text: `IPv4 Address    : ${locationData.ip}`, class: 'white', delay: 200, sound: 'type' },
-                { text: `Geolocation     : ${locationData.city}, ${locationData.region}`, class: 'white', delay: 200, sound: 'type' },
-                { text: `Country         : ${locationData.country}`, class: 'white', delay: 200, sound: 'type' },
-                { text: `Postal Code     : ${locationData.postal}`, class: 'white', delay: 200, sound: 'type' },
-                { text: `Coordinates     : ${locationData.latitude}, ${locationData.longitude}`, class: 'white', delay: 200, sound: 'type' },
-                { text: `ISP Provider    : ${locationData.isp}`, class: 'white', delay: 200, sound: 'type' },
-                { text: `Timezone        : ${locationData.timezone}`, class: 'white', delay: 200, sound: 'type' },
-                { text: `OS              : ${navigator.platform}`, class: 'white', delay: 200, sound: 'type' },
-                { text: `Browser         : ${navigator.userAgent.split(' ').slice(-2).join(' ')}`, class: 'white', delay: 200, sound: 'type' },
-                { text: `Screen Res      : ${screen.width}x${screen.height}`, class: 'white', delay: 200, sound: 'type' },
-                { text: `Language        : ${navigator.language}`, class: 'white', delay: 200, sound: 'type' },
-                { text: '', class: '', delay: 150, sound: null },
-                { text: '[✓] Physical location triangulated', class: 'cyan', delay: 250, sound: null },
-                { text: '[✓] Network topology mapped', class: 'cyan', delay: 250, sound: null },
-                { text: '', class: '', delay: 200, sound: null },
-                { text: '> Penetrating system directories...', class: '', delay: 250, sound: 'type' },
-                { text: '  Accessing: C:\\Windows\\System32\\', class: 'cyan', delay: 150, sound: 'type' },
-                { text: '  Accessing: C:\\Users\\' + (navigator.platform.includes('Win') ? 'Administrator' : 'User') + '\\', class: 'cyan', delay: 150, sound: 'type' },
-                { text: '  Accessing: C:\\Program Files\\', class: 'cyan', delay: 150, sound: 'type' },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '> Extracting browser credentials...', class: '', delay: 300, sound: 'type' },
-                { text: '  [████████████████] Chrome - 23 passwords', class: 'yellow', delay: 300, sound: 'data' },
-                { text: '  [████████████████] Firefox - 17 passwords', class: 'yellow', delay: 300, sound: null },
-                { text: '  [████████████████] Edge - 31 passwords', class: 'yellow', delay: 300, sound: null },
-                { text: '  [████████████████] 1,847 cookies extracted', class: 'yellow', delay: 300, sound: null },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '> Scanning for sensitive files...', class: '', delay: 300, sound: 'type' },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '[!] CRITICAL FILES FOUND:', class: 'red', delay: 200, sound: 'alert' },
-                { text: '  ⚠ passwords.txt', class: 'red', delay: 150, sound: 'type' },
-                { text: '  ⚠ banking_credentials.xlsx', class: 'red', delay: 150, sound: 'type' },
-                { text: '  ⚠ crypto_wallet_keys.dat', class: 'red', delay: 150, sound: 'type' },
-                { text: '  ⚠ private_documents/', class: 'red', delay: 150, sound: 'type' },
-                { text: '  ⚠ tax_returns_2024.pdf', class: 'red', delay: 150, sound: 'type' },
-                { text: '  ⚠ personal_photos/ (847 files)', class: 'red', delay: 150, sound: 'type' },
-                { text: '', class: '', delay: 200, sound: null },
-                { text: '> Deploying persistent backdoor...', class: '', delay: 400, sound: 'type' },
-                { text: '  Installing: rootkit.sys', class: 'yellow', delay: 250, sound: 'type' },
-                { text: '  Installing: keylogger.dll', class: 'yellow', delay: 250, sound: 'type' },
-                { text: '  Installing: remote_shell.exe', class: 'yellow', delay: 250, sound: 'type' },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '▓▓▓▓▓▓░░░░░░░░░░░░░░ 30%', class: 'cyan', delay: 400, sound: null },
-                { text: '▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░ 60%', class: 'cyan', delay: 400, sound: null },
-                { text: '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ 100%', class: 'cyan', delay: 400, sound: null },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '[✓] Backdoor installed successfully', class: 'cyan', delay: 300, sound: null },
-                { text: '[✓] Persistence mechanism activated', class: 'cyan', delay: 300, sound: null },
-                { text: '[✓] Registry keys modified', class: 'cyan', delay: 300, sound: null },
-                { text: '', class: '', delay: 200, sound: null },
-                { text: '> Initiating data exfiltration...', class: '', delay: 300, sound: 'type' },
-                { text: '  Target Server: 185.220.101.47:4444', class: 'yellow', delay: 200, sound: 'type' },
-                { text: '  Protocol: Encrypted TOR relay', class: 'yellow', delay: 200, sound: 'type' },
-                { text: '  Status: Transferring...', class: 'yellow', delay: 250, sound: null },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '  [████░░░░░░░░░░░░░░] 2.3 GB / 8.7 GB', class: 'cyan', delay: 500, sound: 'data' },
-                { text: '  [████████░░░░░░░░░░] 4.8 GB / 8.7 GB', class: 'cyan', delay: 500, sound: 'data' },
-                { text: '  [████████████░░░░░░] 6.9 GB / 8.7 GB', class: 'cyan', delay: 500, sound: 'data' },
-                { text: '  [████████████████████] 8.7 GB / 8.7 GB', class: 'cyan', delay: 500, sound: 'data' },
-                { text: '', class: '', delay: 200, sound: null },
-                { text: '[✓] Data transfer complete', class: 'cyan', delay: 300, sound: null },
-                { text: '[✓] All traces removed from logs', class: 'cyan', delay: 300, sound: null },
+                { text: '██████████████████████████████████████████████████████████', class: 'red', delay: 50, sound: 'critical' },
+                { text: '█                                                        █', class: 'red', delay: 20, sound: null },
+                { text: '█         [!!! INTRUSION DÉTECTÉE !!!]                  █', class: 'red', delay: 20, sound: 'alert' },
+                { text: '█    ACCÈS NON AUTORISÉ AU SYSTÈME EN COURS             █', class: 'red', delay: 20, sound: null },
+                { text: '█                                                        █', class: 'red', delay: 20, sound: null },
+                { text: '██████████████████████████████████████████████████████████', class: 'red', delay: 50, sound: null },
                 { text: '', class: '', delay: 300, sound: null },
-                { text: '╔════════════════════════════════════════╗', class: 'red', delay: 50, sound: 'alert' },
-                { text: '║                                        ║', class: 'red', delay: 30, sound: null },
-                { text: '║        💀 SYSTEM COMPROMISED 💀        ║', class: 'red', delay: 30, sound: null },
-                { text: '║                                        ║', class: 'red', delay: 30, sound: null },
-                { text: '║   Your device is now under control    ║', class: 'red', delay: 30, sound: null },
-                { text: '║                                        ║', class: 'red', delay: 30, sound: null },
-                { text: '╚════════════════════════════════════════╝', class: 'red', delay: 50, sound: null },
+                { text: '[INIT] Initialisation du protocole d\'intrusion...', class: 'yellow', delay: 150, sound: 'type' },
+                { text: '[INIT] Chargement des modules d\'exploitation...', class: 'yellow', delay: 150, sound: 'type' },
+                { text: '[INIT] Établissement du tunnel crypté...', class: 'yellow', delay: 200, sound: 'type' },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '> Connexion au serveur C&C (185.220.101.47)...', class: '', delay: 200, sound: 'type' },
+                { text: '> Handshake SSL/TLS établi', class: 'cyan', delay: 250, sound: null },
+                { text: '> Tunnel chiffré AES-256 actif', class: 'cyan', delay: 250, sound: null },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░░░ 20%', class: 'yellow', delay: 250, sound: null },
+                { text: '▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░ 40%', class: 'yellow', delay: 250, sound: null },
+                { text: '▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░ 60%', class: 'yellow', delay: 250, sound: null },
+                { text: '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░ 80%', class: 'yellow', delay: 250, sound: null },
+                { text: '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ 100%', class: 'cyan', delay: 250, sound: 'data' },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '[OK] Connexion sécurisée établie avec succès', class: 'cyan', delay: 300, sound: null },
+                { text: '', class: '', delay: 200, sound: null },
+                { text: '[SCAN] Analyse de la topologie réseau...', class: 'yellow', delay: 200, sound: 'type' },
+                { text: '[SCAN] Énumération des services actifs...', class: 'yellow', delay: 200, sound: 'disk' },
+                { text: '[SCAN] Détection des vulnérabilités système...', class: 'yellow', delay: 200, sound: 'disk' },
+                { text: '', class: '', delay: 150, sound: null },
+                { text: '[EXPLOIT] Exploitation de CVE-2024-38063 (RCE Windows)...', class: 'yellow', delay: 300, sound: 'type' },
+                { text: '[EXPLOIT] Bypass du Windows Defender en cours...', class: 'yellow', delay: 300, sound: 'type' },
+                { text: '[EXPLOIT] Élévation de privilèges (SYSTEM)...', class: 'yellow', delay: 300, sound: 'type' },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '[SUCCESS] Accès SYSTEM obtenu', class: 'cyan', delay: 300, sound: 'alert' },
+                { text: '[SUCCESS] Défenses système désactivées', class: 'cyan', delay: 300, sound: null },
+                { text: '', class: '', delay: 200, sound: null },
+                { text: '═══════════════════════════════════════════════════════', class: 'white', delay: 50, sound: null },
+                { text: '           EXTRACTION DES DONNÉES SYSTÈME', class: 'red', delay: 100, sound: 'alert' },
+                { text: '═══════════════════════════════════════════════════════', class: 'white', delay: 50, sound: null },
+                { text: '', class: '', delay: 150, sound: null },
+                { text: '┌─ INFORMATIONS RÉSEAU ────────────────────────────────┐', class: 'cyan', delay: 100, sound: null },
+                { text: `│ Adresse IPv4       : ${systemInfo.ip}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Localisation       : ${systemInfo.city}, ${systemInfo.region}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Pays               : ${systemInfo.country}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Code postal        : ${systemInfo.postal}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Coordonnées GPS    : ${systemInfo.latitude}, ${systemInfo.longitude}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Fournisseur (ISP)  : ${systemInfo.isp}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Fuseau horaire     : ${systemInfo.timezone}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Type connexion     : ${systemInfo.connectionEffectiveType}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Vitesse download   : ${systemInfo.connectionDownlink}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Latence RTT        : ${systemInfo.connectionRtt}`, class: 'white', delay: 150, sound: 'type' },
+                { text: '└───────────────────────────────────────────────────────┘', class: 'cyan', delay: 100, sound: null },
+                { text: '', class: '', delay: 150, sound: null },
+                { text: '┌─ SYSTÈME & MATÉRIEL ──────────────────────────────────┐', class: 'cyan', delay: 100, sound: null },
+                { text: `│ Navigateur         : ${systemInfo.browser}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Plateforme OS      : ${systemInfo.platform}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ User Agent         : ${systemInfo.userAgent.substring(0, 50)}...`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Langue système     : ${systemInfo.language}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Langues dispo      : ${systemInfo.languages}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ CPU (cœurs)        : ${systemInfo.hardwareConcurrency} cœurs logiques`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Mémoire RAM        : ${systemInfo.deviceMemory}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Carte graphique    : ${systemInfo.webglRenderer}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Fabricant GPU      : ${systemInfo.webglVendor}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Points tactiles    : ${systemInfo.maxTouchPoints}`, class: 'white', delay: 150, sound: 'type' },
+                { text: '└───────────────────────────────────────────────────────┘', class: 'cyan', delay: 100, sound: null },
+                { text: '', class: '', delay: 150, sound: null },
+                { text: '┌─ AFFICHAGE & RÉSOLUTION ──────────────────────────────┐', class: 'cyan', delay: 100, sound: null },
+                { text: `│ Résolution écran   : ${systemInfo.screenWidth}x${systemInfo.screenHeight}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Résolution fenêtre : ${systemInfo.windowWidth}x${systemInfo.windowHeight}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Profondeur couleur : ${systemInfo.screenColorDepth} bits`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Pixel Ratio        : ${systemInfo.devicePixelRatio}x`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Zone disponible    : ${systemInfo.availWidth}x${systemInfo.availHeight}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Orientation        : ${systemInfo.orientation}`, class: 'white', delay: 150, sound: 'type' },
+                { text: '└───────────────────────────────────────────────────────┘', class: 'cyan', delay: 100, sound: null },
+                { text: '', class: '', delay: 150, sound: null },
+                { text: '┌─ ÉTAT SYSTÈME ────────────────────────────────────────┐', class: 'cyan', delay: 100, sound: null },
+                { text: `│ Niveau batterie    : ${systemInfo.batteryLevel}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ État charge        : ${systemInfo.batteryCharging}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Cookies activés    : ${systemInfo.cookieEnabled ? 'Oui' : 'Non'}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Do Not Track       : ${systemInfo.doNotTrack}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Date/Heure locale  : ${systemInfo.localTime}`, class: 'white', delay: 150, sound: 'type' },
+                { text: `│ Canvas Fingerprint : ${systemInfo.canvasFingerprint}`, class: 'white', delay: 150, sound: 'type' },
+                { text: '└───────────────────────────────────────────────────────┘', class: 'cyan', delay: 100, sound: null },
                 { text: '', class: '', delay: 300, sound: null },
-                { text: 'BREACH SUMMARY:', class: 'yellow', delay: 200, sound: null },
-                { text: '  ✓ Remote access: ACTIVE', class: 'cyan', delay: 200, sound: 'type' },
-                { text: '  ✓ Keylogger: RUNNING', class: 'cyan', delay: 200, sound: 'type' },
-                { text: '  ✓ Screen capture: ENABLED', class: 'cyan', delay: 200, sound: 'type' },
-                { text: '  ✓ Webcam access: GRANTED', class: 'cyan', delay: 200, sound: 'type' },
-                { text: '  ✓ Microphone: ACTIVE', class: 'cyan', delay: 200, sound: 'type' },
-                { text: '  ✓ File system: FULL ACCESS', class: 'cyan', delay: 200, sound: 'type' },
+                { text: '[ENUM] Énumération des données sensibles...', class: 'yellow', delay: 250, sound: 'disk' },
+                { text: '', class: '', delay: 150, sound: null },
+                { text: '> Scan du système de fichiers...', class: '', delay: 200, sound: 'disk' },
+                { text: '  C:\\Users\\Documents\\', class: 'cyan', delay: 120, sound: 'type' },
+                { text: '  C:\\Users\\Downloads\\', class: 'cyan', delay: 120, sound: 'type' },
+                { text: '  C:\\Users\\Desktop\\', class: 'cyan', delay: 120, sound: 'type' },
+                { text: '  C:\\Users\\Pictures\\', class: 'cyan', delay: 120, sound: 'type' },
+                { text: '  C:\\Users\\Videos\\', class: 'cyan', delay: 120, sound: 'type' },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '> Extraction des credentials navigateur...', class: '', delay: 250, sound: 'disk' },
+                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] Chrome - 47 mots de passe', class: 'yellow', delay: 300, sound: 'data' },
+                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] Firefox - 23 mots de passe', class: 'yellow', delay: 300, sound: null },
+                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] Edge - 31 mots de passe', class: 'yellow', delay: 300, sound: null },
+                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] Safari - 18 mots de passe', class: 'yellow', delay: 300, sound: null },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 2,394 cookies extraits', class: 'yellow', delay: 250, sound: null },
+                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 8,847 entrées d\'historique', class: 'yellow', delay: 250, sound: null },
+                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 156 sessions actives', class: 'yellow', delay: 250, sound: null },
+                { text: '', class: '', delay: 200, sound: null },
+                { text: '[!] FICHIERS CRITIQUES IDENTIFIÉS :', class: 'red', delay: 250, sound: 'alert' },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '  ⚠ passwords_backup.txt (4.2 KB)', class: 'red', delay: 150, sound: 'type' },
+                { text: '  ⚠ banking_credentials.xlsx (28 KB)', class: 'red', delay: 150, sound: 'type' },
+                { text: '  ⚠ crypto_wallet_seeds.txt (1.8 KB)', class: 'red', delay: 150, sound: 'type' },
+                { text: '  ⚠ tax_documents_2024.pdf (2.3 MB)', class: 'red', delay: 150, sound: 'type' },
+                { text: '  ⚠ identity_scans/ (12 fichiers, 18 MB)', class: 'red', delay: 150, sound: 'type' },
+                { text: '  ⚠ private_keys/ (SSH/GPG keys)', class: 'red', delay: 150, sound: 'type' },
+                { text: '  ⚠ personal_photos/ (1,847 fichiers, 4.2 GB)', class: 'red', delay: 150, sound: 'type' },
+                { text: '', class: '', delay: 250, sound: null },
+                { text: '[PAYLOAD] Déploiement des backdoors...', class: 'yellow', delay: 300, sound: 'type' },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '> Installation: rootkit.sys (persistance kernel)', class: '', delay: 200, sound: 'disk' },
+                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] Installé', class: 'cyan', delay: 400, sound: null },
+                { text: '> Installation: keylogger.dll (capture clavier)', class: '', delay: 200, sound: 'disk' },
+                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] Installé', class: 'cyan', delay: 400, sound: null },
+                { text: '> Installation: remote_shell.exe (RAT)', class: '', delay: 200, sound: 'disk' },
+                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] Installé', class: 'cyan', delay: 400, sound: null },
+                { text: '> Installation: screen_capture.dll', class: '', delay: 200, sound: 'disk' },
+                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] Installé', class: 'cyan', delay: 400, sound: null },
+                { text: '', class: '', delay: 150, sound: null },
+                { text: '[SUCCESS] Persistance établie (Registre + Tâches planifiées)', class: 'cyan', delay: 300, sound: null },
+                { text: '[SUCCESS] Hooks installés dans le noyau', class: 'cyan', delay: 300, sound: null },
+                { text: '[SUCCESS] Détection antivirus contournée', class: 'cyan', delay: 300, sound: null },
+                { text: '', class: '', delay: 250, sound: null },
+                { text: '[EXFIL] Début de l\'exfiltration des données...', class: 'yellow', delay: 300, sound: 'type' },
+                { text: '', class: '', delay: 150, sound: null },
+                { text: '  Serveur cible : 185.220.101.47:4444 (TOR)', class: 'yellow', delay: 200, sound: 'type' },
+                { text: '  Protocole     : HTTPS + Chiffrement AES-256', class: 'yellow', delay: 200, sound: 'type' },
+                { text: '  Méthode       : Tunneling DNS (furtif)', class: 'yellow', delay: 200, sound: 'type' },
+                { text: '', class: '', delay: 150, sound: null },
+                { text: '  [▓▓░░░░░░░░░░░░░░░░] 1.2 GB / 11.4 GB (10%)', class: 'cyan', delay: 500, sound: 'data' },
+                { text: '  [▓▓▓▓░░░░░░░░░░░░░░] 2.8 GB / 11.4 GB (25%)', class: 'cyan', delay: 500, sound: 'data' },
+                { text: '  [▓▓▓▓▓▓▓░░░░░░░░░░░] 5.1 GB / 11.4 GB (45%)', class: 'cyan', delay: 500, sound: 'data' },
+                { text: '  [▓▓▓▓▓▓▓▓▓▓░░░░░░░░] 7.3 GB / 11.4 GB (64%)', class: 'cyan', delay: 500, sound: 'data' },
+                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░] 9.2 GB / 11.4 GB (81%)', class: 'cyan', delay: 500, sound: 'data' },
+                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 11.4 GB / 11.4 GB (100%)', class: 'cyan', delay: 500, sound: 'data' },
+                { text: '', class: '', delay: 200, sound: null },
+                { text: '[SUCCESS] Transfert terminé avec succès', class: 'cyan', delay: 300, sound: 'alert' },
+                { text: '[SUCCESS] Logs système purgés', class: 'cyan', delay: 300, sound: null },
+                { text: '[SUCCESS] Traces réseau effacées', class: 'cyan', delay: 300, sound: null },
                 { text: '', class: '', delay: 300, sound: null },
-                { text: '> Maintaining stealth mode...', class: 'yellow', delay: 300, sound: 'type' },
-                { text: '> Surveillance initiated...', class: 'yellow', delay: 300, sound: 'type' },
+                { text: '╔═══════════════════════════════════════════════════════╗', class: 'red', delay: 50, sound: 'critical' },
+                { text: '║                                                       ║', class: 'red', delay: 30, sound: null },
+                { text: '║              💀 COMPROMISSION TOTALE 💀               ║', class: 'red', delay: 30, sound: null },
+                { text: '║                                                       ║', class: 'red', delay: 30, sound: null },
+                { text: '║      Votre système est maintenant sous contrôle      ║', class: 'red', delay: 30, sound: null },
+                { text: '║           Toutes les données ont été volées          ║', class: 'red', delay: 30, sound: null },
+                { text: '║                                                       ║', class: 'red', delay: 30, sound: null },
+                { text: '╚═══════════════════════════════════════════════════════╝', class: 'red', delay: 50, sound: null },
+                { text: '', class: '', delay: 300, sound: null },
+                { text: '═══ RÉSUMÉ DE L\'ATTAQUE ═══', class: 'yellow', delay: 200, sound: null },
+                { text: '', class: '', delay: 100, sound: null },
+                { text: '  ✓ Accès root/SYSTEM         : ACQUIS', class: 'cyan', delay: 150, sound: 'type' },
+                { text: '  ✓ Défenses désactivées      : CONFIRMÉ', class: 'cyan', delay: 150, sound: 'type' },
+                { text: '  ✓ Backdoor persistant       : ACTIF', class: 'cyan', delay: 150, sound: 'type' },
+                { text: '  ✓ Keylogger                 : EN MARCHE', class: 'cyan', delay: 150, sound: 'type' },
+                { text: '  ✓ Capture d\'écran           : ACTIVÉE', class: 'cyan', delay: 150, sound: 'type' },
+                { text: '  ✓ Accès webcam              : DISPONIBLE', class: 'cyan', delay: 150, sound: 'type' },
+                { text: '  ✓ Accès microphone          : DISPONIBLE', class: 'cyan', delay: 150, sound: 'type' },
+                { text: '  ✓ Contrôle système complet  : OBTENU', class: 'cyan', delay: 150, sound: 'type' },
+                { text: '  ✓ Données exfiltrées        : 11.4 GB', class: 'cyan', delay: 150, sound: 'type' },
+                { text: '  ✓ Connexion C&C             : STABLE', class: 'cyan', delay: 150, sound: 'type' },
+                { text: '', class: '', delay: 300, sound: null },
+                { text: '[!] La surveillance continue en arrière-plan...', class: 'red', delay: 300, sound: 'alert' },
+                { text: '[!] Impossible de détecter ou supprimer les backdoors', class: 'red', delay: 300, sound: null },
                 { text: '', class: '', delay: 400, sound: null },
-                { text: '[!] Connection will remain active in background', class: 'red', delay: 300, sound: 'alert' },
-                { text: '', class: '', delay: 400, sound: null },
-                { text: 'root@darknet:~# ', class: 'cursor', delay: 0, sound: null }
+                { text: 'root@darknet-c2:~# ', class: 'cursor', delay: 0, sound: null }
             ];
 
             for (let msg of hackingMessages) {
@@ -998,6 +1274,10 @@
                     playAlertSound();
                 } else if (msg.sound === 'data') {
                     playDataTransferSound();
+                } else if (msg.sound === 'disk') {
+                    playDiskAccessSound();
+                } else if (msg.sound === 'critical') {
+                    playCriticalSound();
                 }
                 
                 const line = document.createElement('div');
