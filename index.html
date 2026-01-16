@@ -3,277 +3,490 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ERREUR SYSTÈME</title>
+    <title>Windows</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none;
         }
 
         body {
-            background: #0000AA;
-            font-family: 'Courier New', monospace;
+            background: #0078d7;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: white;
             overflow: hidden;
-            cursor: none;
+            cursor: default;
         }
 
-        .container {
+        .bsod-container {
+            padding: 80px;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            padding: 20px;
         }
 
-        .error-box {
-            background: #0000AA;
-            border: 2px solid white;
-            padding: 40px;
-            max-width: 800px;
-            text-align: center;
-            animation: flicker 0.15s infinite;
-        }
-
-        @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.95; }
+        .sad-face {
+            font-size: 120px;
+            margin-bottom: 40px;
+            font-weight: 300;
         }
 
         h1 {
-            font-size: 48px;
+            font-size: 42px;
+            font-weight: 300;
             margin-bottom: 30px;
-            letter-spacing: 3px;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
         }
 
         .error-text {
-            font-size: 20px;
-            line-height: 1.8;
-            margin: 20px 0;
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        .progress-container {
+            margin-top: 40px;
+        }
+
+        .progress-text {
+            font-size: 16px;
+            margin-bottom: 10px;
         }
 
         .error-code {
-            font-size: 16px;
-            margin: 30px 0;
-            color: #AAAAAA;
+            margin-top: 60px;
+            font-size: 14px;
+            opacity: 0.8;
         }
 
-        .blink {
-            animation: blink 1s infinite;
+        .qr-code {
+            position: absolute;
+            bottom: 80px;
+            right: 80px;
+            width: 150px;
+            height: 150px;
+            background: white;
+            padding: 10px;
         }
 
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
+        /* Fenêtre d'erreur Windows */
+        .error-window {
+            position: fixed;
+            width: 400px;
+            background: #f0f0f0;
+            border: 1px solid #0078d7;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            z-index: 1000;
+            animation: shake 0.3s;
         }
 
-        .press-key {
-            margin-top: 40px;
-            font-size: 24px;
+        @keyframes shake {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(-5px, 0); }
+            75% { transform: translate(5px, 0); }
+        }
+
+        .error-title-bar {
+            background: linear-gradient(180deg, #ffffff 0%, #e5e5e5 100%);
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+            cursor: move;
+        }
+
+        .error-icon-title {
+            width: 16px;
+            height: 16px;
+            margin-right: 6px;
+        }
+
+        .error-title-text {
+            font-size: 12px;
+            color: #000;
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .error-close-btn {
+            width: 16px;
+            height: 16px;
+            background: #e81123;
+            color: white;
+            border: none;
+            font-size: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .error-close-btn:hover {
+            background: #c50014;
+        }
+
+        .error-content {
+            padding: 20px;
+            background: white;
+            display: flex;
+            gap: 15px;
+        }
+
+        .error-symbol {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .error-message {
+            color: #000;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .error-buttons {
+            padding: 15px 20px;
+            background: #f0f0f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            border-top: 1px solid #dfdfdf;
+        }
+
+        .error-btn {
+            padding: 6px 20px;
+            background: linear-gradient(180deg, #ffffff 0%, #e5e5e5 100%);
+            border: 1px solid #adadad;
+            color: #000;
+            font-size: 11px;
+            cursor: pointer;
+            min-width: 75px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .error-btn:hover {
+            background: linear-gradient(180deg, #e5f3ff 0%, #bee6fd 100%);
+            border: 1px solid #0078d7;
+        }
+
+        .error-btn:active {
+            background: #cce8ff;
+        }
+
+        .click-instruction {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
             padding: 15px 30px;
-            border: 2px solid white;
-            display: inline-block;
+            border-radius: 5px;
+            font-size: 16px;
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .hacking-screen {
-            width: 100%;
-            height: 100vh;
-            background: #000;
-            color: #00FF00;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .terminal-line {
-            margin: 2px 0;
-            font-size: 14px;
-        }
-
-        .cursor-blink::after {
-            content: '█';
-            animation: blink 0.7s infinite;
-        }
-
-        .glitch {
-            animation: glitch 0.3s infinite;
-        }
-
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
-        }
-
-        .matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
     </style>
 </head>
 <body>
-    <!-- Écran d'erreur initial -->
-    <div id="errorScreen" class="container">
-        <div class="error-box glitch">
-            <h1>☠ FATAL ERROR ☠</h1>
-            <div class="error-text">
-                SYSTÈME COMPROMIS<br>
-                ACCÈS NON AUTORISÉ DÉTECTÉ<br>
-                <span class="blink">*** VIOLATION DE SÉCURITÉ ***</span>
-            </div>
-            <div class="error-code">
-                Error Code: 0x00000HACK<br>
-                Status: 0xC000000F<br>
-                Module: KERNEL_BREACH.sys
-            </div>
-            <div class="press-key">
-                ▶ PRESS ANY KEY TO ESCAPE ◀
-            </div>
+    <!-- Écran bleu de la mort -->
+    <div class="bsod-container">
+        <div class="sad-face">:(</div>
+        <h1>Votre PC a rencontré un problème et doit redémarrer.</h1>
+        <div class="error-text">
+            Nous collectons simplement des informations relatives aux erreurs, puis nous<br>
+            procéderons au redémarrage pour vous. (0% effectués)
+        </div>
+        <div class="progress-container">
+            <div class="progress-text"><span id="progress">0</span>% effectués</div>
+        </div>
+        <div class="error-code">
+            Si vous souhaitez en savoir plus, vous pouvez rechercher cette erreur en ligne<br>
+            ultérieurement : CRITICAL_PROCESS_DIED
+        </div>
+        <div class="qr-code">
+            <svg viewBox="0 0 100 100">
+                <rect width="100" height="100" fill="white"/>
+                <g fill="black">
+                    <rect x="10" y="10" width="5" height="5"/>
+                    <rect x="20" y="10" width="5" height="5"/>
+                    <rect x="25" y="10" width="5" height="5"/>
+                    <rect x="35" y="10" width="5" height="5"/>
+                    <rect x="45" y="10" width="5" height="5"/>
+                    <rect x="55" y="10" width="5" height="5"/>
+                    <rect x="65" y="10" width="5" height="5"/>
+                    <rect x="75" y="10" width="5" height="5"/>
+                    <rect x="85" y="10" width="5" height="5"/>
+                    <rect x="10" y="20" width="5" height="5"/>
+                    <rect x="30" y="20" width="5" height="5"/>
+                    <rect x="50" y="20" width="5" height="5"/>
+                    <rect x="70" y="20" width="5" height="5"/>
+                    <rect x="85" y="20" width="5" height="5"/>
+                    <rect x="10" y="30" width="5" height="5"/>
+                    <rect x="25" y="30" width="5" height="5"/>
+                    <rect x="40" y="30" width="5" height="5"/>
+                    <rect x="60" y="30" width="5" height="5"/>
+                    <rect x="85" y="30" width="5" height="5"/>
+                    <rect x="10" y="40" width="5" height="5"/>
+                    <rect x="20" y="40" width="5" height="5"/>
+                    <rect x="35" y="40" width="5" height="5"/>
+                    <rect x="55" y="40" width="5" height="5"/>
+                    <rect x="70" y="40" width="5" height="5"/>
+                    <rect x="85" y="40" width="5" height="5"/>
+                    <rect x="15" y="50" width="5" height="5"/>
+                    <rect x="30" y="50" width="5" height="5"/>
+                    <rect x="45" y="50" width="5" height="5"/>
+                    <rect x="65" y="50" width="5" height="5"/>
+                    <rect x="80" y="50" width="5" height="5"/>
+                    <rect x="10" y="60" width="5" height="5"/>
+                    <rect x="25" y="60" width="5" height="5"/>
+                    <rect x="40" y="60" width="5" height="5"/>
+                    <rect x="60" y="60" width="5" height="5"/>
+                    <rect x="75" y="60" width="5" height="5"/>
+                    <rect x="85" y="60" width="5" height="5"/>
+                    <rect x="10" y="70" width="5" height="5"/>
+                    <rect x="20" y="70" width="5" height="5"/>
+                    <rect x="35" y="70" width="5" height="5"/>
+                    <rect x="50" y="70" width="5" height="5"/>
+                    <rect x="70" y="70" width="5" height="5"/>
+                    <rect x="85" y="70" width="5" height="5"/>
+                    <rect x="15" y="80" width="5" height="5"/>
+                    <rect x="30" y="80" width="5" height="5"/>
+                    <rect x="45" y="80" width="5" height="5"/>
+                    <rect x="60" y="80" width="5" height="5"/>
+                    <rect x="80" y="80" width="5" height="5"/>
+                </g>
+            </svg>
         </div>
     </div>
 
-    <!-- Écran de "hacking" -->
-    <div id="hackingScreen" class="hacking-screen hidden">
-        <canvas id="matrix" class="matrix-bg"></canvas>
-        <div id="terminal"></div>
+    <div class="click-instruction">
+        👆 Cliquez n'importe où pour générer des erreurs
     </div>
 
     <script>
-        const errorScreen = document.getElementById('errorScreen');
-        const hackingScreen = document.getElementById('hackingScreen');
-        const terminal = document.getElementById('terminal');
+        let errorCount = 0;
+        let progressValue = 0;
+        const progressElement = document.getElementById('progress');
 
-        // Détecter n'importe quelle touche
-        document.addEventListener('keydown', function(e) {
-            if (!errorScreen.classList.contains('hidden')) {
-                errorScreen.classList.add('hidden');
-                hackingScreen.classList.remove('hidden');
-                startHacking();
+        // Messages d'erreur variés
+        const errorMessages = [
+            {
+                title: "Erreur système",
+                message: "Une erreur critique s'est produite. Le système doit redémarrer immédiatement.",
+                icon: "❌"
+            },
+            {
+                title: "Windows",
+                message: "L'opération n'a pas pu être terminée car le fichier système est introuvable.",
+                icon: "⚠️"
+            },
+            {
+                title: "Erreur d'application",
+                message: "explorer.exe a cessé de fonctionner. Windows recherche une solution au problème...",
+                icon: "❌"
+            },
+            {
+                title: "Gestionnaire des tâches",
+                message: "Mémoire insuffisante. Fermez certaines applications pour libérer de la mémoire.",
+                icon: "⚠️"
+            },
+            {
+                title: "Windows Update",
+                message: "La mise à jour KB4023057 n'a pas pu être installée. Code d'erreur: 0x80070002",
+                icon: "❌"
+            },
+            {
+                title: "Erreur critique",
+                message: "Le processus système critique C:\\Windows\\system32\\csrss.exe a échoué avec le code d'état 0xC000021A.",
+                icon: "🛑"
+            },
+            {
+                title: "Disque dur",
+                message: "SMART a détecté que le disque est sur le point de tomber en panne. Sauvegardez vos données immédiatement.",
+                icon: "⚠️"
+            },
+            {
+                title: "Windows Defender",
+                message: "Menace détectée! Trojan:Win32/Wacatac.B!ml a été trouvé sur votre système.",
+                icon: "🛡️"
+            },
+            {
+                title: "Registre Windows",
+                message: "Le registre système est corrompu. Exécutez sfc /scannow pour réparer.",
+                icon: "❌"
+            },
+            {
+                title: "Carte graphique",
+                message: "Le pilote d'affichage a cessé de répondre et a été récupéré.",
+                icon: "⚠️"
+            },
+            {
+                title: "Microsoft Office",
+                message: "Word a rencontré une erreur et doit fermer. Vos modifications non enregistrées seront perdues.",
+                icon: "❌"
+            },
+            {
+                title: "Réseau",
+                message: "La connexion réseau a été interrompue de manière inattendue. Vérifiez votre câble Ethernet.",
+                icon: "🌐"
+            },
+            {
+                title: "Batterie",
+                message: "Considérez le remplacement de votre batterie. La batterie ne se charge plus correctement.",
+                icon: "🔋"
+            },
+            {
+                title: "Erreur DLL",
+                message: "Le programme ne peut pas démarrer car MSVCP140.dll est introuvable sur votre ordinateur.",
+                icon: "❌"
+            },
+            {
+                title: "Écran bleu",
+                message: "DRIVER_IRQL_NOT_LESS_OR_EQUAL. Votre système va redémarrer dans 60 secondes.",
+                icon: "💀"
             }
-        });
+        ];
 
-        // Détecter le clic aussi
-        document.addEventListener('click', function(e) {
-            if (!errorScreen.classList.contains('hidden')) {
-                errorScreen.classList.add('hidden');
-                hackingScreen.classList.remove('hidden');
-                startHacking();
+        // Animation de la barre de progression
+        setInterval(() => {
+            if (progressValue < 100) {
+                progressValue += Math.random() * 2;
+                if (progressValue > 100) progressValue = 100;
+                progressElement.textContent = Math.floor(progressValue);
             }
-        });
+        }, 1000);
 
-        function startHacking() {
-            const messages = [
-                'Initializing system breach...',
-                'Connecting to mainframe...',
-                '[OK] Connection established',
-                'Bypassing firewall protocols...',
-                'Decrypting SSL certificates...',
-                '[████████████████████] 100%',
-                'Accessing database: TOP_SECRET.db',
-                'Extracting files...',
-                '> passwd.txt',
-                '> nuclear_codes.exe',
-                '> alien_secrets.pdf',
-                '> illuminati_members.csv',
-                '[WARNING] Intrusion detected!',
-                'Deploying countermeasures...',
-                'Rerouting through proxy servers...',
-                '> Tokyo, Japan',
-                '> Moscow, Russia',
-                '> São Paulo, Brazil',
-                '[OK] Identity masked',
-                'Downloading classified data...',
-                '[████████████████████] 100%',
-                'Mission accomplished!',
-                '',
-                'HACK COMPLET! 😎',
-                '',
-                'PS: Ceci est évidemment un faux site pour rire! 🎭'
-            ];
-
-            let index = 0;
-
-            function addLine() {
-                if (index < messages.length) {
-                    const line = document.createElement('div');
-                    line.className = 'terminal-line';
-                    
-                    if (messages[index].includes('[OK]') || messages[index].includes('100%')) {
-                        line.style.color = '#00FF00';
-                    } else if (messages[index].includes('[WARNING]') || messages[index].includes('detected')) {
-                        line.style.color = '#FF0000';
-                    } else if (messages[index].includes('>')) {
-                        line.style.color = '#00FFFF';
-                    }
-                    
-                    line.textContent = messages[index];
-                    terminal.appendChild(line);
-                    
-                    terminal.scrollTop = terminal.scrollHeight;
-                    index++;
-                    
-                    const delay = Math.random() * 300 + 100;
-                    setTimeout(addLine, delay);
-                } else {
-                    const cursor = document.createElement('div');
-                    cursor.className = 'terminal-line cursor-blink';
-                    cursor.textContent = 'root@hacker:~# ';
-                    terminal.appendChild(cursor);
-                }
-            }
-
-            // Effet Matrix en arrière-plan
-            const canvas = document.getElementById('matrix');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-
-            const chars = '01';
-            const fontSize = 14;
-            const columns = canvas.width / fontSize;
-            const drops = Array(Math.floor(columns)).fill(1);
-
-            function drawMatrix() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = '#0F0';
-                ctx.font = fontSize + 'px monospace';
-
-                for (let i = 0; i < drops.length; i++) {
-                    const text = chars[Math.floor(Math.random() * chars.length)];
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
-                }
-            }
-
-            setInterval(drawMatrix, 33);
-            addLine();
+        // Fonction pour créer une fenêtre d'erreur
+        function createErrorWindow() {
+            const error = errorMessages[Math.floor(Math.random() * errorMessages.length)];
+            const errorWindow = document.createElement('div');
+            errorWindow.className = 'error-window';
+            
+            // Position aléatoire
+            const maxX = window.innerWidth - 420;
+            const maxY = window.innerHeight - 300;
+            const randomX = Math.max(20, Math.random() * maxX);
+            const randomY = Math.max(20, Math.random() * maxY);
+            
+            errorWindow.style.left = randomX + 'px';
+            errorWindow.style.top = randomY + 'px';
+            
+            errorWindow.innerHTML = `
+                <div class="error-title-bar">
+                    <div class="error-icon-title">⚠️</div>
+                    <div class="error-title-text">${error.title}</div>
+                    <button class="error-close-btn">×</button>
+                </div>
+                <div class="error-content">
+                    <div class="error-symbol">${error.icon}</div>
+                    <div class="error-message">${error.message}</div>
+                </div>
+                <div class="error-buttons">
+                    <button class="error-btn">OK</button>
+                    <button class="error-btn">Annuler</button>
+                </div>
+            `;
+            
+            document.body.appendChild(errorWindow);
+            errorCount++;
+            
+            // Rendre la fenêtre déplaçable
+            makeDraggable(errorWindow);
+            
+            // Boutons de fermeture
+            const closeBtn = errorWindow.querySelector('.error-close-btn');
+            const okBtn = errorWindow.querySelectorAll('.error-btn')[0];
+            const cancelBtn = errorWindow.querySelectorAll('.error-btn')[1];
+            
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                createErrorWindow(); // Créer une nouvelle erreur quand on ferme
+                errorWindow.remove();
+            });
+            
+            okBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                createErrorWindow(); // Créer une nouvelle erreur quand on clique OK
+                errorWindow.remove();
+            });
+            
+            cancelBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                createErrorWindow(); // Créer une nouvelle erreur quand on clique Annuler
+                errorWindow.remove();
+            });
+            
+            // Jouer un son d'erreur (simulé visuellement)
+            playErrorSound();
         }
+
+        // Fonction pour rendre une fenêtre déplaçable
+        function makeDraggable(element) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            const titleBar = element.querySelector('.error-title-bar');
+            
+            titleBar.addEventListener('mousedown', dragMouseDown);
+            
+            function dragMouseDown(e) {
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.addEventListener('mouseup', closeDragElement);
+                document.addEventListener('mousemove', elementDrag);
+            }
+            
+            function elementDrag(e) {
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                element.style.top = (element.offsetTop - pos2) + 'px';
+                element.style.left = (element.offsetLeft - pos1) + 'px';
+            }
+            
+            function closeDragElement() {
+                document.removeEventListener('mouseup', closeDragElement);
+                document.removeEventListener('mousemove', elementDrag);
+            }
+        }
+
+        // Simulation visuelle du son d'erreur
+        function playErrorSound() {
+            document.body.style.animation = 'none';
+            setTimeout(() => {
+                document.body.style.animation = '';
+            }, 10);
+        }
+
+        // Créer des erreurs au clic
+        document.addEventListener('click', (e) => {
+            // Créer entre 2 et 5 fenêtres d'erreur
+            const numErrors = Math.floor(Math.random() * 4) + 2;
+            for (let i = 0; i < numErrors; i++) {
+                setTimeout(() => {
+                    createErrorWindow();
+                }, i * 200);
+            }
+        });
+
+        // Créer quelques erreurs automatiquement après 3 secondes
+        setTimeout(() => {
+            createErrorWindow();
+        }, 3000);
+
+        // Créer des erreurs aléatoires toutes les 5-10 secondes
+        setInterval(() => {
+            if (Math.random() > 0.5) {
+                createErrorWindow();
+            }
+        }, 7000);
     </script>
 </body>
 </html>
