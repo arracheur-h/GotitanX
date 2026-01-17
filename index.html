@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rivals Clip - Partagez vos meilleurs moments</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         * {
             margin: 0;
@@ -204,6 +205,170 @@
             color: var(--text-secondary);
             max-width: 600px;
             margin: 0 auto;
+        }
+
+        /* Login Screen */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .login-container {
+            background: var(--bg-secondary);
+            padding: 4rem 3rem;
+            border-radius: 20px;
+            border: 2px solid var(--accent-cyan);
+            box-shadow: 0 0 60px rgba(0, 255, 247, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            animation: loginSlide 0.5s ease;
+        }
+
+        @keyframes loginSlide {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .login-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .login-title {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .login-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .google-btn {
+            background: white;
+            color: #1f1f1f;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .google-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .login-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 5rem 2rem;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 2px dashed var(--border);
+        }
+
+        .empty-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* User Menu */
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-cyan);
+            object-fit: cover;
+        }
+
+        .logout-btn {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff6b6b;
+            padding: 0.5rem 1rem;
+            border: 1px solid #ff6b6b;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border: 3px solid var(--accent-cyan);
+            box-shadow: 0 0 30px rgba(0, 255, 247, 0.4);
         }
 
         /* Filters */
@@ -606,18 +771,60 @@
 <body>
     <div class="bg-gradient"></div>
 
-    <header>
-        <div class="header-content">
-            <div class="logo">Rivals Clip</div>
-            <nav>
-                <a href="#" class="nav-link active" data-tab="home">Accueil</a>
-                <a href="#" class="nav-link" data-tab="trending">Tendances</a>
-                <a href="#" class="nav-link" data-tab="leaderboard">Classement</a>
-                <a href="#" class="nav-link" data-tab="profile">Profil</a>
-            </nav>
-            <button class="upload-btn" onclick="openUploadModal()">📤 Upload Clip</button>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-logo">Rivals Clip</div>
+            <h2 class="login-title">Partagez vos meilleurs moments</h2>
+            <p class="login-subtitle">Connectez-vous pour uploader et découvrir des clips épiques</p>
+            
+            <div id="googleSignInBtn" class="google-btn">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                <span>Continuer avec Google</span>
+            </div>
+            
+            <div class="login-features">
+                <div class="feature-item">
+                    <span class="feature-icon">🎮</span>
+                    <span>Uploadez vos clips</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🏆</span>
+                    <span>Classement communautaire</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">💬</span>
+                    <span>Commentaires et likes</span>
+                </div>
+            </div>
         </div>
-    </header>
+    </div>
+
+    <!-- Main App (Hidden until logged in) -->
+    <div id="mainApp" style="display: none;">
+        <header>
+            <div class="header-content">
+                <div class="logo">Rivals Clip</div>
+                <nav>
+                    <a href="#" class="nav-link active" data-tab="home">Accueil</a>
+                    <a href="#" class="nav-link" data-tab="trending">Tendances</a>
+                    <a href="#" class="nav-link" data-tab="leaderboard">Classement</a>
+                    <a href="#" class="nav-link" data-tab="profile">Profil</a>
+                </nav>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="upload-btn" onclick="openUploadModal()">📤 Upload Clip</button>
+                    <div class="user-menu">
+                        <img id="userAvatar" class="user-avatar" src="" alt="Avatar">
+                        <button class="logout-btn" onclick="signOut()">Déconnexion</button>
+                    </div>
+                </div>
+            </div>
+        </header>
 
     <main>
         <!-- Home Tab -->
@@ -635,89 +842,14 @@
                 <button class="filter-btn">Funny</button>
             </div>
 
-            <div class="clips-grid">
-                <div class="clip-card">
-                    <div class="clip-thumbnail"></div>
-                    <div class="clip-info">
-                        <h3 class="clip-title">Triple Kill Insane!</h3>
-                        <div class="clip-meta">
-                            <span>Par <strong>ProGamer</strong></span>
-                            <div class="clip-stats">
-                                <span class="stat"><span class="stat-icon">👁️</span> 1.2K</span>
-                                <span class="stat"><span class="stat-icon">❤️</span> 342</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="clip-card">
-                    <div class="clip-thumbnail"></div>
-                    <div class="clip-info">
-                        <h3 class="clip-title">Clutch 1v5 Impossible</h3>
-                        <div class="clip-meta">
-                            <span>Par <strong>ClutchMaster</strong></span>
-                            <div class="clip-stats">
-                                <span class="stat"><span class="stat-icon">👁️</span> 3.5K</span>
-                                <span class="stat"><span class="stat-icon">❤️</span> 892</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="clip-card">
-                    <div class="clip-thumbnail"></div>
-                    <div class="clip-info">
-                        <h3 class="clip-title">Le Snipe du Siècle</h3>
-                        <div class="clip-meta">
-                            <span>Par <strong>SnipeKing</strong></span>
-                            <div class="clip-stats">
-                                <span class="stat"><span class="stat-icon">👁️</span> 2.1K</span>
-                                <span class="stat"><span class="stat-icon">❤️</span> 567</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="clip-card">
-                    <div class="clip-thumbnail"></div>
-                    <div class="clip-info">
-                        <h3 class="clip-title">Epic Fail Compilation</h3>
-                        <div class="clip-meta">
-                            <span>Par <strong>FunnyGuy</strong></span>
-                            <div class="clip-stats">
-                                <span class="stat"><span class="stat-icon">👁️</span> 5.8K</span>
-                                <span class="stat"><span class="stat-icon">❤️</span> 1.3K</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="clip-card">
-                    <div class="clip-thumbnail"></div>
-                    <div class="clip-info">
-                        <h3 class="clip-title">200 IQ Play</h3>
-                        <div class="clip-meta">
-                            <span>Par <strong>BigBrain</strong></span>
-                            <div class="clip-stats">
-                                <span class="stat"><span class="stat-icon">👁️</span> 4.2K</span>
-                                <span class="stat"><span class="stat-icon">❤️</span> 976</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="clip-card">
-                    <div class="clip-thumbnail"></div>
-                    <div class="clip-info">
-                        <h3 class="clip-title">Meilleur Ace Ever</h3>
-                        <div class="clip-meta">
-                            <span>Par <strong>AceHunter</strong></span>
-                            <div class="clip-stats">
-                                <span class="stat"><span class="stat-icon">👁️</span> 6.7K</span>
-                                <span class="stat"><span class="stat-icon">❤️</span> 1.9K</span>
-                            </div>
-                        </div>
-                    </div>
+            <div id="clipsContainer" class="clips-grid">
+                <div class="empty-state">
+                    <div class="empty-icon">🎬</div>
+                    <h3>Aucun clip pour le moment</h3>
+                    <p>Soyez le premier à partager vos meilleurs moments !</p>
+                    <button class="upload-btn" onclick="openUploadModal()" style="margin-top: 1.5rem;">
+                        📤 Upload votre premier clip
+                    </button>
                 </div>
             </div>
         </div>
@@ -729,47 +861,11 @@
                 <p>Les clips les plus populaires cette semaine</p>
             </div>
 
-            <div class="clips-grid">
-                <div class="clip-card">
-                    <div class="clip-thumbnail"></div>
-                    <div class="clip-info">
-                        <h3 class="clip-title">🏆 Clip #1 de la Semaine</h3>
-                        <div class="clip-meta">
-                            <span>Par <strong>LegendPlayer</strong></span>
-                            <div class="clip-stats">
-                                <span class="stat"><span class="stat-icon">👁️</span> 15.2K</span>
-                                <span class="stat"><span class="stat-icon">❤️</span> 4.8K</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="clip-card">
-                    <div class="clip-thumbnail"></div>
-                    <div class="clip-info">
-                        <h3 class="clip-title">Montage Incroyable</h3>
-                        <div class="clip-meta">
-                            <span>Par <strong>EditMaster</strong></span>
-                            <div class="clip-stats">
-                                <span class="stat"><span class="stat-icon">👁️</span> 12.5K</span>
-                                <span class="stat"><span class="stat-icon">❤️</span> 3.2K</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="clip-card">
-                    <div class="clip-thumbnail"></div>
-                    <div class="clip-info">
-                        <h3 class="clip-title">Speed Run Record</h3>
-                        <div class="clip-meta">
-                            <span>Par <strong>FastRunner</strong></span>
-                            <div class="clip-stats">
-                                <span class="stat"><span class="stat-icon">👁️</span> 9.8K</span>
-                                <span class="stat"><span class="stat-icon">❤️</span> 2.7K</span>
-                            </div>
-                        </div>
-                    </div>
+            <div id="trendingContainer" class="clips-grid">
+                <div class="empty-state">
+                    <div class="empty-icon">📈</div>
+                    <h3>Aucun clip tendance</h3>
+                    <p>Les clips les plus likés apparaîtront ici</p>
                 </div>
             </div>
         </div>
@@ -781,117 +877,52 @@
                 <p>Les meilleurs joueurs de la communauté</p>
             </div>
 
-            <div class="leaderboard-item">
-                <div class="leaderboard-rank top-1">1</div>
-                <div class="leaderboard-avatar">L</div>
-                <div class="leaderboard-info">
-                    <div class="leaderboard-name">LegendPlayer</div>
-                    <div>250 Clips • 125K Vues</div>
+            <div id="leaderboardContainer">
+                <div class="empty-state">
+                    <div class="empty-icon">🏅</div>
+                    <h3>Classement en construction</h3>
+                    <p>Uploadez des clips pour apparaître dans le classement !</p>
                 </div>
-                <div class="leaderboard-score">9,847 pts</div>
-            </div>
-
-            <div class="leaderboard-item">
-                <div class="leaderboard-rank top-2">2</div>
-                <div class="leaderboard-avatar">P</div>
-                <div class="leaderboard-info">
-                    <div class="leaderboard-name">ProGamer</div>
-                    <div>198 Clips • 98K Vues</div>
-                </div>
-                <div class="leaderboard-score">8,532 pts</div>
-            </div>
-
-            <div class="leaderboard-item">
-                <div class="leaderboard-rank top-3">3</div>
-                <div class="leaderboard-avatar">C</div>
-                <div class="leaderboard-info">
-                    <div class="leaderboard-name">ClutchMaster</div>
-                    <div>175 Clips • 87K Vues</div>
-                </div>
-                <div class="leaderboard-score">7,921 pts</div>
-            </div>
-
-            <div class="leaderboard-item">
-                <div class="leaderboard-rank">4</div>
-                <div class="leaderboard-avatar">S</div>
-                <div class="leaderboard-info">
-                    <div class="leaderboard-name">SnipeKing</div>
-                    <div>162 Clips • 75K Vues</div>
-                </div>
-                <div class="leaderboard-score">7,234 pts</div>
-            </div>
-
-            <div class="leaderboard-item">
-                <div class="leaderboard-rank">5</div>
-                <div class="leaderboard-avatar">E</div>
-                <div class="leaderboard-info">
-                    <div class="leaderboard-name">EditMaster</div>
-                    <div>143 Clips • 68K Vues</div>
-                </div>
-                <div class="leaderboard-score">6,789 pts</div>
             </div>
         </div>
 
         <!-- Profile Tab -->
         <div id="profile" class="tab-content">
             <div class="profile-header">
-                <div class="profile-avatar">U</div>
+                <img id="profileAvatar" class="profile-avatar" src="" alt="Avatar" style="border-radius: 50%; object-fit: cover;">
                 <div class="profile-info">
-                    <h2>Utilisateur</h2>
-                    <p style="color: var(--text-secondary);">Membre depuis Janvier 2026</p>
+                    <h2 id="profileName">Utilisateur</h2>
+                    <p id="profileEmail" style="color: var(--text-secondary);"></p>
                     <div class="profile-stats">
                         <div class="profile-stat">
-                            <div class="profile-stat-value">42</div>
+                            <div class="profile-stat-value" id="userClipsCount">0</div>
                             <div class="profile-stat-label">Clips</div>
                         </div>
                         <div class="profile-stat">
-                            <div class="profile-stat-value">12.5K</div>
+                            <div class="profile-stat-value" id="userViewsCount">0</div>
                             <div class="profile-stat-label">Vues</div>
                         </div>
                         <div class="profile-stat">
-                            <div class="profile-stat-value">3.2K</div>
+                            <div class="profile-stat-value" id="userLikesCount">0</div>
                             <div class="profile-stat-label">Likes</div>
-                        </div>
-                        <div class="profile-stat">
-                            <div class="profile-stat-value">156</div>
-                            <div class="profile-stat-label">Abonnés</div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <h2 style="margin-bottom: 1.5rem; font-family: 'Orbitron', sans-serif;">Mes Clips</h2>
-            <div class="clips-grid">
-                <div class="clip-card">
-                    <div class="clip-thumbnail"></div>
-                    <div class="clip-info">
-                        <h3 class="clip-title">Mon Premier Ace</h3>
-                        <div class="clip-meta">
-                            <span>Il y a 2 jours</span>
-                            <div class="clip-stats">
-                                <span class="stat"><span class="stat-icon">👁️</span> 523</span>
-                                <span class="stat"><span class="stat-icon">❤️</span> 87</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="clip-card">
-                    <div class="clip-thumbnail"></div>
-                    <div class="clip-info">
-                        <h3 class="clip-title">Clutch Moment</h3>
-                        <div class="clip-meta">
-                            <span>Il y a 5 jours</span>
-                            <div class="clip-stats">
-                                <span class="stat"><span class="stat-icon">👁️</span> 892</span>
-                                <span class="stat"><span class="stat-icon">❤️</span> 134</span>
-                            </div>
-                        </div>
-                    </div>
+            <div id="userClipsContainer" class="clips-grid">
+                <div class="empty-state">
+                    <div class="empty-icon">🎮</div>
+                    <h3>Vous n'avez pas encore de clips</h3>
+                    <p>Uploadez votre premier clip pour commencer !</p>
+                    <button class="upload-btn" onclick="openUploadModal()" style="margin-top: 1.5rem;">
+                        📤 Upload mon premier clip
+                    </button>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
 
     <!-- Upload Modal -->
     <div id="uploadModal" class="modal">
@@ -910,17 +941,17 @@
 
             <div class="form-group">
                 <label>Titre du Clip</label>
-                <input type="text" placeholder="Mon meilleur clip ever...">
+                <input type="text" id="clipTitle" placeholder="Mon meilleur clip ever...">
             </div>
 
             <div class="form-group">
                 <label>Description</label>
-                <textarea placeholder="Décrivez votre clip..."></textarea>
+                <textarea id="clipDescription" placeholder="Décrivez votre clip..."></textarea>
             </div>
 
             <div class="form-group">
                 <label>Catégorie</label>
-                <select>
+                <select id="clipCategory">
                     <option>Kills</option>
                     <option>Clutch</option>
                     <option>Fails</option>
@@ -929,21 +960,237 @@
                 </select>
             </div>
 
-            <button class="upload-btn" style="width: 100%;">🚀 Publier le Clip</button>
+            <button class="upload-btn" style="width: 100%;" onclick="publishClip()">🚀 Publier le Clip</button>
         </div>
     </div>
 
+    </div>
+
     <script>
+        // Variables globales
+        let currentUser = null;
+        let allClips = [];
+
+        // Initialize Google Sign-In
+        function initGoogleSignIn() {
+            // Simuler la connexion Google (en production, utilisez Google OAuth)
+            const googleBtn = document.getElementById('googleSignInBtn');
+            googleBtn.addEventListener('click', () => {
+                // En production, utilisez: google.accounts.id.initialize() et google.accounts.id.prompt()
+                // Pour cette démo, on simule une connexion
+                simulateGoogleSignIn();
+            });
+        }
+
+        // Simuler connexion Google (pour démo)
+        function simulateGoogleSignIn() {
+            const user = {
+                id: 'user_' + Date.now(),
+                name: 'Joueur Demo',
+                email: 'demo@rivalsclip.com',
+                avatar: 'https://ui-avatars.com/api/?name=Joueur+Demo&background=00fff7&color=0a0a0f&size=200'
+            };
+            
+            handleSignIn(user);
+        }
+
+        // Gérer la connexion
+        function handleSignIn(user) {
+            currentUser = user;
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            
+            // Afficher l'interface principale
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            
+            // Mettre à jour l'interface utilisateur
+            document.getElementById('userAvatar').src = user.avatar;
+            document.getElementById('profileAvatar').src = user.avatar;
+            document.getElementById('profileName').textContent = user.name;
+            document.getElementById('profileEmail').textContent = user.email;
+            
+            // Charger les clips
+            loadClips();
+        }
+
+        // Déconnexion
+        function signOut() {
+            if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
+                currentUser = null;
+                localStorage.removeItem('currentUser');
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('mainApp').style.display = 'none';
+            }
+        }
+
+        // Vérifier si l'utilisateur est déjà connecté
+        function checkAuth() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                handleSignIn(JSON.parse(savedUser));
+            }
+        }
+
+        // Charger les clips depuis localStorage
+        function loadClips() {
+            const savedClips = localStorage.getItem('rivalsClips');
+            allClips = savedClips ? JSON.parse(savedClips) : [];
+            
+            renderClips();
+            updateUserStats();
+        }
+
+        // Sauvegarder les clips dans localStorage
+        function saveClips() {
+            localStorage.setItem('rivalsClips', JSON.stringify(allClips));
+        }
+
+        // Rendre les clips dans l'interface
+        function renderClips(filter = 'Tous') {
+            const container = document.getElementById('clipsContainer');
+            const trendingContainer = document.getElementById('trendingContainer');
+            const userClipsContainer = document.getElementById('userClipsContainer');
+            
+            // Filtrer les clips
+            let filteredClips = allClips;
+            if (filter !== 'Tous') {
+                filteredClips = allClips.filter(clip => clip.category === filter);
+            }
+            
+            // Clips principaux
+            if (filteredClips.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🎬</div>
+                        <h3>Aucun clip pour le moment</h3>
+                        <p>Soyez le premier à partager vos meilleurs moments !</p>
+                        <button class="upload-btn" onclick="openUploadModal()" style="margin-top: 1.5rem;">
+                            📤 Upload votre premier clip
+                        </button>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = filteredClips.map(clip => createClipCard(clip)).join('');
+            }
+            
+            // Clips trending (triés par likes)
+            const trendingClips = [...allClips].sort((a, b) => b.likes - a.likes).slice(0, 6);
+            if (trendingClips.length === 0) {
+                trendingContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📈</div>
+                        <h3>Aucun clip tendance</h3>
+                        <p>Les clips les plus likés apparaîtront ici</p>
+                    </div>
+                `;
+            } else {
+                trendingContainer.innerHTML = trendingClips.map(clip => createClipCard(clip)).join('');
+            }
+            
+            // Clips de l'utilisateur
+            const userClips = allClips.filter(clip => clip.userId === currentUser.id);
+            if (userClips.length === 0) {
+                userClipsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🎮</div>
+                        <h3>Vous n'avez pas encore de clips</h3>
+                        <p>Uploadez votre premier clip pour commencer !</p>
+                        <button class="upload-btn" onclick="openUploadModal()" style="margin-top: 1.5rem;">
+                            📤 Upload mon premier clip
+                        </button>
+                    </div>
+                `;
+            } else {
+                userClipsContainer.innerHTML = userClips.map(clip => createClipCard(clip)).join('');
+            }
+        }
+
+        // Créer une carte de clip
+        function createClipCard(clip) {
+            return `
+                <div class="clip-card" onclick="playClip('${clip.id}')">
+                    <div class="clip-thumbnail">
+                        ${clip.videoUrl ? `<video src="${clip.videoUrl}" style="width: 100%; height: 100%; object-fit: cover;"></video>` : ''}
+                    </div>
+                    <div class="clip-info">
+                        <h3 class="clip-title">${clip.title}</h3>
+                        <div class="clip-meta">
+                            <span>Par <strong>${clip.userName}</strong></span>
+                            <div class="clip-stats">
+                                <span class="stat"><span class="stat-icon">👁️</span> ${clip.views}</span>
+                                <span class="stat">
+                                    <button onclick="likeClip('${clip.id}', event)" style="background: none; border: none; cursor: pointer; color: inherit;">
+                                        <span class="stat-icon">❤️</span> ${clip.likes}
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Lire un clip
+        function playClip(clipId) {
+            const clip = allClips.find(c => c.id === clipId);
+            if (clip) {
+                clip.views++;
+                saveClips();
+                renderClips();
+                updateUserStats();
+                
+                // Ouvrir le lecteur vidéo
+                if (clip.videoUrl) {
+                    const videoPlayer = window.open('', '_blank');
+                    videoPlayer.document.write(`
+                        <html>
+                        <head>
+                            <title>${clip.title}</title>
+                            <style>
+                                body { margin: 0; background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; }
+                                video { max-width: 100%; max-height: 100%; }
+                            </style>
+                        </head>
+                        <body>
+                            <video controls autoplay src="${clip.videoUrl}"></video>
+                        </body>
+                        </html>
+                    `);
+                }
+            }
+        }
+
+        // Liker un clip
+        function likeClip(clipId, event) {
+            event.stopPropagation();
+            const clip = allClips.find(c => c.id === clipId);
+            if (clip) {
+                clip.likes++;
+                saveClips();
+                renderClips();
+                updateUserStats();
+            }
+        }
+
+        // Mettre à jour les statistiques utilisateur
+        function updateUserStats() {
+            const userClips = allClips.filter(clip => clip.userId === currentUser.id);
+            const totalViews = userClips.reduce((sum, clip) => sum + clip.views, 0);
+            const totalLikes = userClips.reduce((sum, clip) => sum + clip.likes, 0);
+            
+            document.getElementById('userClipsCount').textContent = userClips.length;
+            document.getElementById('userViewsCount').textContent = totalViews;
+            document.getElementById('userLikesCount').textContent = totalLikes;
+        }
+
         // Tab Navigation
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 
-                // Remove active class from all links and tabs
                 document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
                 document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
                 
-                // Add active class to clicked link and corresponding tab
                 link.classList.add('active');
                 const tabId = link.getAttribute('data-tab');
                 document.getElementById(tabId).classList.add('active');
@@ -955,6 +1202,7 @@
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
+                renderClips(btn.textContent);
             });
         });
 
@@ -967,26 +1215,68 @@
             document.getElementById('uploadModal').classList.remove('active');
         }
 
-        // Close modal when clicking outside
         document.getElementById('uploadModal').addEventListener('click', (e) => {
             if (e.target.id === 'uploadModal') {
                 closeUploadModal();
             }
         });
 
-        // File input handling
+        // Gestion de l'upload de fichier
+        let selectedFile = null;
         document.getElementById('fileInput').addEventListener('change', (e) => {
             if (e.target.files.length > 0) {
-                const fileName = e.target.files[0].name;
-                alert('Fichier sélectionné : ' + fileName);
+                selectedFile = e.target.files[0];
+                const fileName = selectedFile.name;
+                document.querySelector('.upload-area p').textContent = `Fichier sélectionné : ${fileName}`;
             }
         });
 
-        // Clip card click animation
-        document.querySelectorAll('.clip-card').forEach(card => {
-            card.addEventListener('click', () => {
-                alert('Lecture du clip...');
-            });
+        // Publier un clip
+        function publishClip() {
+            const title = document.getElementById('clipTitle').value;
+            const description = document.getElementById('clipDescription').value;
+            const category = document.getElementById('clipCategory').value;
+            
+            if (!title || !selectedFile) {
+                alert('Veuillez remplir le titre et sélectionner une vidéo');
+                return;
+            }
+            
+            // Créer une URL pour la vidéo
+            const videoUrl = URL.createObjectURL(selectedFile);
+            
+            const newClip = {
+                id: 'clip_' + Date.now(),
+                userId: currentUser.id,
+                userName: currentUser.name,
+                title: title,
+                description: description,
+                category: category,
+                videoUrl: videoUrl,
+                views: 0,
+                likes: 0,
+                timestamp: new Date().toISOString()
+            };
+            
+            allClips.unshift(newClip);
+            saveClips();
+            renderClips();
+            updateUserStats();
+            
+            // Réinitialiser le formulaire
+            document.getElementById('clipTitle').value = '';
+            document.getElementById('clipDescription').value = '';
+            selectedFile = null;
+            document.querySelector('.upload-area p').textContent = 'Cliquez pour choisir un fichier vidéo';
+            
+            closeUploadModal();
+            alert('Clip publié avec succès ! 🎉');
+        }
+
+        // Initialiser au chargement de la page
+        window.addEventListener('DOMContentLoaded', () => {
+            initGoogleSignIn();
+            checkAuth();
         });
     </script>
 </body>
