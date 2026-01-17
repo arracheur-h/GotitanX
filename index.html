@@ -33,7 +33,6 @@
             overflow-x: hidden;
         }
 
-        /* Animated background */
         .bg-gradient {
             position: fixed;
             top: 0;
@@ -51,160 +50,6 @@
         @keyframes gradientShift {
             0%, 100% { opacity: 0.5; }
             50% { opacity: 0.8; }
-        }
-
-        /* Header */
-        header {
-            background: rgba(18, 18, 26, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 2px solid var(--border);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 10px 40px rgba(0, 255, 247, 0.1);
-        }
-
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 30px rgba(0, 255, 247, 0.5);
-            animation: logoGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes logoGlow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.3); }
-        }
-
-        nav {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 600;
-            padding: 0.5rem 1.5rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .nav-link:hover::before {
-            left: 100%;
-        }
-
-        .nav-link:hover {
-            color: var(--accent-cyan);
-            text-shadow: 0 0 10px var(--accent-cyan);
-        }
-
-        .nav-link.active {
-            color: var(--accent-cyan);
-            background: rgba(0, 255, 247, 0.1);
-            border: 1px solid var(--accent-cyan);
-        }
-
-        .upload-btn {
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
-            color: var(--bg-primary);
-            padding: 0.7rem 2rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(0, 255, 247, 0.3);
-        }
-
-        .upload-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(0, 255, 247, 0.6);
-        }
-
-        /* Main Content */
-        main {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 3rem 2rem;
-        }
-
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 4rem 0;
-            margin-bottom: 3rem;
-        }
-
-        .hero h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #ffffff, var(--accent-cyan), var(--accent-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: titleShine 3s ease-in-out infinite;
-        }
-
-        @keyframes titleShine {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.5); }
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
         }
 
         /* Login Screen */
@@ -247,6 +92,8 @@
             margin-bottom: 1rem;
             text-transform: uppercase;
             letter-spacing: 3px;
+            cursor: pointer;
+            user-select: none;
         }
 
         .login-title {
@@ -304,35 +151,90 @@
             font-size: 2rem;
         }
 
-        /* Empty State */
-        .empty-state {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 5rem 2rem;
-            background: var(--bg-card);
-            border-radius: 12px;
-            border: 2px dashed var(--border);
+        /* Header */
+        header {
+            background: rgba(18, 18, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 10px 40px rgba(0, 255, 247, 0.1);
         }
 
-        .empty-icon {
-            font-size: 5rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
-        .empty-state h3 {
+        .logo {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 30px rgba(0, 255, 247, 0.5);
         }
 
-        .empty-state p {
+        nav {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
             color: var(--text-secondary);
+            text-decoration: none;
             font-size: 1.1rem;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* User Menu */
+        .nav-link:hover {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        .nav-link.active {
+            color: var(--accent-cyan);
+            background: rgba(0, 255, 247, 0.1);
+            border: 1px solid var(--accent-cyan);
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+            color: var(--bg-primary);
+            padding: 0.7rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 247, 0.3);
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 255, 247, 0.6);
+        }
+
         .user-menu {
             display: flex;
             align-items: center;
@@ -364,11 +266,72 @@
             color: white;
         }
 
-        .profile-avatar {
-            width: 150px;
-            height: 150px;
-            border: 3px solid var(--accent-cyan);
-            box-shadow: 0 0 30px rgba(0, 255, 247, 0.4);
+        /* Main Content */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff, var(--accent-cyan), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 5rem 2rem;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 2px dashed var(--border);
+        }
+
+        .empty-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
         }
 
         /* Filters */
@@ -405,7 +368,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 2rem;
-            margin-bottom: 3rem;
         }
 
         .clip-card {
@@ -418,27 +380,10 @@
             position: relative;
         }
 
-        .clip-card::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink), var(--accent-yellow));
-            border-radius: 12px;
-            opacity: 0;
-            z-index: -1;
-            transition: opacity 0.4s ease;
-        }
-
-        .clip-card:hover::before {
-            opacity: 1;
-        }
-
         .clip-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 20px 60px rgba(0, 255, 247, 0.3);
+            border-color: var(--accent-cyan);
         }
 
         .clip-thumbnail {
@@ -452,6 +397,12 @@
             overflow: hidden;
         }
 
+        .clip-thumbnail video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .clip-thumbnail::after {
             content: '▶';
             position: absolute;
@@ -460,6 +411,7 @@
             opacity: 0.8;
             text-shadow: 0 0 20px var(--accent-cyan);
             transition: all 0.3s ease;
+            pointer-events: none;
         }
 
         .clip-card:hover .clip-thumbnail::after {
@@ -475,7 +427,6 @@
             font-size: 1.3rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
-            color: var(--text-primary);
         }
 
         .clip-meta {
@@ -502,7 +453,56 @@
             color: var(--accent-cyan);
         }
 
-        /* Upload Modal */
+        /* Profile */
+        .profile-header {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            padding: 2rem;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 3rem;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-cyan);
+            box-shadow: 0 0 30px rgba(0, 255, 247, 0.4);
+            object-fit: cover;
+        }
+
+        .profile-info h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .profile-stat {
+            text-align: center;
+        }
+
+        .profile-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .profile-stat-label {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -514,16 +514,10 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
-            animation: modalFade 0.3s ease;
         }
 
         .modal.active {
             display: flex;
-        }
-
-        @keyframes modalFade {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
 
         .modal-content {
@@ -535,6 +529,8 @@
             border: 2px solid var(--accent-cyan);
             box-shadow: 0 0 60px rgba(0, 255, 247, 0.3);
             animation: modalSlide 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         @keyframes modalSlide {
@@ -627,129 +623,71 @@
             box-shadow: 0 0 15px rgba(0, 255, 247, 0.2);
         }
 
-        /* Profile Section */
-        .profile-header {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-            padding: 2rem;
-            background: var(--bg-card);
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            margin-bottom: 3rem;
+        /* Admin Panel */
+        .admin-badge {
+            background: linear-gradient(135deg, #ff0000, #ff6b00);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-left: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: adminPulse 2s infinite;
         }
 
-        .profile-avatar {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            font-weight: 900;
-            border: 3px solid var(--accent-cyan);
-            box-shadow: 0 0 30px rgba(0, 255, 247, 0.4);
+        @keyframes adminPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.8); }
         }
 
-        .profile-info h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .profile-stats {
+        .admin-actions {
             display: flex;
-            gap: 2rem;
+            gap: 0.5rem;
             margin-top: 1rem;
         }
 
-        .profile-stat {
-            text-align: center;
-        }
-
-        .profile-stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--accent-cyan);
-        }
-
-        .profile-stat-label {
-            color: var(--text-secondary);
-            text-transform: uppercase;
+        .admin-btn {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff6b6b;
+            padding: 0.5rem 1rem;
+            border: 1px solid #ff6b6b;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
             font-size: 0.9rem;
-        }
-
-        /* Leaderboard */
-        .leaderboard-item {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            padding: 1.5rem;
-            background: var(--bg-card);
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            margin-bottom: 1rem;
             transition: all 0.3s ease;
         }
 
-        .leaderboard-item:hover {
-            transform: translateX(10px);
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 20px rgba(0, 255, 247, 0.2);
+        .admin-btn:hover {
+            background: #ff6b6b;
+            color: white;
         }
 
-        .leaderboard-rank {
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--accent-cyan);
-            min-width: 50px;
-            text-align: center;
+        .admin-panel {
+            background: var(--bg-card);
+            border: 2px solid #ff0000;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
         }
 
-        .leaderboard-rank.top-1 { color: #FFD700; text-shadow: 0 0 20px #FFD700; }
-        .leaderboard-rank.top-2 { color: #C0C0C0; text-shadow: 0 0 20px #C0C0C0; }
-        .leaderboard-rank.top-3 { color: #CD7F32; text-shadow: 0 0 20px #CD7F32; }
-
-        .leaderboard-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 1.5rem;
-        }
-
-        .leaderboard-info {
-            flex: 1;
-        }
-
-        .leaderboard-name {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 0.3rem;
-        }
-
-        .leaderboard-score {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent-pink);
+        .admin-panel h2 {
+            color: #ff6b6b;
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 1.5rem;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
-                gap: 1rem;
             }
 
             nav {
                 flex-direction: column;
-                gap: 0.5rem;
+                width: 100%;
                 text-align: center;
             }
 
@@ -765,6 +703,10 @@
                 flex-direction: column;
                 text-align: center;
             }
+
+            .login-features {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -774,19 +716,33 @@
     <!-- Login Screen -->
     <div id="loginScreen" class="login-screen">
         <div class="login-container">
-            <div class="login-logo">Rivals Clip</div>
+            <div class="login-logo" ondblclick="openAdminPrompt()">Rivals Clip</div>
             <h2 class="login-title">Partagez vos meilleurs moments</h2>
             <p class="login-subtitle">Connectez-vous pour uploader et découvrir des clips épiques</p>
             
-            <div id="googleSignInBtn" class="google-btn">
+            <div id="g_id_onload"
+                 data-client_id="VOTRE_CLIENT_ID_GOOGLE"
+                 data-callback="handleCredentialResponse"
+                 data-auto_prompt="false">
+            </div>
+            <div class="g_id_signin" 
+                 data-type="standard"
+                 data-size="large"
+                 data-theme="filled_black"
+                 data-text="signin_with"
+                 data-shape="rectangular"
+                 data-logo_alignment="left">
+            </div>
+
+            <button class="google-btn" onclick="simulateGoogleSignIn()" style="margin-top: 2rem;">
                 <svg viewBox="0 0 24 24" width="24" height="24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                 </svg>
-                <span>Continuer avec Google</span>
-            </div>
+                <span>Se connecter (Mode Démo)</span>
+            </button>
             
             <div class="login-features">
                 <div class="feature-item">
@@ -805,16 +761,19 @@
         </div>
     </div>
 
-    <!-- Main App (Hidden until logged in) -->
+    <!-- Main App -->
     <div id="mainApp" style="display: none;">
         <header>
             <div class="header-content">
-                <div class="logo">Rivals Clip</div>
+                <div class="logo">
+                    Rivals Clip
+                    <span id="adminBadge" style="display: none;" class="admin-badge">Admin</span>
+                </div>
                 <nav>
                     <a href="#" class="nav-link active" data-tab="home">Accueil</a>
                     <a href="#" class="nav-link" data-tab="trending">Tendances</a>
-                    <a href="#" class="nav-link" data-tab="leaderboard">Classement</a>
                     <a href="#" class="nav-link" data-tab="profile">Profil</a>
+                    <a href="#" id="adminTab" class="nav-link" data-tab="admin" style="display: none; color: #ff6b6b;">Admin</a>
                 </nav>
                 <div style="display: flex; align-items: center; gap: 1rem;">
                     <button class="upload-btn" onclick="openUploadModal()">📤 Upload Clip</button>
@@ -826,102 +785,103 @@
             </div>
         </header>
 
-    <main>
-        <!-- Home Tab -->
-        <div id="home" class="tab-content active">
-            <div class="hero">
-                <h1>Vos Meilleurs Moments</h1>
-                <p>Partagez et découvrez les clips les plus épiques de Rivals</p>
-            </div>
-
-            <div class="filters">
-                <button class="filter-btn active">Tous</button>
-                <button class="filter-btn">Kills</button>
-                <button class="filter-btn">Clutch</button>
-                <button class="filter-btn">Fails</button>
-                <button class="filter-btn">Funny</button>
-            </div>
-
-            <div id="clipsContainer" class="clips-grid">
-                <div class="empty-state">
-                    <div class="empty-icon">🎬</div>
-                    <h3>Aucun clip pour le moment</h3>
-                    <p>Soyez le premier à partager vos meilleurs moments !</p>
-                    <button class="upload-btn" onclick="openUploadModal()" style="margin-top: 1.5rem;">
-                        📤 Upload votre premier clip
-                    </button>
+        <main>
+            <!-- Home Tab -->
+            <div id="home" class="tab-content active">
+                <div class="hero">
+                    <h1>Vos Meilleurs Moments</h1>
+                    <p>Partagez et découvrez les clips les plus épiques de Rivals</p>
                 </div>
-            </div>
-        </div>
 
-        <!-- Trending Tab -->
-        <div id="trending" class="tab-content">
-            <div class="hero">
-                <h1>🔥 Tendances</h1>
-                <p>Les clips les plus populaires cette semaine</p>
-            </div>
-
-            <div id="trendingContainer" class="clips-grid">
-                <div class="empty-state">
-                    <div class="empty-icon">📈</div>
-                    <h3>Aucun clip tendance</h3>
-                    <p>Les clips les plus likés apparaîtront ici</p>
+                <div class="filters">
+                    <button class="filter-btn active" onclick="filterClips('Tous')">Tous</button>
+                    <button class="filter-btn" onclick="filterClips('Kills')">Kills</button>
+                    <button class="filter-btn" onclick="filterClips('Clutch')">Clutch</button>
+                    <button class="filter-btn" onclick="filterClips('Fails')">Fails</button>
+                    <button class="filter-btn" onclick="filterClips('Funny')">Funny</button>
                 </div>
-            </div>
-        </div>
 
-        <!-- Leaderboard Tab -->
-        <div id="leaderboard" class="tab-content">
-            <div class="hero">
-                <h1>🏆 Classement</h1>
-                <p>Les meilleurs joueurs de la communauté</p>
-            </div>
-
-            <div id="leaderboardContainer">
-                <div class="empty-state">
-                    <div class="empty-icon">🏅</div>
-                    <h3>Classement en construction</h3>
-                    <p>Uploadez des clips pour apparaître dans le classement !</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Profile Tab -->
-        <div id="profile" class="tab-content">
-            <div class="profile-header">
-                <img id="profileAvatar" class="profile-avatar" src="" alt="Avatar" style="border-radius: 50%; object-fit: cover;">
-                <div class="profile-info">
-                    <h2 id="profileName">Utilisateur</h2>
-                    <p id="profileEmail" style="color: var(--text-secondary);"></p>
-                    <div class="profile-stats">
-                        <div class="profile-stat">
-                            <div class="profile-stat-value" id="userClipsCount">0</div>
-                            <div class="profile-stat-label">Clips</div>
-                        </div>
-                        <div class="profile-stat">
-                            <div class="profile-stat-value" id="userViewsCount">0</div>
-                            <div class="profile-stat-label">Vues</div>
-                        </div>
-                        <div class="profile-stat">
-                            <div class="profile-stat-value" id="userLikesCount">0</div>
-                            <div class="profile-stat-label">Likes</div>
-                        </div>
+                <div id="clipsContainer" class="clips-grid">
+                    <div class="empty-state">
+                        <div class="empty-icon">🎬</div>
+                        <h3>Aucun clip pour le moment</h3>
+                        <p>Soyez le premier à partager vos meilleurs moments !</p>
+                        <button class="upload-btn" onclick="openUploadModal()" style="margin-top: 1.5rem;">
+                            📤 Upload votre premier clip
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <h2 style="margin-bottom: 1.5rem; font-family: 'Orbitron', sans-serif;">Mes Clips</h2>
-            <div id="userClipsContainer" class="clips-grid">
-                <div class="empty-state">
-                    <div class="empty-icon">🎮</div>
-                    <h3>Vous n'avez pas encore de clips</h3>
-                    <p>Uploadez votre premier clip pour commencer !</p>
-                    <button class="upload-btn" onclick="openUploadModal()" style="margin-top: 1.5rem;">
-                        📤 Upload mon premier clip
-                    </button>
+            <!-- Trending Tab -->
+            <div id="trending" class="tab-content">
+                <div class="hero">
+                    <h1>🔥 Tendances</h1>
+                    <p>Les clips les plus populaires cette semaine</p>
+                </div>
+
+                <div id="trendingContainer" class="clips-grid">
+                    <div class="empty-state">
+                        <div class="empty-icon">📈</div>
+                        <h3>Aucun clip tendance</h3>
+                        <p>Les clips les plus likés apparaîtront ici</p>
+                    </div>
                 </div>
             </div>
-        </div>
+
+            <!-- Profile Tab -->
+            <div id="profile" class="tab-content">
+                <div class="profile-header">
+                    <img id="profileAvatar" class="profile-avatar" src="" alt="Avatar">
+                    <div class="profile-info">
+                        <h2 id="profileName">Utilisateur</h2>
+                        <p id="profileEmail" style="color: var(--text-secondary);"></p>
+                        <div class="profile-stats">
+                            <div class="profile-stat">
+                                <div class="profile-stat-value" id="userClipsCount">0</div>
+                                <div class="profile-stat-label">Clips</div>
+                            </div>
+                            <div class="profile-stat">
+                                <div class="profile-stat-value" id="userViewsCount">0</div>
+                                <div class="profile-stat-label">Vues</div>
+                            </div>
+                            <div class="profile-stat">
+                                <div class="profile-stat-value" id="userLikesCount">0</div>
+                                <div class="profile-stat-label">Likes</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 style="margin-bottom: 1.5rem; font-family: 'Orbitron', sans-serif;">Mes Clips</h2>
+                <div id="userClipsContainer" class="clips-grid">
+                    <div class="empty-state">
+                        <div class="empty-icon">🎮</div>
+                        <h3>Vous n'avez pas encore de clips</h3>
+                        <p>Uploadez votre premier clip pour commencer !</p>
+                        <button class="upload-btn" onclick="openUploadModal()" style="margin-top: 1.5rem;">
+                            📤 Upload mon premier clip
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Tab -->
+            <div id="admin" class="tab-content">
+                <div class="admin-panel">
+                    <h2>🛡️ Panel Administrateur</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">Gérez tous les clips de la plateforme</p>
+                    
+                    <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                        <button class="admin-btn" onclick="exportClips()">📥 Exporter tous les clips</button>
+                        <button class="admin-btn" onclick="clearAllClips()">🗑️ Supprimer tous les clips</button>
+                    </div>
+                </div>
+
+                <h2 style="margin-bottom: 1.5rem; font-family: 'Orbitron', sans-serif;">Tous les Clips</h2>
+                <div id="adminClipsContainer" class="clips-grid"></div>
+            </div>
+        </main>
     </div>
 
     <!-- Upload Modal -->
@@ -935,7 +895,7 @@
             <div class="upload-area" onclick="document.getElementById('fileInput').click()">
                 <input type="file" id="fileInput" accept="video/*">
                 <p style="font-size: 1.5rem; margin-bottom: 1rem;">📁</p>
-                <p style="color: var(--text-secondary);">Cliquez pour choisir un fichier vidéo</p>
+                <p id="uploadAreaText" style="color: var(--text-secondary);">Cliquez pour choisir un fichier vidéo</p>
                 <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">MP4, MOV, AVI (Max 100MB)</p>
             </div>
 
@@ -964,34 +924,66 @@
         </div>
     </div>
 
-    </div>
-
     <script>
         // Variables globales
         let currentUser = null;
         let allClips = [];
+        let isAdmin = false;
+        const ADMIN_CODE = 'Arracheur2_92i';
 
-        // Initialize Google Sign-In
-        function initGoogleSignIn() {
-            // Simuler la connexion Google (en production, utilisez Google OAuth)
-            const googleBtn = document.getElementById('googleSignInBtn');
-            googleBtn.addEventListener('click', () => {
-                // En production, utilisez: google.accounts.id.initialize() et google.accounts.id.prompt()
-                // Pour cette démo, on simule une connexion
-                simulateGoogleSignIn();
-            });
+        // Callback Google Sign-In (pour production réelle)
+        function handleCredentialResponse(response) {
+            // Décoder le JWT token de Google
+            const userObject = parseJwt(response.credential);
+            const user = {
+                id: userObject.sub,
+                name: userObject.name,
+                email: userObject.email,
+                avatar: userObject.picture
+            };
+            handleSignIn(user);
         }
 
-        // Simuler connexion Google (pour démo)
+        function parseJwt(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        // Simuler connexion Google (pour démo sans configuration OAuth)
         function simulateGoogleSignIn() {
+            const names = ['Gamer Pro', 'ClipMaster', 'Epic Player', 'Shadow Ninja', 'Clutch King'];
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            
             const user = {
                 id: 'user_' + Date.now(),
-                name: 'Joueur Demo',
-                email: 'demo@rivalsclip.com',
-                avatar: 'https://ui-avatars.com/api/?name=Joueur+Demo&background=00fff7&color=0a0a0f&size=200'
+                name: randomName,
+                email: randomName.toLowerCase().replace(' ', '') + '@rivals.gg',
+                avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(randomName)}&background=00fff7&color=0a0a0f&size=200&bold=true`
             };
             
             handleSignIn(user);
+        }
+
+        // Prompt admin secret (double-clic sur le logo)
+        function openAdminPrompt() {
+            const code = prompt('🔐 Code Administrateur:');
+            if (code === ADMIN_CODE) {
+                isAdmin = true;
+                localStorage.setItem('isAdmin', 'true');
+                showAdminFeatures();
+                alert('✅ Accès administrateur activé !');
+            } else if (code !== null) {
+                alert('❌ Code incorrect !');
+            }
+        }
+
+        function showAdminFeatures() {
+            document.getElementById('adminBadge').style.display = 'inline-block';
+            document.getElementById('adminTab').style.display = 'block';
         }
 
         // Gérer la connexion
@@ -1009,6 +1001,12 @@
             document.getElementById('profileName').textContent = user.name;
             document.getElementById('profileEmail').textContent = user.email;
             
+            // Vérifier si admin
+            if (localStorage.getItem('isAdmin') === 'true') {
+                isAdmin = true;
+                showAdminFeatures();
+            }
+            
             // Charger les clips
             loadClips();
         }
@@ -1017,9 +1015,13 @@
         function signOut() {
             if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
                 currentUser = null;
+                isAdmin = false;
                 localStorage.removeItem('currentUser');
+                localStorage.removeItem('isAdmin');
                 document.getElementById('loginScreen').style.display = 'flex';
                 document.getElementById('mainApp').style.display = 'none';
+                document.getElementById('adminBadge').style.display = 'none';
+                document.getElementById('adminTab').style.display = 'none';
             }
         }
 
@@ -1038,11 +1040,25 @@
             
             renderClips();
             updateUserStats();
+            if (isAdmin) {
+                renderAdminClips();
+            }
         }
 
         // Sauvegarder les clips dans localStorage
         function saveClips() {
             localStorage.setItem('rivalsClips', JSON.stringify(allClips));
+        }
+
+        // Filtrer les clips
+        function filterClips(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === category) {
+                    btn.classList.add('active');
+                }
+            });
+            renderClips(category);
         }
 
         // Rendre les clips dans l'interface
@@ -1101,16 +1117,23 @@
                     </div>
                 `;
             } else {
-                userClipsContainer.innerHTML = userClips.map(clip => createClipCard(clip)).join('');
+                userClipsContainer.innerHTML = userClips.map(clip => createClipCard(clip, true)).join('');
             }
         }
 
         // Créer une carte de clip
-        function createClipCard(clip) {
+        function createClipCard(clip, showDelete = false) {
+            const deleteBtn = (showDelete || isAdmin) ? `
+                <button class="admin-btn" onclick="deleteClip('${clip.id}', event)" style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+                    🗑️
+                </button>
+            ` : '';
+            
             return `
                 <div class="clip-card" onclick="playClip('${clip.id}')">
+                    ${deleteBtn}
                     <div class="clip-thumbnail">
-                        ${clip.videoUrl ? `<video src="${clip.videoUrl}" style="width: 100%; height: 100%; object-fit: cover;"></video>` : ''}
+                        ${clip.videoUrl ? `<video src="${clip.videoUrl}"></video>` : ''}
                     </div>
                     <div class="clip-info">
                         <h3 class="clip-title">${clip.title}</h3>
@@ -1119,7 +1142,7 @@
                             <div class="clip-stats">
                                 <span class="stat"><span class="stat-icon">👁️</span> ${clip.views}</span>
                                 <span class="stat">
-                                    <button onclick="likeClip('${clip.id}', event)" style="background: none; border: none; cursor: pointer; color: inherit;">
+                                    <button onclick="likeClip('${clip.id}', event)" style="background: none; border: none; cursor: pointer; color: inherit; display: flex; align-items: center; gap: 0.3rem;">
                                         <span class="stat-icon">❤️</span> ${clip.likes}
                                     </button>
                                 </span>
@@ -1141,17 +1164,46 @@
                 
                 // Ouvrir le lecteur vidéo
                 if (clip.videoUrl) {
-                    const videoPlayer = window.open('', '_blank');
+                    const videoPlayer = window.open('', '_blank', 'width=800,height=600');
                     videoPlayer.document.write(`
+                        <!DOCTYPE html>
                         <html>
                         <head>
                             <title>${clip.title}</title>
                             <style>
-                                body { margin: 0; background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; }
-                                video { max-width: 100%; max-height: 100%; }
+                                body { 
+                                    margin: 0; 
+                                    background: #000; 
+                                    display: flex; 
+                                    flex-direction: column;
+                                    justify-content: center; 
+                                    align-items: center; 
+                                    height: 100vh;
+                                    font-family: Arial, sans-serif;
+                                }
+                                video { 
+                                    max-width: 100%; 
+                                    max-height: 80vh; 
+                                }
+                                .info {
+                                    color: white;
+                                    padding: 20px;
+                                    text-align: center;
+                                }
+                                h1 {
+                                    margin: 0 0 10px 0;
+                                }
+                                p {
+                                    color: #888;
+                                    margin: 5px 0;
+                                }
                             </style>
                         </head>
                         <body>
+                            <div class="info">
+                                <h1>${clip.title}</h1>
+                                <p>Par ${clip.userName} • ${clip.views} vues • ${clip.likes} likes</p>
+                            </div>
                             <video controls autoplay src="${clip.videoUrl}"></video>
                         </body>
                         </html>
@@ -1169,6 +1221,23 @@
                 saveClips();
                 renderClips();
                 updateUserStats();
+                if (isAdmin) {
+                    renderAdminClips();
+                }
+            }
+        }
+
+        // Supprimer un clip
+        function deleteClip(clipId, event) {
+            event.stopPropagation();
+            if (confirm('Voulez-vous vraiment supprimer ce clip ?')) {
+                allClips = allClips.filter(c => c.id !== clipId);
+                saveClips();
+                renderClips();
+                updateUserStats();
+                if (isAdmin) {
+                    renderAdminClips();
+                }
             }
         }
 
@@ -1181,6 +1250,47 @@
             document.getElementById('userClipsCount').textContent = userClips.length;
             document.getElementById('userViewsCount').textContent = totalViews;
             document.getElementById('userLikesCount').textContent = totalLikes;
+        }
+
+        // Admin: Rendre tous les clips
+        function renderAdminClips() {
+            const container = document.getElementById('adminClipsContainer');
+            if (allClips.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🎬</div>
+                        <h3>Aucun clip sur la plateforme</h3>
+                        <p>Les clips apparaîtront ici</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = allClips.map(clip => createClipCard(clip, true)).join('');
+            }
+        }
+
+        // Admin: Exporter tous les clips
+        function exportClips() {
+            const dataStr = JSON.stringify(allClips, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            const exportFileDefaultName = 'rivals-clips-export.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        }
+
+        // Admin: Supprimer tous les clips
+        function clearAllClips() {
+            if (confirm('⚠️ ATTENTION ! Voulez-vous vraiment supprimer TOUS les clips de la plateforme ? Cette action est irréversible !')) {
+                if (confirm('Êtes-vous ABSOLUMENT sûr ?')) {
+                    allClips = [];
+                    saveClips();
+                    renderClips();
+                    renderAdminClips();
+                    alert('Tous les clips ont été supprimés.');
+                }
+            }
         }
 
         // Tab Navigation
@@ -1197,15 +1307,6 @@
             });
         });
 
-        // Filter buttons
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                renderClips(btn.textContent);
-            });
-        });
-
         // Modal functions
         function openUploadModal() {
             document.getElementById('uploadModal').classList.add('active');
@@ -1213,6 +1314,10 @@
 
         function closeUploadModal() {
             document.getElementById('uploadModal').classList.remove('active');
+            document.getElementById('clipTitle').value = '';
+            document.getElementById('clipDescription').value = '';
+            document.getElementById('uploadAreaText').textContent = 'Cliquez pour choisir un fichier vidéo';
+            selectedFile = null;
         }
 
         document.getElementById('uploadModal').addEventListener('click', (e) => {
@@ -1227,7 +1332,7 @@
             if (e.target.files.length > 0) {
                 selectedFile = e.target.files[0];
                 const fileName = selectedFile.name;
-                document.querySelector('.upload-area p').textContent = `Fichier sélectionné : ${fileName}`;
+                document.getElementById('uploadAreaText').textContent = `✅ Fichier sélectionné : ${fileName}`;
             }
         });
 
@@ -1238,7 +1343,7 @@
             const category = document.getElementById('clipCategory').value;
             
             if (!title || !selectedFile) {
-                alert('Veuillez remplir le titre et sélectionner une vidéo');
+                alert('⚠️ Veuillez remplir le titre et sélectionner une vidéo');
                 return;
             }
             
@@ -1249,6 +1354,7 @@
                 id: 'clip_' + Date.now(),
                 userId: currentUser.id,
                 userName: currentUser.name,
+                userAvatar: currentUser.avatar,
                 title: title,
                 description: description,
                 category: category,
@@ -1262,20 +1368,16 @@
             saveClips();
             renderClips();
             updateUserStats();
-            
-            // Réinitialiser le formulaire
-            document.getElementById('clipTitle').value = '';
-            document.getElementById('clipDescription').value = '';
-            selectedFile = null;
-            document.querySelector('.upload-area p').textContent = 'Cliquez pour choisir un fichier vidéo';
+            if (isAdmin) {
+                renderAdminClips();
+            }
             
             closeUploadModal();
-            alert('Clip publié avec succès ! 🎉');
+            alert('🎉 Clip publié avec succès !');
         }
 
         // Initialiser au chargement de la page
         window.addEventListener('DOMContentLoaded', () => {
-            initGoogleSignIn();
             checkAuth();
         });
     </script>
