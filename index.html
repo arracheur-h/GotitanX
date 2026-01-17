@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rivals Clip - Partagez vos meilleurs moments</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Rivals Clip - La Plateforme #1 des Meilleurs Clips Gaming</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         * {
@@ -14,26 +14,31 @@
         }
 
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-card: #1a1a26;
-            --accent-cyan: #00fff7;
-            --accent-pink: #ff00ff;
-            --accent-yellow: #ffff00;
+            --bg-primary: #0f0f1a;
+            --bg-secondary: #1a1a2e;
+            --bg-card: #16213e;
+            --accent-primary: #00d9ff;
+            --accent-secondary: #7b2ff7;
+            --accent-gradient: linear-gradient(135deg, #00d9ff 0%, #7b2ff7 100%);
             --text-primary: #ffffff;
-            --text-secondary: #b0b0c8;
-            --border: rgba(0, 255, 247, 0.2);
+            --text-secondary: #a0a0b8;
+            --border: rgba(0, 217, 255, 0.15);
+            --success: #00ff88;
+            --warning: #ffaa00;
+            --danger: #ff4444;
         }
 
         body {
-            font-family: 'Rajdhani', sans-serif;
+            font-family: 'Inter', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        .bg-gradient {
+        /* Animated Background */
+        .bg-animated {
             position: fixed;
             top: 0;
             left: 0;
@@ -41,15 +46,23 @@
             height: 100%;
             z-index: -1;
             background: 
-                radial-gradient(circle at 20% 30%, rgba(0, 255, 247, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(255, 0, 255, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(255, 255, 0, 0.05) 0%, transparent 70%);
-            animation: gradientShift 15s ease infinite;
+                radial-gradient(circle at 10% 20%, rgba(0, 217, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(123, 47, 247, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.03) 0%, transparent 50%);
         }
 
-        @keyframes gradientShift {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 0.8; }
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.3;
         }
 
         /* Login Screen */
@@ -63,73 +76,82 @@
             align-items: center;
             justify-content: center;
             z-index: 9999;
+            padding: 2rem;
         }
 
         .login-container {
             background: var(--bg-secondary);
-            padding: 4rem 3rem;
-            border-radius: 20px;
-            border: 2px solid var(--accent-cyan);
-            box-shadow: 0 0 60px rgba(0, 255, 247, 0.3);
+            padding: 3rem;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5);
             text-align: center;
-            max-width: 500px;
-            width: 90%;
-            animation: loginSlide 0.5s ease;
+            max-width: 480px;
+            width: 100%;
+            animation: slideUp 0.6s ease;
         }
 
-        @keyframes loginSlide {
-            from { transform: translateY(-50px); opacity: 0; }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
         .login-logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .login-tagline {
+            color: var(--accent-primary);
+            font-size: 0.9rem;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            cursor: pointer;
-            user-select: none;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
         }
 
         .login-title {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             margin-bottom: 0.5rem;
             font-weight: 700;
         }
 
         .login-subtitle {
             color: var(--text-secondary);
-            margin-bottom: 3rem;
-            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            font-size: 1rem;
         }
 
         .google-btn {
             background: white;
             color: #1f1f1f;
             padding: 1rem 2rem;
-            border-radius: 10px;
-            font-size: 1.1rem;
+            border-radius: 12px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.75rem;
             transition: all 0.3s ease;
             border: none;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            justify-content: center;
         }
 
         .google-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .login-features {
+        .login-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
@@ -138,29 +160,61 @@
             border-top: 1px solid var(--border);
         }
 
-        .feature-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+        .stat-item {
+            text-align: center;
         }
 
-        .feature-icon {
-            font-size: 2rem;
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Admin Button */
+        .admin-btn-secret {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 68, 68, 0.1);
+            border: 2px solid rgba(255, 68, 68, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 28px;
+            transition: all 0.3s ease;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .admin-btn-secret:hover {
+            background: rgba(255, 68, 68, 0.2);
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.4);
         }
 
         /* Header */
         header {
-            background: rgba(18, 18, 26, 0.8);
+            background: rgba(26, 26, 46, 0.8);
             backdrop-filter: blur(20px);
-            border-bottom: 2px solid var(--border);
+            border-bottom: 1px solid var(--border);
             padding: 1rem 0;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 10px 40px rgba(0, 255, 247, 0.1);
         }
 
         .header-content {
@@ -170,69 +224,71 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 2rem;
             flex-wrap: wrap;
-            gap: 1rem;
         }
 
         .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 30px rgba(0, 255, 247, 0.5);
+            letter-spacing: -1px;
         }
 
         nav {
             display: flex;
-            gap: 2rem;
+            gap: 1rem;
+            flex: 1;
+            justify-content: center;
             flex-wrap: wrap;
         }
 
         .nav-link {
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            padding: 0.5rem 1.5rem;
-            border-radius: 8px;
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            position: relative;
         }
 
         .nav-link:hover {
-            color: var(--accent-cyan);
-            text-shadow: 0 0 10px var(--accent-cyan);
+            color: var(--accent-primary);
+            background: rgba(0, 217, 255, 0.05);
         }
 
         .nav-link.active {
-            color: var(--accent-cyan);
-            background: rgba(0, 255, 247, 0.1);
-            border: 1px solid var(--accent-cyan);
+            color: var(--accent-primary);
+            background: rgba(0, 217, 255, 0.1);
         }
 
-        .upload-btn {
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
-            color: var(--bg-primary);
-            padding: 0.7rem 2rem;
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            padding: 0.7rem 1.5rem;
             border: none;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
             cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
             transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(0, 255, 247, 0.3);
+            box-shadow: 0 4px 16px rgba(0, 217, 255, 0.3);
         }
 
-        .upload-btn:hover {
+        .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(0, 255, 247, 0.6);
+            box-shadow: 0 6px 20px rgba(0, 217, 255, 0.4);
         }
 
         .user-menu {
@@ -242,27 +298,34 @@
         }
 
         .user-avatar {
-            width: 45px;
-            height: 45px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            border: 2px solid var(--accent-cyan);
+            border: 2px solid var(--accent-primary);
             object-fit: cover;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .logout-btn {
-            background: rgba(255, 0, 0, 0.2);
-            color: #ff6b6b;
-            padding: 0.5rem 1rem;
-            border: 1px solid #ff6b6b;
-            border-radius: 6px;
+        .user-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+        }
+
+        .btn-logout {
+            background: rgba(255, 68, 68, 0.1);
+            color: var(--danger);
+            padding: 0.6rem 1.2rem;
+            border: 1px solid var(--danger);
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
-        .logout-btn:hover {
-            background: #ff6b6b;
+        .btn-logout:hover {
+            background: var(--danger);
             color: white;
         }
 
@@ -287,92 +350,153 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Hero Section */
         .hero {
             text-align: center;
-            padding: 4rem 0;
+            padding: 3rem 0 2rem;
             margin-bottom: 3rem;
         }
 
         .hero h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 4rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, #ffffff, var(--accent-cyan), var(--accent-pink));
+            background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
         }
 
         .hero p {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        /* Empty State */
-        .empty-state {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 5rem 2rem;
-            background: var(--bg-card);
-            border-radius: 12px;
-            border: 2px dashed var(--border);
-        }
-
-        .empty-icon {
-            font-size: 5rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        .empty-state h3 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .empty-state p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-        }
-
-        /* Filters */
-        .filters {
+        /* Search & Filters */
+        .controls {
             display: flex;
             gap: 1rem;
             margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.9rem 1rem 0.9rem 3rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 0.75rem;
             flex-wrap: wrap;
         }
 
         .filter-btn {
             background: var(--bg-card);
             color: var(--text-secondary);
-            padding: 0.7rem 1.5rem;
+            padding: 0.7rem 1.3rem;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
+            font-size: 0.85rem;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        .filter-btn:hover, .filter-btn.active {
-            background: var(--accent-cyan);
-            color: var(--bg-primary);
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 20px rgba(0, 255, 247, 0.4);
-            transform: translateY(-2px);
+        .filter-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--accent-gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .sort-select {
+            padding: 0.7rem 1.3rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sort-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px dashed var(--border);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
         }
 
         /* Clips Grid */
         .clips-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
         }
 
         .clip-card {
             background: var(--bg-card);
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
             border: 1px solid var(--border);
             transition: all 0.4s ease;
@@ -381,15 +505,15 @@
         }
 
         .clip-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 60px rgba(0, 255, 247, 0.3);
-            border-color: var(--accent-cyan);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(0, 217, 255, 0.2);
+            border-color: var(--accent-primary);
         }
 
         .clip-thumbnail {
             width: 100%;
             height: 200px;
-            background: linear-gradient(135deg, #1a1a26, #2a2a36);
+            background: linear-gradient(135deg, #1a1a2e, #2a2a3e);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -403,87 +527,161 @@
             object-fit: cover;
         }
 
-        .clip-thumbnail::after {
-            content: '▶';
+        .clip-play-btn {
             position: absolute;
-            font-size: 3rem;
-            color: var(--accent-cyan);
-            opacity: 0.8;
-            text-shadow: 0 0 20px var(--accent-cyan);
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 217, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
             transition: all 0.3s ease;
             pointer-events: none;
         }
 
-        .clip-card:hover .clip-thumbnail::after {
-            transform: scale(1.2);
-            opacity: 1;
+        .clip-card:hover .clip-play-btn {
+            transform: scale(1.15);
+            background: var(--accent-primary);
+        }
+
+        .clip-category {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .clip-info {
-            padding: 1.5rem;
+            padding: 1.25rem;
+        }
+
+        .clip-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .clip-author-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-primary);
+            object-fit: cover;
+        }
+
+        .clip-author-info {
+            flex: 1;
+        }
+
+        .clip-author-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .clip-time {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
         }
 
         .clip-title {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
-        .clip-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1rem;
+        .clip-description {
+            font-size: 0.85rem;
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
-        .clip-stats {
+        .clip-actions {
             display: flex;
             gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
         }
 
-        .stat {
+        .action-btn {
             display: flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.4rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
         }
 
-        .stat-icon {
-            color: var(--accent-cyan);
+        .action-btn:hover {
+            background: rgba(0, 217, 255, 0.1);
+            color: var(--accent-primary);
+        }
+
+        .action-btn.liked {
+            color: #ff4444;
         }
 
         /* Profile */
         .profile-header {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            margin-bottom: 3rem;
             display: flex;
             gap: 2rem;
             align-items: center;
-            padding: 2rem;
-            background: var(--bg-card);
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            margin-bottom: 3rem;
         }
 
-        .profile-avatar {
-            width: 150px;
-            height: 150px;
+        .profile-avatar-large {
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            border: 3px solid var(--accent-cyan);
-            box-shadow: 0 0 30px rgba(0, 255, 247, 0.4);
+            border: 3px solid var(--accent-primary);
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
             object-fit: cover;
         }
 
         .profile-info h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2rem;
             margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .profile-email {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
         }
 
         .profile-stats {
             display: flex;
-            gap: 2rem;
-            margin-top: 1rem;
+            gap: 2.5rem;
         }
 
         .profile-stat {
@@ -493,13 +691,17 @@
         .profile-stat-value {
             font-size: 2rem;
             font-weight: 700;
-            color: var(--accent-cyan);
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .profile-stat-label {
             color: var(--text-secondary);
+            font-size: 0.85rem;
             text-transform: uppercase;
-            font-size: 0.9rem;
+            letter-spacing: 1px;
+            margin-top: 0.25rem;
         }
 
         /* Modal */
@@ -510,10 +712,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            padding: 2rem;
         }
 
         .modal.active {
@@ -522,19 +726,19 @@
 
         .modal-content {
             background: var(--bg-secondary);
-            padding: 3rem;
-            border-radius: 16px;
+            padding: 2.5rem;
+            border-radius: 20px;
             max-width: 600px;
-            width: 90%;
-            border: 2px solid var(--accent-cyan);
-            box-shadow: 0 0 60px rgba(0, 255, 247, 0.3);
-            animation: modalSlide 0.3s ease;
+            width: 100%;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5);
+            animation: modalSlide 0.4s ease;
             max-height: 90vh;
             overflow-y: auto;
         }
 
         @keyframes modalSlide {
-            from { transform: translateY(-50px); opacity: 0; }
+            from { transform: translateY(-30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
@@ -546,9 +750,8 @@
         }
 
         .modal-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
-            color: var(--accent-cyan);
+            font-size: 1.75rem;
+            font-weight: 700;
         }
 
         .close-btn {
@@ -558,26 +761,33 @@
             font-size: 2rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
         }
 
         .close-btn:hover {
-            color: var(--accent-pink);
-            transform: rotate(90deg);
+            background: rgba(255, 68, 68, 0.1);
+            color: var(--danger);
         }
 
         .upload-area {
             border: 2px dashed var(--border);
             border-radius: 12px;
-            padding: 3rem;
+            padding: 3rem 2rem;
             text-align: center;
             margin-bottom: 2rem;
             transition: all 0.3s ease;
             cursor: pointer;
+            background: var(--bg-card);
         }
 
         .upload-area:hover {
-            border-color: var(--accent-cyan);
-            background: rgba(0, 255, 247, 0.05);
+            border-color: var(--accent-primary);
+            background: rgba(0, 217, 255, 0.05);
         }
 
         .upload-area input {
@@ -593,21 +803,21 @@
             margin-bottom: 0.5rem;
             color: var(--text-secondary);
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 0.9rem;
         }
 
         .form-group input,
         .form-group textarea,
         .form-group select {
             width: 100%;
-            padding: 0.8rem;
+            padding: 0.9rem 1rem;
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 10px;
             color: var(--text-primary);
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
         }
 
         .form-group textarea {
@@ -619,41 +829,56 @@
         .form-group textarea:focus,
         .form-group select:focus {
             outline: none;
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 15px rgba(0, 255, 247, 0.2);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
         }
 
         /* Admin Panel */
         .admin-badge {
-            background: linear-gradient(135deg, #ff0000, #ff6b00);
+            background: linear-gradient(135deg, #ff4444, #ff6b00);
             color: white;
             padding: 0.3rem 0.8rem;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 700;
-            margin-left: 1rem;
+            margin-left: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             animation: adminPulse 2s infinite;
         }
 
         @keyframes adminPulse {
-            0%, 100% { box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); }
-            50% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.8); }
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 68, 68, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(255, 68, 68, 0.8); }
+        }
+
+        .admin-panel {
+            background: var(--bg-card);
+            border: 2px solid var(--danger);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .admin-panel h2 {
+            color: var(--danger);
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
         }
 
         .admin-actions {
             display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
         }
 
         .admin-btn {
-            background: rgba(255, 0, 0, 0.2);
-            color: #ff6b6b;
-            padding: 0.5rem 1rem;
-            border: 1px solid #ff6b6b;
-            border-radius: 6px;
+            background: rgba(255, 68, 68, 0.1);
+            color: var(--danger);
+            padding: 0.7rem 1.3rem;
+            border: 1px solid var(--danger);
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
             font-size: 0.9rem;
@@ -661,36 +886,75 @@
         }
 
         .admin-btn:hover {
-            background: #ff6b6b;
+            background: var(--danger);
             color: white;
         }
 
-        .admin-panel {
-            background: var(--bg-card);
-            border: 2px solid #ff0000;
+        .users-table {
+            background: var(--bg-secondary);
             border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
+            overflow: hidden;
+            border: 1px solid var(--border);
         }
 
-        .admin-panel h2 {
-            color: #ff6b6b;
-            font-family: 'Orbitron', sans-serif;
-            margin-bottom: 1.5rem;
+        .table-header {
+            background: rgba(0, 217, 255, 0.05);
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: 60px 1fr 1.5fr 100px 100px 100px 120px;
+            gap: 1rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-row {
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: 60px 1fr 1.5fr 100px 100px 100px 120px;
+            gap: 1rem;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .table-row:hover {
+            background: rgba(0, 217, 255, 0.03);
+        }
+
+        .table-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-primary);
+            object-fit: cover;
+        }
+
+        .delete-clip-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .delete-clip-btn:hover {
+            background: var(--danger);
+            color: white;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-            }
-
-            nav {
-                flex-direction: column;
-                width: 100%;
-                text-align: center;
-            }
-
             .hero h1 {
                 font-size: 2.5rem;
             }
@@ -704,80 +968,89 @@
                 text-align: center;
             }
 
-            .login-features {
+            .table-header,
+            .table-row {
                 grid-template-columns: 1fr;
+                gap: 0.5rem;
             }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+
+        /* Tooltips */
+        [data-tooltip] {
+            position: relative;
+        }
+
+        [data-tooltip]::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            border: 1px solid var(--border);
+            margin-bottom: 0.5rem;
+        }
+
+        [data-tooltip]:hover::after {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
-    <div class="bg-gradient"></div>
+    <div class="bg-animated"></div>
+    <div class="bg-grid"></div>
 
     <!-- Login Screen -->
     <div id="loginScreen" class="login-screen">
         <div class="login-container">
-            <div class="login-logo">Rivals Clip</div>
-            <h2 class="login-title">Partagez vos meilleurs moments</h2>
-            <p class="login-subtitle">Connectez-vous pour uploader et découvrir des clips épiques</p>
+            <div class="login-logo">RIVALS CLIP</div>
+            <div class="login-tagline">La plateforme #1 des clips gaming</div>
+            <h2 class="login-title">Rejoignez la communauté</h2>
+            <p class="login-subtitle">Partagez vos meilleurs moments et découvrez des clips épiques</p>
             
-            <div id="g_id_onload"
-                 data-client_id="VOTRE_CLIENT_ID_GOOGLE"
-                 data-callback="handleCredentialResponse"
-                 data-auto_prompt="false">
-            </div>
-            <div class="g_id_signin" 
-                 data-type="standard"
-                 data-size="large"
-                 data-theme="filled_black"
-                 data-text="signin_with"
-                 data-shape="rectangular"
-                 data-logo_alignment="left">
-            </div>
-
-            <button class="google-btn" onclick="simulateGoogleSignIn()" style="margin-top: 2rem;">
+            <button class="google-btn" onclick="simulateGoogleSignIn()">
                 <svg viewBox="0 0 24 24" width="24" height="24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                 </svg>
-                <span>Se connecter (Mode Démo)</span>
+                <span>Se connecter avec Google</span>
             </button>
             
-            <div class="login-features">
-                <div class="feature-item">
-                    <span class="feature-icon">🎮</span>
-                    <span>Uploadez vos clips</span>
+            <div class="login-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalUsers">0</div>
+                    <div class="stat-label">Membres</div>
                 </div>
-                <div class="feature-item">
-                    <span class="feature-icon">🏆</span>
-                    <span>Classement communautaire</span>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalClips">0</div>
+                    <div class="stat-label">Clips</div>
                 </div>
-                <div class="feature-item">
-                    <span class="feature-icon">💬</span>
-                    <span>Commentaires et likes</span>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalViews">0</div>
+                    <div class="stat-label">Vues</div>
                 </div>
             </div>
         </div>
         
-        <!-- Bouton Admin Secret -->
-        <button onclick="openAdminPrompt()" style="
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 0, 0, 0.1);
-            border: 2px solid rgba(255, 0, 0, 0.3);
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 24px;
-            transition: all 0.3s ease;
-            z-index: 10000;
-        " onmouseover="this.style.background='rgba(255, 0, 0, 0.3)'; this.style.transform='scale(1.1)'" 
-           onmouseout="this.style.background='rgba(255, 0, 0, 0.1)'; this.style.transform='scale(1)'">
-            🔑
-        </button>
+        <button class="admin-btn-secret" onclick="openAdminPrompt()">🔑</button>
     </div>
 
     <!-- Main App -->
@@ -785,20 +1058,21 @@
         <header>
             <div class="header-content">
                 <div class="logo">
-                    Rivals Clip
+                    RIVALS CLIP
                     <span id="adminBadge" style="display: none;" class="admin-badge">Admin</span>
                 </div>
                 <nav>
-                    <a href="#" class="nav-link active" data-tab="home">Accueil</a>
-                    <a href="#" class="nav-link" data-tab="trending">Tendances</a>
-                    <a href="#" class="nav-link" data-tab="profile">Profil</a>
-                    <a href="#" id="adminTab" class="nav-link" data-tab="admin" style="display: none; color: #ff6b6b;">Admin</a>
+                    <a href="#" class="nav-link active" data-tab="home">🏠 Accueil</a>
+                    <a href="#" class="nav-link" data-tab="trending">🔥 Tendances</a>
+                    <a href="#" class="nav-link" data-tab="following">👥 Abonnements</a>
+                    <a href="#" class="nav-link" data-tab="profile">👤 Profil</a>
+                    <a href="#" id="adminTab" class="nav-link" data-tab="admin" style="display: none; color: var(--danger);">🛡️ Admin</a>
                 </nav>
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <button class="upload-btn" onclick="openUploadModal()">📤 Upload Clip</button>
+                <div class="header-actions">
+                    <button class="btn-primary" onclick="openUploadModal()">📤 Uploader</button>
                     <div class="user-menu">
-                        <img id="userAvatar" class="user-avatar" src="" alt="Avatar">
-                        <button class="logout-btn" onclick="signOut()">Déconnexion</button>
+                        <img id="userAvatar" class="user-avatar" src="" alt="Avatar" data-tooltip="Mon profil">
+                        <button class="btn-logout" onclick="signOut()">Déconnexion</button>
                     </div>
                 </div>
             </div>
@@ -808,16 +1082,27 @@
             <!-- Home Tab -->
             <div id="home" class="tab-content active">
                 <div class="hero">
-                    <h1>Vos Meilleurs Moments</h1>
-                    <p>Partagez et découvrez les clips les plus épiques de Rivals</p>
+                    <h1>Découvrez les meilleurs clips</h1>
+                    <p>Des moments épiques partagés par la communauté</p>
                 </div>
 
-                <div class="filters">
-                    <button class="filter-btn active" onclick="filterClips('Tous')">Tous</button>
-                    <button class="filter-btn" onclick="filterClips('Kills')">Kills</button>
-                    <button class="filter-btn" onclick="filterClips('Clutch')">Clutch</button>
-                    <button class="filter-btn" onclick="filterClips('Fails')">Fails</button>
-                    <button class="filter-btn" onclick="filterClips('Funny')">Funny</button>
+                <div class="controls">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Rechercher des clips..." oninput="searchClips()">
+                    </div>
+                    <div class="filters">
+                        <button class="filter-btn active" onclick="filterClips('Tous')">Tous</button>
+                        <button class="filter-btn" onclick="filterClips('Kills')">Kills</button>
+                        <button class="filter-btn" onclick="filterClips('Clutch')">Clutch</button>
+                        <button class="filter-btn" onclick="filterClips('Fails')">Fails</button>
+                        <button class="filter-btn" onclick="filterClips('Funny')">Funny</button>
+                        <button class="filter-btn" onclick="filterClips('Montage')">Montage</button>
+                    </div>
+                    <select class="sort-select" id="sortSelect" onchange="sortClips()">
+                        <option value="recent">Plus récents</option>
+                        <option value="popular">Plus populaires</option>
+                        <option value="views">Plus vus</option>
+                    </select>
                 </div>
 
                 <div id="clipsContainer" class="clips-grid">
@@ -825,8 +1110,8 @@
                         <div class="empty-icon">🎬</div>
                         <h3>Aucun clip pour le moment</h3>
                         <p>Soyez le premier à partager vos meilleurs moments !</p>
-                        <button class="upload-btn" onclick="openUploadModal()" style="margin-top: 1.5rem;">
-                            📤 Upload votre premier clip
+                        <button class="btn-primary" onclick="openUploadModal()" style="margin-top: 1rem;">
+                            📤 Uploader mon premier clip
                         </button>
                     </div>
                 </div>
@@ -836,7 +1121,7 @@
             <div id="trending" class="tab-content">
                 <div class="hero">
                     <h1>🔥 Tendances</h1>
-                    <p>Les clips les plus populaires cette semaine</p>
+                    <p>Les clips les plus populaires de la semaine</p>
                 </div>
 
                 <div id="trendingContainer" class="clips-grid">
@@ -848,13 +1133,29 @@
                 </div>
             </div>
 
+            <!-- Following Tab -->
+            <div id="following" class="tab-content">
+                <div class="hero">
+                    <h1>👥 Abonnements</h1>
+                    <p>Clips des créateurs que vous suivez</p>
+                </div>
+
+                <div id="followingContainer" class="clips-grid">
+                    <div class="empty-state">
+                        <div class="empty-icon">💫</div>
+                        <h3>Aucun abonnement</h3>
+                        <p>Suivez des créateurs pour voir leurs clips ici</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Profile Tab -->
             <div id="profile" class="tab-content">
                 <div class="profile-header">
-                    <img id="profileAvatar" class="profile-avatar" src="" alt="Avatar">
+                    <img id="profileAvatar" class="profile-avatar-large" src="" alt="Avatar">
                     <div class="profile-info">
                         <h2 id="profileName">Utilisateur</h2>
-                        <p id="profileEmail" style="color: var(--text-secondary);"></p>
+                        <p id="profileEmail" class="profile-email"></p>
                         <div class="profile-stats">
                             <div class="profile-stat">
                                 <div class="profile-stat-value" id="userClipsCount">0</div>
@@ -868,18 +1169,22 @@
                                 <div class="profile-stat-value" id="userLikesCount">0</div>
                                 <div class="profile-stat-label">Likes</div>
                             </div>
+                            <div class="profile-stat">
+                                <div class="profile-stat-value" id="userFollowersCount">0</div>
+                                <div class="profile-stat-label">Abonnés</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <h2 style="margin-bottom: 1.5rem; font-family: 'Orbitron', sans-serif;">Mes Clips</h2>
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.75rem; font-weight: 700;">Mes Clips</h2>
                 <div id="userClipsContainer" class="clips-grid">
                     <div class="empty-state">
                         <div class="empty-icon">🎮</div>
                         <h3>Vous n'avez pas encore de clips</h3>
                         <p>Uploadez votre premier clip pour commencer !</p>
-                        <button class="upload-btn" onclick="openUploadModal()" style="margin-top: 1.5rem;">
-                            📤 Upload mon premier clip
+                        <button class="btn-primary" onclick="openUploadModal()" style="margin-top: 1rem;">
+                            📤 Uploader mon premier clip
                         </button>
                     </div>
                 </div>
@@ -889,15 +1194,43 @@
             <div id="admin" class="tab-content">
                 <div class="admin-panel">
                     <h2>🛡️ Panel Administrateur</h2>
-                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">Gérez tous les clips de la plateforme</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Gérez la plateforme Rivals Clip</p>
                     
-                    <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
-                        <button class="admin-btn" onclick="exportClips()">📥 Exporter tous les clips</button>
+                    <div class="admin-actions">
+                        <button class="admin-btn" onclick="viewAllUsers()">👥 Voir tous les utilisateurs</button>
+                        <button class="admin-btn" onclick="exportAllData()">📥 Exporter toutes les données</button>
                         <button class="admin-btn" onclick="clearAllClips()">🗑️ Supprimer tous les clips</button>
+                        <button class="admin-btn" onclick="clearAllData()">⚠️ Réinitialiser la plateforme</button>
+                    </div>
+
+                    <div style="background: rgba(0, 217, 255, 0.05); padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
+                        <strong>Statistiques globales:</strong><br>
+                        Total utilisateurs: <span id="adminTotalUsers">0</span> | 
+                        Total clips: <span id="adminTotalClips">0</span> | 
+                        Total vues: <span id="adminTotalViews">0</span>
                     </div>
                 </div>
 
-                <h2 style="margin-bottom: 1.5rem; font-family: 'Orbitron', sans-serif;">Tous les Clips</h2>
+                <div id="usersTableContainer" style="display: none; margin-bottom: 3rem;">
+                    <h2 style="margin-bottom: 1.5rem; font-size: 1.75rem; font-weight: 700;">
+                        Utilisateurs inscrits
+                        <button class="admin-btn" onclick="hideUsersTable()" style="float: right; font-size: 0.8rem;">✕ Fermer</button>
+                    </h2>
+                    <div class="users-table">
+                        <div class="table-header">
+                            <div>Avatar</div>
+                            <div>Nom</div>
+                            <div>Email</div>
+                            <div>Clips</div>
+                            <div>Vues</div>
+                            <div>Likes</div>
+                            <div>Inscription</div>
+                        </div>
+                        <div id="usersTableBody"></div>
+                    </div>
+                </div>
+
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.75rem; font-weight: 700;">Tous les Clips</h2>
                 <div id="adminClipsContainer" class="clips-grid"></div>
             </div>
         </main>
@@ -907,20 +1240,20 @@
     <div id="uploadModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">Upload Clip</h2>
-                <button class="close-btn" onclick="closeUploadModal()">&times;</button>
+                <h2 class="modal-title">📤 Uploader un clip</h2>
+                <button class="close-btn" onclick="closeUploadModal()">×</button>
             </div>
             
             <div class="upload-area" onclick="document.getElementById('fileInput').click()">
                 <input type="file" id="fileInput" accept="video/*">
-                <p style="font-size: 1.5rem; margin-bottom: 1rem;">📁</p>
-                <p id="uploadAreaText" style="color: var(--text-secondary);">Cliquez pour choisir un fichier vidéo</p>
-                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">MP4, MOV, AVI (Max 100MB)</p>
+                <p style="font-size: 3rem; margin-bottom: 0.5rem;">📁</p>
+                <p id="uploadAreaText" style="color: var(--text-secondary); font-weight: 600;">Cliquez pour choisir une vidéo</p>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;">MP4, MOV, AVI • Max 100MB</p>
             </div>
 
             <div class="form-group">
-                <label>Titre du Clip</label>
-                <input type="text" id="clipTitle" placeholder="Mon meilleur clip ever...">
+                <label>Titre du clip *</label>
+                <input type="text" id="clipTitle" placeholder="Ex: Triple kill incroyable sur Dust 2">
             </div>
 
             <div class="form-group">
@@ -929,17 +1262,19 @@
             </div>
 
             <div class="form-group">
-                <label>Catégorie</label>
+                <label>Catégorie *</label>
                 <select id="clipCategory">
-                    <option>Kills</option>
-                    <option>Clutch</option>
-                    <option>Fails</option>
-                    <option>Funny</option>
-                    <option>Montage</option>
+                    <option value="Kills">🎯 Kills</option>
+                    <option value="Clutch">💪 Clutch</option>
+                    <option value="Fails">😅 Fails</option>
+                    <option value="Funny">😂 Funny</option>
+                    <option value="Montage">🎬 Montage</option>
                 </select>
             </div>
 
-            <button class="upload-btn" style="width: 100%;" onclick="publishClip()">🚀 Publier le Clip</button>
+            <button class="btn-primary" style="width: 100%; padding: 1rem;" onclick="publishClip()">
+                🚀 Publier le clip
+            </button>
         </div>
     </div>
 
@@ -947,47 +1282,32 @@
         // Variables globales
         let currentUser = null;
         let allClips = [];
+        let allUsers = [];
         let isAdmin = false;
         const ADMIN_CODE = 'Arracheur2_92i';
+        let currentFilter = 'Tous';
+        let currentSort = 'recent';
+        let searchQuery = '';
 
-        // Callback Google Sign-In (pour production réelle)
-        function handleCredentialResponse(response) {
-            // Décoder le JWT token de Google
-            const userObject = parseJwt(response.credential);
-            const user = {
-                id: userObject.sub,
-                name: userObject.name,
-                email: userObject.email,
-                avatar: userObject.picture
-            };
-            handleSignIn(user);
-        }
-
-        function parseJwt(token) {
-            const base64Url = token.split('.')[1];
-            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-            return JSON.parse(jsonPayload);
-        }
-
-        // Simuler connexion Google (pour démo sans configuration OAuth)
+        // Simuler connexion Google
         function simulateGoogleSignIn() {
-            const names = ['Gamer Pro', 'ClipMaster', 'Epic Player', 'Shadow Ninja', 'Clutch King'];
-            const randomName = names[Math.floor(Math.random() * names.length)];
+            const names = ['ProGamer', 'ClipMaster', 'EpicPlayer', 'ShadowNinja', 'ClutchKing', 'SnipeGod', 'RushMaster'];
+            const randomName = names[Math.floor(Math.random() * names.length)] + Math.floor(Math.random() * 1000);
             
             const user = {
                 id: 'user_' + Date.now(),
                 name: randomName,
-                email: randomName.toLowerCase().replace(' ', '') + '@rivals.gg',
-                avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(randomName)}&background=00fff7&color=0a0a0f&size=200&bold=true`
+                email: randomName.toLowerCase() + '@rivals.gg',
+                avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(randomName)}&background=00d9ff&color=0f0f1a&size=200&bold=true`,
+                joinDate: new Date().toISOString(),
+                followers: 0,
+                following: []
             };
             
             handleSignIn(user);
         }
 
-        // Prompt admin secret (double-clic sur le logo)
+        // Prompt admin secret
         function openAdminPrompt() {
             const code = prompt('🔐 Code Administrateur:');
             if (code === ADMIN_CODE) {
@@ -1008,26 +1328,30 @@
         // Gérer la connexion
         function handleSignIn(user) {
             currentUser = user;
+            
+            // Ajouter l'utilisateur à la liste s'il n'existe pas
+            if (!allUsers.find(u => u.id === user.id)) {
+                allUsers.push(user);
+                saveUsers();
+            }
+            
             localStorage.setItem('currentUser', JSON.stringify(user));
             
-            // Afficher l'interface principale
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
             
-            // Mettre à jour l'interface utilisateur
             document.getElementById('userAvatar').src = user.avatar;
             document.getElementById('profileAvatar').src = user.avatar;
             document.getElementById('profileName').textContent = user.name;
             document.getElementById('profileEmail').textContent = user.email;
             
-            // Vérifier si admin
             if (localStorage.getItem('isAdmin') === 'true') {
                 isAdmin = true;
                 showAdminFeatures();
             }
             
-            // Charger les clips
             loadClips();
+            updateLoginStats();
         }
 
         // Déconnexion
@@ -1044,7 +1368,7 @@
             }
         }
 
-        // Vérifier si l'utilisateur est déjà connecté
+        // Vérifier authentification
         function checkAuth() {
             const savedUser = localStorage.getItem('currentUser');
             if (savedUser) {
@@ -1052,55 +1376,107 @@
             }
         }
 
-        // Charger les clips depuis localStorage
+        // Charger les clips
         function loadClips() {
             const savedClips = localStorage.getItem('rivalsClips');
             allClips = savedClips ? JSON.parse(savedClips) : [];
             
+            const savedUsers = localStorage.getItem('rivalsUsers');
+            allUsers = savedUsers ? JSON.parse(savedUsers) : [];
+            
             renderClips();
             updateUserStats();
+            updateLoginStats();
             if (isAdmin) {
                 renderAdminClips();
+                updateAdminStats();
             }
         }
 
-        // Sauvegarder les clips dans localStorage
         function saveClips() {
             localStorage.setItem('rivalsClips', JSON.stringify(allClips));
         }
 
+        function saveUsers() {
+            localStorage.setItem('rivalsUsers', JSON.stringify(allUsers));
+        }
+
         // Filtrer les clips
         function filterClips(category) {
+            currentFilter = category;
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');
-                if (btn.textContent === category) {
+                if (btn.textContent.includes(category)) {
                     btn.classList.add('active');
                 }
             });
-            renderClips(category);
+            renderClips();
         }
 
-        // Rendre les clips dans l'interface
-        function renderClips(filter = 'Tous') {
+        // Trier les clips
+        function sortClips() {
+            currentSort = document.getElementById('sortSelect').value;
+            renderClips();
+        }
+
+        // Rechercher les clips
+        function searchClips() {
+            searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            renderClips();
+        }
+
+        // Obtenir les clips filtrés et triés
+        function getFilteredClips() {
+            let filtered = [...allClips];
+            
+            // Filtrer par catégorie
+            if (currentFilter !== 'Tous') {
+                filtered = filtered.filter(clip => clip.category === currentFilter);
+            }
+            
+            // Filtrer par recherche
+            if (searchQuery) {
+                filtered = filtered.filter(clip => 
+                    clip.title.toLowerCase().includes(searchQuery) ||
+                    clip.description.toLowerCase().includes(searchQuery) ||
+                    clip.userName.toLowerCase().includes(searchQuery)
+                );
+            }
+            
+            // Trier
+            switch (currentSort) {
+                case 'popular':
+                    filtered.sort((a, b) => b.likes - a.likes);
+                    break;
+                case 'views':
+                    filtered.sort((a, b) => b.views - a.views);
+                    break;
+                case 'recent':
+                default:
+                    filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            }
+            
+            return filtered;
+        }
+
+        // Rendre les clips
+        function renderClips() {
             const container = document.getElementById('clipsContainer');
             const trendingContainer = document.getElementById('trendingContainer');
             const userClipsContainer = document.getElementById('userClipsContainer');
+            const followingContainer = document.getElementById('followingContainer');
             
-            // Filtrer les clips
-            let filteredClips = allClips;
-            if (filter !== 'Tous') {
-                filteredClips = allClips.filter(clip => clip.category === filter);
-            }
+            const filteredClips = getFilteredClips();
             
             // Clips principaux
             if (filteredClips.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-icon">🎬</div>
-                        <h3>Aucun clip pour le moment</h3>
-                        <p>Soyez le premier à partager vos meilleurs moments !</p>
-                        <button class="upload-btn" onclick="openUploadModal()" style="margin-top: 1.5rem;">
-                            📤 Upload votre premier clip
+                        <h3>Aucun clip trouvé</h3>
+                        <p>Essayez de modifier vos filtres ou soyez le premier à uploader !</p>
+                        <button class="btn-primary" onclick="openUploadModal()" style="margin-top: 1rem;">
+                            📤 Uploader un clip
                         </button>
                     </div>
                 `;
@@ -1108,8 +1484,8 @@
                 container.innerHTML = filteredClips.map(clip => createClipCard(clip)).join('');
             }
             
-            // Clips trending (triés par likes)
-            const trendingClips = [...allClips].sort((a, b) => b.likes - a.likes).slice(0, 6);
+            // Clips trending
+            const trendingClips = [...allClips].sort((a, b) => b.likes - a.likes).slice(0, 9);
             if (trendingClips.length === 0) {
                 trendingContainer.innerHTML = `
                     <div class="empty-state">
@@ -1129,47 +1505,84 @@
                     <div class="empty-state">
                         <div class="empty-icon">🎮</div>
                         <h3>Vous n'avez pas encore de clips</h3>
-                        <p>Uploadez votre premier clip pour commencer !</p>
-                        <button class="upload-btn" onclick="openUploadModal()" style="margin-top: 1.5rem;">
-                            📤 Upload mon premier clip
+                        <p>Partagez vos meilleurs moments avec la communauté !</p>
+                        <button class="btn-primary" onclick="openUploadModal()" style="margin-top: 1rem;">
+                            📤 Uploader mon premier clip
                         </button>
                     </div>
                 `;
             } else {
                 userClipsContainer.innerHTML = userClips.map(clip => createClipCard(clip, true)).join('');
             }
+            
+            // Clips des abonnements
+            followingContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">💫</div>
+                    <h3>Fonctionnalité bientôt disponible</h3>
+                    <p>Suivez vos créateurs préférés pour voir leurs clips ici</p>
+                </div>
+            `;
         }
 
         // Créer une carte de clip
         function createClipCard(clip, showDelete = false) {
             const deleteBtn = (showDelete || isAdmin) ? `
-                <button class="admin-btn" onclick="deleteClip('${clip.id}', event)" style="position: absolute; top: 10px; right: 10px; z-index: 10;">
-                    🗑️
+                <button class="delete-clip-btn" onclick="deleteClip('${clip.id}', event)">
+                    🗑️ Supprimer
                 </button>
             ` : '';
+            
+            const timeAgo = getTimeAgo(clip.timestamp);
             
             return `
                 <div class="clip-card" onclick="playClip('${clip.id}')">
                     ${deleteBtn}
                     <div class="clip-thumbnail">
                         ${clip.videoUrl ? `<video src="${clip.videoUrl}"></video>` : ''}
+                        <div class="clip-play-btn">▶</div>
+                        <div class="clip-category">${clip.category}</div>
                     </div>
                     <div class="clip-info">
-                        <h3 class="clip-title">${clip.title}</h3>
-                        <div class="clip-meta">
-                            <span>Par <strong>${clip.userName}</strong></span>
-                            <div class="clip-stats">
-                                <span class="stat"><span class="stat-icon">👁️</span> ${clip.views}</span>
-                                <span class="stat">
-                                    <button onclick="likeClip('${clip.id}', event)" style="background: none; border: none; cursor: pointer; color: inherit; display: flex; align-items: center; gap: 0.3rem;">
-                                        <span class="stat-icon">❤️</span> ${clip.likes}
-                                    </button>
-                                </span>
+                        <div class="clip-header">
+                            <img src="${clip.userAvatar}" class="clip-author-avatar" alt="${clip.userName}">
+                            <div class="clip-author-info">
+                                <div class="clip-author-name">${clip.userName}</div>
+                                <div class="clip-time">${timeAgo}</div>
                             </div>
+                        </div>
+                        <h3 class="clip-title">${clip.title}</h3>
+                        ${clip.description ? `<p class="clip-description">${clip.description}</p>` : ''}
+                        <div class="clip-actions">
+                            <button class="action-btn ${clip.likedBy?.includes(currentUser.id) ? 'liked' : ''}" onclick="likeClip('${clip.id}', event)">
+                                ❤️ ${clip.likes}
+                            </button>
+                            <button class="action-btn">
+                                👁️ ${clip.views}
+                            </button>
+                            <button class="action-btn">
+                                💬 ${clip.comments || 0}
+                            </button>
+                            <button class="action-btn">
+                                🔗 Partager
+                            </button>
                         </div>
                     </div>
                 </div>
             `;
+        }
+
+        // Fonction pour calculer le temps écoulé
+        function getTimeAgo(timestamp) {
+            const now = new Date();
+            const past = new Date(timestamp);
+            const diff = Math.floor((now - past) / 1000);
+            
+            if (diff < 60) return 'À l\'instant';
+            if (diff < 3600) return Math.floor(diff / 60) + ' min';
+            if (diff < 86400) return Math.floor(diff / 3600) + ' h';
+            if (diff < 604800) return Math.floor(diff / 86400) + ' j';
+            return Math.floor(diff / 604800) + ' sem';
         }
 
         // Lire un clip
@@ -1181,49 +1594,81 @@
                 renderClips();
                 updateUserStats();
                 
-                // Ouvrir le lecteur vidéo
                 if (clip.videoUrl) {
-                    const videoPlayer = window.open('', '_blank', 'width=800,height=600');
+                    const videoPlayer = window.open('', '_blank', 'width=1000,height=700');
                     videoPlayer.document.write(`
                         <!DOCTYPE html>
                         <html>
                         <head>
-                            <title>${clip.title}</title>
+                            <title>${clip.title} - Rivals Clip</title>
                             <style>
+                                * { margin: 0; padding: 0; box-sizing: border-box; }
                                 body { 
-                                    margin: 0; 
-                                    background: #000; 
-                                    display: flex; 
+                                    background: #0f0f1a; 
+                                    color: white;
+                                    font-family: 'Inter', sans-serif;
+                                    display: flex;
                                     flex-direction: column;
-                                    justify-content: center; 
-                                    align-items: center; 
-                                    height: 100vh;
-                                    font-family: Arial, sans-serif;
+                                    min-height: 100vh;
+                                }
+                                .player-container {
+                                    flex: 1;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    background: #000;
                                 }
                                 video { 
                                     max-width: 100%; 
-                                    max-height: 80vh; 
+                                    max-height: 100%;
                                 }
-                                .info {
-                                    color: white;
-                                    padding: 20px;
-                                    text-align: center;
+                                .info-bar {
+                                    background: #1a1a2e;
+                                    padding: 1.5rem 2rem;
+                                    border-top: 1px solid rgba(0, 217, 255, 0.15);
                                 }
-                                h1 {
-                                    margin: 0 0 10px 0;
+                                .title {
+                                    font-size: 1.5rem;
+                                    font-weight: 700;
+                                    margin-bottom: 0.5rem;
                                 }
-                                p {
-                                    color: #888;
-                                    margin: 5px 0;
+                                .meta {
+                                    color: #a0a0b8;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 2rem;
+                                    font-size: 0.9rem;
+                                }
+                                .author {
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 0.5rem;
+                                }
+                                .avatar {
+                                    width: 32px;
+                                    height: 32px;
+                                    border-radius: 50%;
+                                    border: 2px solid #00d9ff;
                                 }
                             </style>
                         </head>
                         <body>
-                            <div class="info">
-                                <h1>${clip.title}</h1>
-                                <p>Par ${clip.userName} • ${clip.views} vues • ${clip.likes} likes</p>
+                            <div class="player-container">
+                                <video controls autoplay src="${clip.videoUrl}"></video>
                             </div>
-                            <video controls autoplay src="${clip.videoUrl}"></video>
+                            <div class="info-bar">
+                                <div class="title">${clip.title}</div>
+                                <div class="meta">
+                                    <div class="author">
+                                        <img src="${clip.userAvatar}" class="avatar">
+                                        <strong>${clip.userName}</strong>
+                                    </div>
+                                    <span>👁️ ${clip.views} vues</span>
+                                    <span>❤️ ${clip.likes} likes</span>
+                                    <span>📁 ${clip.category}</span>
+                                </div>
+                                ${clip.description ? `<p style="margin-top: 1rem; color: #a0a0b8;">${clip.description}</p>` : ''}
+                            </div>
                         </body>
                         </html>
                     `);
@@ -1236,7 +1681,17 @@
             event.stopPropagation();
             const clip = allClips.find(c => c.id === clipId);
             if (clip) {
-                clip.likes++;
+                if (!clip.likedBy) clip.likedBy = [];
+                
+                const likedIndex = clip.likedBy.indexOf(currentUser.id);
+                if (likedIndex > -1) {
+                    clip.likedBy.splice(likedIndex, 1);
+                    clip.likes--;
+                } else {
+                    clip.likedBy.push(currentUser.id);
+                    clip.likes++;
+                }
+                
                 saveClips();
                 renderClips();
                 updateUserStats();
@@ -1256,11 +1711,12 @@
                 updateUserStats();
                 if (isAdmin) {
                     renderAdminClips();
+                    updateAdminStats();
                 }
             }
         }
 
-        // Mettre à jour les statistiques utilisateur
+        // Mettre à jour les stats utilisateur
         function updateUserStats() {
             const userClips = allClips.filter(clip => clip.userId === currentUser.id);
             const totalViews = userClips.reduce((sum, clip) => sum + clip.views, 0);
@@ -1269,6 +1725,103 @@
             document.getElementById('userClipsCount').textContent = userClips.length;
             document.getElementById('userViewsCount').textContent = totalViews;
             document.getElementById('userLikesCount').textContent = totalLikes;
+            document.getElementById('userFollowersCount').textContent = currentUser.followers || 0;
+        }
+
+        // Mettre à jour les stats de l'écran de connexion
+        function updateLoginStats() {
+            const totalUsers = allUsers.length;
+            const totalClips = allClips.length;
+            const totalViews = allClips.reduce((sum, clip) => sum + clip.views, 0);
+            
+            document.getElementById('totalUsers').textContent = totalUsers;
+            document.getElementById('totalClips').textContent = totalClips;
+            document.getElementById('totalViews').textContent = totalViews > 1000 ? (totalViews / 1000).toFixed(1) + 'K' : totalViews;
+        }
+
+        // Navigation tabs
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                
+                link.classList.add('active');
+                const tabId = link.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Modal
+        function openUploadModal() {
+            document.getElementById('uploadModal').classList.add('active');
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.remove('active');
+            document.getElementById('clipTitle').value = '';
+            document.getElementById('clipDescription').value = '';
+            document.getElementById('uploadAreaText').textContent = 'Cliquez pour choisir une vidéo';
+            selectedFile = null;
+        }
+
+        document.getElementById('uploadModal').addEventListener('click', (e) => {
+            if (e.target.id === 'uploadModal') {
+                closeUploadModal();
+            }
+        });
+
+        // Upload fichier
+        let selectedFile = null;
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                selectedFile = e.target.files[0];
+                document.getElementById('uploadAreaText').textContent = `✅ ${selectedFile.name}`;
+            }
+        });
+
+        // Publier un clip
+        function publishClip() {
+            const title = document.getElementById('clipTitle').value;
+            const description = document.getElementById('clipDescription').value;
+            const category = document.getElementById('clipCategory').value;
+            
+            if (!title || !selectedFile) {
+                alert('⚠️ Veuillez remplir le titre et sélectionner une vidéo');
+                return;
+            }
+            
+            const videoUrl = URL.createObjectURL(selectedFile);
+            
+            const newClip = {
+                id: 'clip_' + Date.now(),
+                userId: currentUser.id,
+                userName: currentUser.name,
+                userAvatar: currentUser.avatar,
+                title: title,
+                description: description,
+                category: category,
+                videoUrl: videoUrl,
+                views: 0,
+                likes: 0,
+                likedBy: [],
+                comments: 0,
+                timestamp: new Date().toISOString()
+            };
+            
+            allClips.unshift(newClip);
+            saveClips();
+            renderClips();
+            updateUserStats();
+            updateLoginStats();
+            if (isAdmin) {
+                renderAdminClips();
+                updateAdminStats();
+            }
+            
+            closeUploadModal();
+            alert('🎉 Clip publié avec succès !');
         }
 
         // Admin: Rendre tous les clips
@@ -1287,117 +1840,113 @@
             }
         }
 
-        // Admin: Exporter tous les clips
-        function exportClips() {
-            const dataStr = JSON.stringify(allClips, null, 2);
+        // Admin: Mettre à jour les stats
+        function updateAdminStats() {
+            const totalUsers = allUsers.length;
+            const totalClips = allClips.length;
+            const totalViews = allClips.reduce((sum, clip) => sum + clip.views, 0);
+            
+            document.getElementById('adminTotalUsers').textContent = totalUsers;
+            document.getElementById('adminTotalClips').textContent = totalClips;
+            document.getElementById('adminTotalViews').textContent = totalViews;
+        }
+
+        // Admin: Voir tous les utilisateurs
+        function viewAllUsers() {
+            const container = document.getElementById('usersTableContainer');
+            const tbody = document.getElementById('usersTableBody');
+            
+            if (allUsers.length === 0) {
+                tbody.innerHTML = `
+                    <div style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+                        Aucun utilisateur inscrit
+                    </div>
+                `;
+            } else {
+                tbody.innerHTML = allUsers.map(user => {
+                    const userClips = allClips.filter(c => c.userId === user.id);
+                    const totalViews = userClips.reduce((sum, clip) => sum + clip.views, 0);
+                    const totalLikes = userClips.reduce((sum, clip) => sum + clip.likes, 0);
+                    const joinDate = new Date(user.joinDate).toLocaleDateString('fr-FR');
+                    
+                    return `
+                        <div class="table-row">
+                            <img src="${user.avatar}" class="table-avatar" alt="${user.name}">
+                            <div>${user.name}</div>
+                            <div>${user.email}</div>
+                            <div>${userClips.length}</div>
+                            <div>${totalViews}</div>
+                            <div>${totalLikes}</div>
+                            <div>${joinDate}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            container.style.display = 'block';
+            container.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function hideUsersTable() {
+            document.getElementById('usersTableContainer').style.display = 'none';
+        }
+
+        // Admin: Exporter toutes les données
+        function exportAllData() {
+            const data = {
+                users: allUsers,
+                clips: allClips,
+                exportDate: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
             const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            const exportFileDefaultName = 'rivals-clips-export.json';
+            const exportFileDefaultName = 'rivals-clip-export-' + Date.now() + '.json';
             
             const linkElement = document.createElement('a');
             linkElement.setAttribute('href', dataUri);
             linkElement.setAttribute('download', exportFileDefaultName);
             linkElement.click();
+            
+            alert('✅ Données exportées avec succès !');
         }
 
         // Admin: Supprimer tous les clips
         function clearAllClips() {
-            if (confirm('⚠️ ATTENTION ! Voulez-vous vraiment supprimer TOUS les clips de la plateforme ? Cette action est irréversible !')) {
-                if (confirm('Êtes-vous ABSOLUMENT sûr ?')) {
+            if (confirm('⚠️ ATTENTION ! Voulez-vous vraiment supprimer TOUS les clips de la plateforme ?')) {
+                if (confirm('Cette action est irréversible. Continuer ?')) {
                     allClips = [];
                     saveClips();
                     renderClips();
                     renderAdminClips();
-                    alert('Tous les clips ont été supprimés.');
+                    updateAdminStats();
+                    updateLoginStats();
+                    alert('✅ Tous les clips ont été supprimés.');
                 }
             }
         }
 
-        // Tab Navigation
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-                
-                link.classList.add('active');
-                const tabId = link.getAttribute('data-tab');
-                document.getElementById(tabId).classList.add('active');
-            });
-        });
-
-        // Modal functions
-        function openUploadModal() {
-            document.getElementById('uploadModal').classList.add('active');
+        // Admin: Réinitialiser la plateforme
+        function clearAllData() {
+            if (confirm('⚠️⚠️⚠️ DANGER ! Cela va supprimer TOUS les utilisateurs et TOUS les clips !')) {
+                if (confirm('Êtes-vous ABSOLUMENT sûr ? Cette action est IRRÉVERSIBLE !')) {
+                    const confirmText = prompt('Tapez "SUPPRIMER TOUT" pour confirmer:');
+                    if (confirmText === 'SUPPRIMER TOUT') {
+                        allClips = [];
+                        allUsers = [];
+                        saveClips();
+                        saveUsers();
+                        alert('✅ Plateforme réinitialisée. Vous allez être déconnecté.');
+                        signOut();
+                    }
+                }
+            }
         }
 
-        function closeUploadModal() {
-            document.getElementById('uploadModal').classList.remove('active');
-            document.getElementById('clipTitle').value = '';
-            document.getElementById('clipDescription').value = '';
-            document.getElementById('uploadAreaText').textContent = 'Cliquez pour choisir un fichier vidéo';
-            selectedFile = null;
-        }
-
-        document.getElementById('uploadModal').addEventListener('click', (e) => {
-            if (e.target.id === 'uploadModal') {
-                closeUploadModal();
-            }
-        });
-
-        // Gestion de l'upload de fichier
-        let selectedFile = null;
-        document.getElementById('fileInput').addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                selectedFile = e.target.files[0];
-                const fileName = selectedFile.name;
-                document.getElementById('uploadAreaText').textContent = `✅ Fichier sélectionné : ${fileName}`;
-            }
-        });
-
-        // Publier un clip
-        function publishClip() {
-            const title = document.getElementById('clipTitle').value;
-            const description = document.getElementById('clipDescription').value;
-            const category = document.getElementById('clipCategory').value;
-            
-            if (!title || !selectedFile) {
-                alert('⚠️ Veuillez remplir le titre et sélectionner une vidéo');
-                return;
-            }
-            
-            // Créer une URL pour la vidéo
-            const videoUrl = URL.createObjectURL(selectedFile);
-            
-            const newClip = {
-                id: 'clip_' + Date.now(),
-                userId: currentUser.id,
-                userName: currentUser.name,
-                userAvatar: currentUser.avatar,
-                title: title,
-                description: description,
-                category: category,
-                videoUrl: videoUrl,
-                views: 0,
-                likes: 0,
-                timestamp: new Date().toISOString()
-            };
-            
-            allClips.unshift(newClip);
-            saveClips();
-            renderClips();
-            updateUserStats();
-            if (isAdmin) {
-                renderAdminClips();
-            }
-            
-            closeUploadModal();
-            alert('🎉 Clip publié avec succès !');
-        }
-
-        // Initialiser au chargement de la page
+        // Initialiser
         window.addEventListener('DOMContentLoaded', () => {
             checkAuth();
+            updateLoginStats();
         });
     </script>
 </body>
