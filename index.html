@@ -3,1352 +3,990 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Security Alert</title>
+    <title>Rivals Clip - Partagez vos meilleurs moments</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a26;
+            --accent-cyan: #00fff7;
+            --accent-pink: #ff00ff;
+            --accent-yellow: #ffff00;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0c8;
+            --border: rgba(0, 255, 247, 0.2);
         }
 
         body {
-            background: #000000;
-            font-family: 'Share Tech Mono', monospace;
-            color: #00ff41;
-            overflow: hidden;
-            cursor: default;
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* Effet de scanlines CRT */
-        body::before {
-            content: '';
+        /* Animated background */
+        .bg-gradient {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0, 0, 0, 0.15),
-                rgba(0, 0, 0, 0.15) 1px,
-                transparent 1px,
-                transparent 2px
-            );
-            pointer-events: none;
-            z-index: 9999;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 255, 247, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 0, 0.05) 0%, transparent 70%);
+            animation: gradientShift 15s ease infinite;
         }
 
-        /* Écran bleu initial - version cyberpunk */
-        .bsod-container {
-            padding: 0;
-            height: 100vh;
+        @keyframes gradientShift {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Header */
+        header {
+            background: rgba(18, 18, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 10px 40px rgba(0, 255, 247, 0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
             display: flex;
-            flex-direction: column;
-            background: linear-gradient(135deg, #0a0a1f 0%, #000000 100%);
-            position: relative;
-            overflow: hidden;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .bsod-container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0,100,255,0.1) 0%, transparent 70%);
-            animation: pulse-bg 4s ease-in-out infinite;
-        }
-
-        @keyframes pulse-bg {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.6; }
-        }
-
-        .bsod-header {
-            background: linear-gradient(90deg, #0a0a1f 0%, #1a0a2e 50%, #0a0a1f 100%);
-            padding: 20px 40px;
-            border-bottom: 2px solid #ff0055;
-            box-shadow: 0 0 20px rgba(255, 0, 85, 0.5);
-        }
-
-        .bsod-header h1 {
+        .logo {
             font-family: 'Orbitron', sans-serif;
-            font-size: 24px;
+            font-size: 2rem;
             font-weight: 900;
-            color: #ff0055;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             text-transform: uppercase;
             letter-spacing: 3px;
-            text-shadow: 0 0 10px rgba(255, 0, 85, 0.8);
+            text-shadow: 0 0 30px rgba(0, 255, 247, 0.5);
+            animation: logoGlow 3s ease-in-out infinite;
         }
 
-        .bsod-content {
-            flex: 1;
+        @keyframes logoGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        nav {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 60px;
-            position: relative;
-            z-index: 1;
+            gap: 2rem;
         }
 
-        .error-icon {
-            font-size: 120px;
-            margin-bottom: 40px;
-            color: #ff0055;
-            text-shadow: 0 0 30px rgba(255, 0, 85, 1);
-            animation: glitch-icon 2s infinite;
-        }
-
-        @keyframes glitch-icon {
-            0%, 90%, 100% { 
-                transform: translate(0);
-                text-shadow: 0 0 30px rgba(255, 0, 85, 1);
-            }
-            92% { 
-                transform: translate(-3px, 3px);
-                text-shadow: -3px 0 #00ffff, 3px 0 #ff0055;
-            }
-            94% { 
-                transform: translate(3px, -3px);
-                text-shadow: 3px 0 #00ffff, -3px 0 #ff0055;
-            }
-        }
-
-        .error-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 42px;
-            font-weight: 900;
-            margin-bottom: 30px;
-            color: #ffffff;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            text-align: center;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-        }
-
-        .error-subtitle {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 20px;
-            font-weight: 400;
-            color: #00d4ff;
-            text-align: center;
-            max-width: 700px;
-            line-height: 1.6;
-            margin-bottom: 40px;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
-        }
-
-        .error-code-box {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid #ff0055;
-            padding: 25px 40px;
-            margin-top: 30px;
-            box-shadow: 0 0 20px rgba(255, 0, 85, 0.3), inset 0 0 20px rgba(255, 0, 85, 0.1);
-        }
-
-        .error-code-box p {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 14px;
-            color: #00ff41;
-            margin: 8px 0;
-        }
-
-        .progress-bar-container {
-            width: 400px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            margin-top: 40px;
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            border: 1px solid #00d4ff;
-            box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .progress-bar {
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, #00d4ff 0%, #ff0055 100%);
-            width: 0%;
-            animation: load-progress 3s ease-out forwards;
-            box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+            transition: left 0.5s ease;
         }
 
-        @keyframes load-progress {
-            to { width: 100%; }
+        .nav-link:hover::before {
+            left: 100%;
         }
 
-        /* Fenêtres d'erreur - style cyberpunk */
-        .error-window {
-            position: fixed;
-            width: 450px;
-            background: linear-gradient(135deg, #0a0a1f 0%, #1a0a2e 100%);
-            border: 2px solid #ff0055;
-            box-shadow: 0 0 40px rgba(255, 0, 85, 0.6), inset 0 0 30px rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            animation: shake-window 0.2s;
-            font-family: 'Rajdhani', sans-serif;
+        .nav-link:hover {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px var(--accent-cyan);
         }
 
-        @keyframes shake-window {
-            0%, 100% { transform: translate(0, 0); }
-            25% { transform: translate(-8px, 0); }
-            75% { transform: translate(8px, 0); }
+        .nav-link.active {
+            color: var(--accent-cyan);
+            background: rgba(0, 255, 247, 0.1);
+            border: 1px solid var(--accent-cyan);
         }
 
-        .error-title-bar {
-            background: linear-gradient(90deg, #ff0055 0%, #c40042 100%);
-            padding: 12px 15px;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid #ff0055;
-            box-shadow: 0 2px 10px rgba(255, 0, 85, 0.5);
-        }
-
-        .error-icon-title {
-            font-size: 18px;
-            margin-right: 10px;
-        }
-
-        .error-title-text {
-            font-size: 14px;
-            color: #ffffff;
-            flex: 1;
+        .upload-btn {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+            color: var(--bg-primary);
+            padding: 0.7rem 2rem;
+            border: none;
+            border-radius: 8px;
             font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 1px;
-            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 247, 0.3);
         }
 
-        .error-close-btn {
-            width: 24px;
-            height: 24px;
-            background: #000;
-            color: #ff0055;
-            border: 1px solid #ff0055;
-            font-size: 16px;
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 255, 247, 0.6);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff, var(--accent-cyan), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleShine 3s ease-in-out infinite;
+        }
+
+        @keyframes titleShine {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.5); }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            padding: 0.7rem 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            transition: all 0.2s;
-        }
-
-        .error-close-btn:hover {
-            background: #ff0055;
-            color: #000;
-            box-shadow: 0 0 10px rgba(255, 0, 85, 0.8);
-        }
-
-        .error-content {
-            padding: 25px;
-            background: rgba(0, 0, 0, 0.4);
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
-        }
-
-        .error-symbol {
-            font-size: 40px;
-            flex-shrink: 0;
-            filter: drop-shadow(0 0 10px currentColor);
-        }
-
-        .error-message {
-            color: #00d4ff;
-            font-size: 15px;
-            line-height: 1.6;
-            font-weight: 500;
-        }
-
-        .error-buttons {
-            padding: 20px 25px;
-            background: rgba(0, 0, 0, 0.6);
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-            border-top: 1px solid rgba(255, 0, 85, 0.3);
-        }
-
-        .error-btn {
-            padding: 10px 30px;
-            background: linear-gradient(135deg, #ff0055 0%, #c40042 100%);
-            border: 1px solid #ff0055;
-            color: #ffffff;
-            font-size: 13px;
-            cursor: pointer;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
+            font-weight: 600;
+            transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: all 0.3s;
-            box-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
         }
 
-        .error-btn:hover {
-            background: linear-gradient(135deg, #ff2a75 0%, #e60052 100%);
-            box-shadow: 0 0 20px rgba(255, 0, 85, 0.8);
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--accent-cyan);
+            color: var(--bg-primary);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 247, 0.4);
             transform: translateY(-2px);
         }
 
-        /* Écran noir de hacking - cyberpunk */
-        .hacking-screen {
+        /* Clips Grid */
+        .clips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .clip-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .clip-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink), var(--accent-yellow));
+            border-radius: 12px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.4s ease;
+        }
+
+        .clip-card:hover::before {
+            opacity: 1;
+        }
+
+        .clip-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 255, 247, 0.3);
+        }
+
+        .clip-thumbnail {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #1a1a26, #2a2a36);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .clip-thumbnail::after {
+            content: '▶';
+            position: absolute;
+            font-size: 3rem;
+            color: var(--accent-cyan);
+            opacity: 0.8;
+            text-shadow: 0 0 20px var(--accent-cyan);
+            transition: all 0.3s ease;
+        }
+
+        .clip-card:hover .clip-thumbnail::after {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+
+        .clip-info {
+            padding: 1.5rem;
+        }
+
+        .clip-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .clip-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .clip-stats {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .stat-icon {
+            color: var(--accent-cyan);
+        }
+
+        /* Upload Modal */
+        .modal {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000000;
-            color: #00ff41;
-            font-family: 'Share Tech Mono', monospace;
-            padding: 30px;
-            overflow-y: auto;
-            display: none;
-            z-index: 9999;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: modalFade 0.3s ease;
         }
 
-        .hacking-screen.active {
+        .modal.active {
+            display: flex;
+        }
+
+        @keyframes modalFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            padding: 3rem;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            border: 2px solid var(--accent-cyan);
+            box-shadow: 0 0 60px rgba(0, 255, 247, 0.3);
+            animation: modalSlide 0.3s ease;
+        }
+
+        @keyframes modalSlide {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--accent-cyan);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--accent-pink);
+            transform: rotate(90deg);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 255, 247, 0.05);
+        }
+
+        .upload-area input {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
             display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .hacking-screen::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        .hacking-screen::-webkit-scrollbar-track {
-            background: #0a0a0a;
-            border-left: 1px solid #00ff41;
-        }
-
-        .hacking-screen::-webkit-scrollbar-thumb {
-            background: #00ff41;
-            box-shadow: 0 0 10px #00ff41;
-        }
-
-        .terminal-line {
-            margin: 2px 0;
-            font-size: 14px;
-            line-height: 1.4;
-            text-shadow: 0 0 5px currentColor;
-        }
-
-        .terminal-line.red {
-            color: #ff0055;
-        }
-
-        .terminal-line.yellow {
-            color: #ffd700;
-        }
-
-        .terminal-line.cyan {
-            color: #00d4ff;
-        }
-
-        .terminal-line.white {
-            color: #ffffff;
-        }
-
-        .cursor::after {
-            content: '█';
-            animation: blink-cursor 0.7s infinite;
-        }
-
-        @keyframes blink-cursor {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-
-        /* Écran bleu final - version cyberpunk */
-        .final-bsod {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
             width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #0a0a1f 0%, #000000 100%);
-            color: white;
-            padding: 60px;
-            display: none;
-            z-index: 10000;
+            padding: 0.8rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
             font-family: 'Rajdhani', sans-serif;
-            overflow-y: auto;
+            font-size: 1rem;
         }
 
-        .final-bsod.active {
-            display: block;
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
         }
 
-        .final-bsod .skull-icon {
-            font-size: 180px;
-            text-align: center;
-            margin-bottom: 40px;
-            color: #ff0055;
-            text-shadow: 0 0 40px rgba(255, 0, 85, 1);
-            animation: skull-pulse 2s infinite;
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(0, 255, 247, 0.2);
         }
 
-        @keyframes skull-pulse {
-            0%, 100% { 
-                transform: scale(1);
-                text-shadow: 0 0 40px rgba(255, 0, 85, 1);
-            }
-            50% { 
-                transform: scale(1.05);
-                text-shadow: 0 0 60px rgba(255, 0, 85, 1), 0 0 80px rgba(255, 0, 85, 0.5);
-            }
+        /* Profile Section */
+        .profile-header {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            padding: 2rem;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 3rem;
         }
 
-        .final-bsod h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 52px;
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
             font-weight: 900;
-            margin-bottom: 30px;
-            color: #ff0055;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            text-shadow: 0 0 20px rgba(255, 0, 85, 1);
+            border: 3px solid var(--accent-cyan);
+            box-shadow: 0 0 30px rgba(0, 255, 247, 0.4);
         }
 
-        .final-bsod .error-details {
-            font-size: 18px;
-            line-height: 1.8;
-            margin-bottom: 40px;
-            text-align: center;
-            color: #00d4ff;
-            max-width: 1000px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .final-bsod .data-loss {
-            background: rgba(255, 0, 85, 0.1);
-            padding: 40px;
-            margin: 40px auto;
-            border: 2px solid #ff0055;
-            max-width: 900px;
-            box-shadow: 0 0 30px rgba(255, 0, 85, 0.5), inset 0 0 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .final-bsod .data-loss h2 {
+        .profile-info h2 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 28px;
-            color: #ff0055;
-            margin-bottom: 25px;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .profile-stat {
             text-align: center;
+        }
+
+        .profile-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .profile-stat-label {
+            color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 15px rgba(255, 0, 85, 0.8);
+            font-size: 0.9rem;
         }
 
-        .final-bsod .data-loss ul {
-            list-style: none;
-            padding: 0;
+        /* Leaderboard */
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
         }
 
-        .final-bsod .data-loss li {
-            padding: 12px 0;
-            font-size: 16px;
-            border-bottom: 1px solid rgba(255, 0, 85, 0.3);
-            color: #ffffff;
-            font-weight: 500;
+        .leaderboard-item:hover {
+            transform: translateX(10px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 247, 0.2);
         }
 
-        .final-bsod .data-loss li::before {
-            content: '⚠ ';
-            color: #ff0055;
-            margin-right: 15px;
-            font-size: 18px;
-            text-shadow: 0 0 10px rgba(255, 0, 85, 1);
-        }
-
-        .final-bsod .warning-message {
-            font-size: 22px;
-            color: #ffd700;
-            margin-top: 50px;
+        .leaderboard-rank {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--accent-cyan);
+            min-width: 50px;
             text-align: center;
-            animation: pulse-warning 1.5s infinite;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
         }
 
-        @keyframes pulse-warning {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
+        .leaderboard-rank.top-1 { color: #FFD700; text-shadow: 0 0 20px #FFD700; }
+        .leaderboard-rank.top-2 { color: #C0C0C0; text-shadow: 0 0 20px #C0C0C0; }
+        .leaderboard-rank.top-3 { color: #CD7F32; text-shadow: 0 0 20px #CD7F32; }
+
+        .leaderboard-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.5rem;
         }
 
-        .final-bsod .stop-code {
-            margin-top: 60px;
-            text-align: center;
-            font-size: 14px;
-            opacity: 0.7;
-            font-family: 'Share Tech Mono', monospace;
-            color: #00ff41;
+        .leaderboard-info {
+            flex: 1;
+        }
+
+        .leaderboard-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .leaderboard-score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-pink);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .clips-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Écran bleu initial cyberpunk -->
-    <div id="errorScreen" class="bsod-container">
-        <div class="bsod-header">
-            <h1>⚠ System Security Alert</h1>
+    <div class="bg-gradient"></div>
+
+    <header>
+        <div class="header-content">
+            <div class="logo">Rivals Clip</div>
+            <nav>
+                <a href="#" class="nav-link active" data-tab="home">Accueil</a>
+                <a href="#" class="nav-link" data-tab="trending">Tendances</a>
+                <a href="#" class="nav-link" data-tab="leaderboard">Classement</a>
+                <a href="#" class="nav-link" data-tab="profile">Profil</a>
+            </nav>
+            <button class="upload-btn" onclick="openUploadModal()">📤 Upload Clip</button>
         </div>
-        <div class="bsod-content">
-            <div class="error-icon">⚠</div>
-            <div class="error-title">Critical System Failure</div>
-            <div class="error-subtitle">
-                Your system has encountered a critical security breach.<br>
-                All protective measures have been compromised.<br>
-                Emergency shutdown protocol initiated.
+    </header>
+
+    <main>
+        <!-- Home Tab -->
+        <div id="home" class="tab-content active">
+            <div class="hero">
+                <h1>Vos Meilleurs Moments</h1>
+                <p>Partagez et découvrez les clips les plus épiques de Rivals</p>
             </div>
-            <div class="error-code-box">
-                <p>ERROR CODE: 0xC000021A</p>
-                <p>FAILED MODULE: ntoskrnl.exe</p>
-                <p>STATUS: CRITICAL_PROCESS_DIED</p>
+
+            <div class="filters">
+                <button class="filter-btn active">Tous</button>
+                <button class="filter-btn">Kills</button>
+                <button class="filter-btn">Clutch</button>
+                <button class="filter-btn">Fails</button>
+                <button class="filter-btn">Funny</button>
             </div>
-            <div class="progress-bar-container">
-                <div class="progress-bar"></div>
+
+            <div class="clips-grid">
+                <div class="clip-card">
+                    <div class="clip-thumbnail"></div>
+                    <div class="clip-info">
+                        <h3 class="clip-title">Triple Kill Insane!</h3>
+                        <div class="clip-meta">
+                            <span>Par <strong>ProGamer</strong></span>
+                            <div class="clip-stats">
+                                <span class="stat"><span class="stat-icon">👁️</span> 1.2K</span>
+                                <span class="stat"><span class="stat-icon">❤️</span> 342</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clip-card">
+                    <div class="clip-thumbnail"></div>
+                    <div class="clip-info">
+                        <h3 class="clip-title">Clutch 1v5 Impossible</h3>
+                        <div class="clip-meta">
+                            <span>Par <strong>ClutchMaster</strong></span>
+                            <div class="clip-stats">
+                                <span class="stat"><span class="stat-icon">👁️</span> 3.5K</span>
+                                <span class="stat"><span class="stat-icon">❤️</span> 892</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clip-card">
+                    <div class="clip-thumbnail"></div>
+                    <div class="clip-info">
+                        <h3 class="clip-title">Le Snipe du Siècle</h3>
+                        <div class="clip-meta">
+                            <span>Par <strong>SnipeKing</strong></span>
+                            <div class="clip-stats">
+                                <span class="stat"><span class="stat-icon">👁️</span> 2.1K</span>
+                                <span class="stat"><span class="stat-icon">❤️</span> 567</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clip-card">
+                    <div class="clip-thumbnail"></div>
+                    <div class="clip-info">
+                        <h3 class="clip-title">Epic Fail Compilation</h3>
+                        <div class="clip-meta">
+                            <span>Par <strong>FunnyGuy</strong></span>
+                            <div class="clip-stats">
+                                <span class="stat"><span class="stat-icon">👁️</span> 5.8K</span>
+                                <span class="stat"><span class="stat-icon">❤️</span> 1.3K</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clip-card">
+                    <div class="clip-thumbnail"></div>
+                    <div class="clip-info">
+                        <h3 class="clip-title">200 IQ Play</h3>
+                        <div class="clip-meta">
+                            <span>Par <strong>BigBrain</strong></span>
+                            <div class="clip-stats">
+                                <span class="stat"><span class="stat-icon">👁️</span> 4.2K</span>
+                                <span class="stat"><span class="stat-icon">❤️</span> 976</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clip-card">
+                    <div class="clip-thumbnail"></div>
+                    <div class="clip-info">
+                        <h3 class="clip-title">Meilleur Ace Ever</h3>
+                        <div class="clip-meta">
+                            <span>Par <strong>AceHunter</strong></span>
+                            <div class="clip-stats">
+                                <span class="stat"><span class="stat-icon">👁️</span> 6.7K</span>
+                                <span class="stat"><span class="stat-icon">❤️</span> 1.9K</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Écran de hacking -->
-    <div class="hacking-screen" id="hackingScreen">
-        <div id="hackTerminal"></div>
-    </div>
+        <!-- Trending Tab -->
+        <div id="trending" class="tab-content">
+            <div class="hero">
+                <h1>🔥 Tendances</h1>
+                <p>Les clips les plus populaires cette semaine</p>
+            </div>
 
-    <!-- Écran bleu final -->
-    <div class="final-bsod" id="finalBsod">
-        <div class="skull-icon">☠</div>
-        <h1>System Corruption Detected</h1>
-        <div class="error-details">
-            Your system has been compromised by an advanced persistent threat.<br>
-            Critical system files have been irreversibly corrupted.<br>
-            Recovery is not possible with standard methods.
+            <div class="clips-grid">
+                <div class="clip-card">
+                    <div class="clip-thumbnail"></div>
+                    <div class="clip-info">
+                        <h3 class="clip-title">🏆 Clip #1 de la Semaine</h3>
+                        <div class="clip-meta">
+                            <span>Par <strong>LegendPlayer</strong></span>
+                            <div class="clip-stats">
+                                <span class="stat"><span class="stat-icon">👁️</span> 15.2K</span>
+                                <span class="stat"><span class="stat-icon">❤️</span> 4.8K</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clip-card">
+                    <div class="clip-thumbnail"></div>
+                    <div class="clip-info">
+                        <h3 class="clip-title">Montage Incroyable</h3>
+                        <div class="clip-meta">
+                            <span>Par <strong>EditMaster</strong></span>
+                            <div class="clip-stats">
+                                <span class="stat"><span class="stat-icon">👁️</span> 12.5K</span>
+                                <span class="stat"><span class="stat-icon">❤️</span> 3.2K</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clip-card">
+                    <div class="clip-thumbnail"></div>
+                    <div class="clip-info">
+                        <h3 class="clip-title">Speed Run Record</h3>
+                        <div class="clip-meta">
+                            <span>Par <strong>FastRunner</strong></span>
+                            <div class="clip-stats">
+                                <span class="stat"><span class="stat-icon">👁️</span> 9.8K</span>
+                                <span class="stat"><span class="stat-icon">❤️</span> 2.7K</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div class="data-loss">
-            <h2>⚠ Permanent Data Loss Detected</h2>
-            <ul>
-                <li>All personal documents and files (Documents, Desktop, Downloads)</li>
-                <li>Photo and video archives (0 recoverable files from 3,847 total)</li>
-                <li>Stored authentication credentials and passwords</li>
-                <li>Browser history, cookies, and cached data</li>
-                <li>Microsoft Office documents (Word, Excel, PowerPoint)</li>
-                <li>Email databases and contact lists</li>
-                <li>Installed applications and program data</li>
-                <li>Windows system files (C:\Windows\System32\)</li>
-                <li>Boot sector and partition table data</li>
-            </ul>
+
+        <!-- Leaderboard Tab -->
+        <div id="leaderboard" class="tab-content">
+            <div class="hero">
+                <h1>🏆 Classement</h1>
+                <p>Les meilleurs joueurs de la communauté</p>
+            </div>
+
+            <div class="leaderboard-item">
+                <div class="leaderboard-rank top-1">1</div>
+                <div class="leaderboard-avatar">L</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">LegendPlayer</div>
+                    <div>250 Clips • 125K Vues</div>
+                </div>
+                <div class="leaderboard-score">9,847 pts</div>
+            </div>
+
+            <div class="leaderboard-item">
+                <div class="leaderboard-rank top-2">2</div>
+                <div class="leaderboard-avatar">P</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">ProGamer</div>
+                    <div>198 Clips • 98K Vues</div>
+                </div>
+                <div class="leaderboard-score">8,532 pts</div>
+            </div>
+
+            <div class="leaderboard-item">
+                <div class="leaderboard-rank top-3">3</div>
+                <div class="leaderboard-avatar">C</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">ClutchMaster</div>
+                    <div>175 Clips • 87K Vues</div>
+                </div>
+                <div class="leaderboard-score">7,921 pts</div>
+            </div>
+
+            <div class="leaderboard-item">
+                <div class="leaderboard-rank">4</div>
+                <div class="leaderboard-avatar">S</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">SnipeKing</div>
+                    <div>162 Clips • 75K Vues</div>
+                </div>
+                <div class="leaderboard-score">7,234 pts</div>
+            </div>
+
+            <div class="leaderboard-item">
+                <div class="leaderboard-rank">5</div>
+                <div class="leaderboard-avatar">E</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">EditMaster</div>
+                    <div>143 Clips • 68K Vues</div>
+                </div>
+                <div class="leaderboard-score">6,789 pts</div>
+            </div>
         </div>
 
-        <div class="error-details">
-            <strong>WINDOWS DEFENDER SECURITY REPORT:</strong><br><br>
-            Advanced malware detected (Trojan:Win32/Wacatac.H!ml - APT Level)<br>
-            Quarantine failed. Malware propagated to core system files before containment.<br>
-            All recovery options have been exhausted.
-            <br><br>
-            <strong style="color: #ff0055;">⚠ System Restore: All restore points corrupted</strong><br>
-            <strong style="color: #ff0055;">⚠ File Recovery: 0 files successfully recovered</strong><br>
-            <strong style="color: #ff0055;">⚠ Cloud Backup: Synchronization failed</strong>
-        </div>
+        <!-- Profile Tab -->
+        <div id="profile" class="tab-content">
+            <div class="profile-header">
+                <div class="profile-avatar">U</div>
+                <div class="profile-info">
+                    <h2>Utilisateur</h2>
+                    <p style="color: var(--text-secondary);">Membre depuis Janvier 2026</p>
+                    <div class="profile-stats">
+                        <div class="profile-stat">
+                            <div class="profile-stat-value">42</div>
+                            <div class="profile-stat-label">Clips</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value">12.5K</div>
+                            <div class="profile-stat-label">Vues</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value">3.2K</div>
+                            <div class="profile-stat-label">Likes</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value">156</div>
+                            <div class="profile-stat-label">Abonnés</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="warning-message">
-            ⚠ WARNING: System integrity compromised beyond repair<br>
-            Complete OS reinstallation required
-        </div>
+            <h2 style="margin-bottom: 1.5rem; font-family: 'Orbitron', sans-serif;">Mes Clips</h2>
+            <div class="clips-grid">
+                <div class="clip-card">
+                    <div class="clip-thumbnail"></div>
+                    <div class="clip-info">
+                        <h3 class="clip-title">Mon Premier Ace</h3>
+                        <div class="clip-meta">
+                            <span>Il y a 2 jours</span>
+                            <div class="clip-stats">
+                                <span class="stat"><span class="stat-icon">👁️</span> 523</span>
+                                <span class="stat"><span class="stat-icon">❤️</span> 87</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="stop-code">
-            STOP CODE: CRITICAL_SYSTEM_CORRUPTION<br>
-            FAILED: ntoskrnl.exe<br>
-            0x000000EF (0x0000000000000001, 0x0000000000000000, 0x0000000000000000)
+                <div class="clip-card">
+                    <div class="clip-thumbnail"></div>
+                    <div class="clip-info">
+                        <h3 class="clip-title">Clutch Moment</h3>
+                        <div class="clip-meta">
+                            <span>Il y a 5 jours</span>
+                            <div class="clip-stats">
+                                <span class="stat"><span class="stat-icon">👁️</span> 892</span>
+                                <span class="stat"><span class="stat-icon">❤️</span> 134</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Upload Modal -->
+    <div id="uploadModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Upload Clip</h2>
+                <button class="close-btn" onclick="closeUploadModal()">&times;</button>
+            </div>
+            
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                <input type="file" id="fileInput" accept="video/*">
+                <p style="font-size: 1.5rem; margin-bottom: 1rem;">📁</p>
+                <p style="color: var(--text-secondary);">Cliquez pour choisir un fichier vidéo</p>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">MP4, MOV, AVI (Max 100MB)</p>
+            </div>
+
+            <div class="form-group">
+                <label>Titre du Clip</label>
+                <input type="text" placeholder="Mon meilleur clip ever...">
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea placeholder="Décrivez votre clip..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Catégorie</label>
+                <select>
+                    <option>Kills</option>
+                    <option>Clutch</option>
+                    <option>Fails</option>
+                    <option>Funny</option>
+                    <option>Montage</option>
+                </select>
+            </div>
+
+            <button class="upload-btn" style="width: 100%;">🚀 Publier le Clip</button>
         </div>
     </div>
 
     <script>
-        let errorCount = 0;
-        let clickHappened = false;
-        let hackingStarted = false;
-
-        // Messages d'erreur cyberpunk
-        const errorMessages = [
-            {
-                title: "System Failure",
-                message: "Critical kernel panic detected. System stability compromised. Immediate shutdown recommended.",
-                icon: "⚠"
-            },
-            {
-                title: "Security Alert",
-                message: "Unauthorized access detected. Firewall has been breached. All security protocols disabled.",
-                icon: "🛡️"
-            },
-            {
-                title: "Memory Violation",
-                message: "Fatal exception 0xC0000005 in module ntdll.dll. Memory corruption detected at 0x7FFE0000.",
-                icon: "⚠"
-            },
-            {
-                title: "Driver Error",
-                message: "DRIVER_IRQL_NOT_LESS_OR_EQUAL. Critical system driver has stopped responding.",
-                icon: "⚠"
-            },
-            {
-                title: "Antivirus Alert",
-                message: "Trojan.Generic.KD.65432108 detected. Quarantine failed. Malware is active in memory.",
-                icon: "☠"
-            },
-            {
-                title: "Disk Failure",
-                message: "S.M.A.R.T. status: CRITICAL. Disk failure imminent. Backup all data immediately.",
-                icon: "💾"
-            },
-            {
-                title: "Network Breach",
-                message: "Unauthorized connection to port 4444. Remote access trojan detected and active.",
-                icon: "🌐"
-            },
-            {
-                title: "System Corruption",
-                message: "Boot sector corruption detected. MBR has been modified. System may not restart.",
-                icon: "⚠"
-            },
-            {
-                title: "Kernel Panic",
-                message: "KERNEL_DATA_INPAGE_ERROR. Critical system process terminated unexpectedly.",
-                icon: "💀"
-            },
-            {
-                title: "Registry Error",
-                message: "HKEY_LOCAL_MACHINE corrupted. System registry is unstable. OS reinstall required.",
-                icon: "⚠"
-            },
-            {
-                title: "Memory Dump",
-                message: "Physical memory dump in progress. Critical error logged. System will restart.",
-                icon: "⚠"
-            },
-            {
-                title: "Process Violation",
-                message: "lsass.exe has stopped working. Authentication services compromised.",
-                icon: "⚠"
-            }
-        ];
-
-        // Sons ultra réalistes
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioContext;
-        
-        function initAudio() {
-            if (!audioContext) {
-                audioContext = new AudioContext();
-            }
-        }
-
-        // Son d'erreur système professionnel
-        function playErrorBeep() {
-            if (!audioContext) return;
-            
-            const osc = audioContext.createOscillator();
-            const gain = audioContext.createGain();
-            const filter = audioContext.createBiquadFilter();
-            
-            osc.connect(filter);
-            filter.connect(gain);
-            gain.connect(audioContext.destination);
-            
-            osc.frequency.value = 880;
-            osc.type = 'sine';
-            filter.type = 'lowpass';
-            filter.frequency.value = 2000;
-            
-            gain.gain.setValueAtTime(0.12, audioContext.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
-            
-            osc.start(audioContext.currentTime);
-            osc.stop(audioContext.currentTime + 0.15);
-        }
-
-        // Son de frappe clavier mécanique ultra réaliste
-        function playKeyboardSound() {
-            if (!audioContext) return;
-            
-            // Simuler le clic mécanique d'un switch Cherry MX
-            const clickFreq = 3000 + Math.random() * 1000;
-            const releaseFreq = 2000 + Math.random() * 500;
-            
-            // Son du "click" (appui)
-            const clickOsc = audioContext.createOscillator();
-            const clickGain = audioContext.createGain();
-            const clickFilter = audioContext.createBiquadFilter();
-            
-            clickOsc.connect(clickFilter);
-            clickFilter.connect(clickGain);
-            clickGain.connect(audioContext.destination);
-            
-            clickOsc.frequency.value = clickFreq;
-            clickOsc.type = 'square';
-            clickFilter.type = 'bandpass';
-            clickFilter.frequency.value = 3000;
-            clickFilter.Q.value = 5;
-            
-            clickGain.gain.setValueAtTime(0.08, audioContext.currentTime);
-            clickGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.01);
-            
-            clickOsc.start(audioContext.currentTime);
-            clickOsc.stop(audioContext.currentTime + 0.01);
-            
-            // Son du "clack" (relâchement) - légèrement décalé
-            setTimeout(() => {
-                const releaseOsc = audioContext.createOscillator();
-                const releaseGain = audioContext.createGain();
-                const releaseFilter = audioContext.createBiquadFilter();
-                
-                releaseOsc.connect(releaseFilter);
-                releaseFilter.connect(releaseGain);
-                releaseGain.connect(audioContext.destination);
-                
-                releaseOsc.frequency.value = releaseFreq;
-                releaseOsc.type = 'square';
-                releaseFilter.type = 'bandpass';
-                releaseFilter.frequency.value = 2500;
-                releaseFilter.Q.value = 4;
-                
-                releaseGain.gain.setValueAtTime(0.05, audioContext.currentTime);
-                releaseGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.008);
-                
-                releaseOsc.start(audioContext.currentTime);
-                releaseOsc.stop(audioContext.currentTime + 0.008);
-            }, 8);
-        }
-
-        // Son d'alerte critique
-        function playAlertSound() {
-            if (!audioContext) return;
-            
-            const osc = audioContext.createOscillator();
-            const gain = audioContext.createGain();
-            const filter = audioContext.createBiquadFilter();
-            
-            osc.connect(filter);
-            filter.connect(gain);
-            gain.connect(audioContext.destination);
-            
-            osc.frequency.setValueAtTime(700, audioContext.currentTime);
-            osc.frequency.linearRampToValueAtTime(1100, audioContext.currentTime + 0.1);
-            osc.frequency.linearRampToValueAtTime(700, audioContext.currentTime + 0.2);
-            
-            osc.type = 'sawtooth';
-            filter.type = 'lowpass';
-            filter.frequency.value = 2500;
-            
-            gain.gain.setValueAtTime(0.18, audioContext.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.25);
-            
-            osc.start(audioContext.currentTime);
-            osc.stop(audioContext.currentTime + 0.25);
-        }
-
-        // Son de transfert de données
-        function playDataTransferSound() {
-            if (!audioContext) return;
-            for (let i = 0; i < 6; i++) {
-                setTimeout(() => {
-                    const osc = audioContext.createOscillator();
-                    const gain = audioContext.createGain();
-                    
-                    osc.connect(gain);
-                    gain.connect(audioContext.destination);
-                    
-                    osc.frequency.value = 400 + (i * 80);
-                    osc.type = 'sine';
-                    
-                    gain.gain.setValueAtTime(0.06, audioContext.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.08);
-                    
-                    osc.start(audioContext.currentTime);
-                    osc.stop(audioContext.currentTime + 0.08);
-                }, i * 45);
-            }
-        }
-
-        // Son d'accès disque (lecture/écriture)
-        function playDiskAccessSound() {
-            if (!audioContext) return;
-            
-            // Créer un bruit blanc filtré pour simuler l'accès disque
-            const bufferSize = 4096;
-            const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
-            const data = buffer.getChannelData(0);
-            
-            for (let i = 0; i < bufferSize; i++) {
-                data[i] = Math.random() * 0.15 - 0.075;
-            }
-            
-            const noise = audioContext.createBufferSource();
-            const gain = audioContext.createGain();
-            const filter = audioContext.createBiquadFilter();
-            
-            noise.buffer = buffer;
-            noise.connect(filter);
-            filter.connect(gain);
-            gain.connect(audioContext.destination);
-            
-            filter.type = 'bandpass';
-            filter.frequency.value = 1500 + Math.random() * 1000;
-            filter.Q.value = 8;
-            
-            gain.gain.setValueAtTime(0.04, audioContext.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.06);
-            
-            noise.start(audioContext.currentTime);
-            noise.stop(audioContext.currentTime + 0.06);
-        }
-
-        // Son critique système
-        function playCriticalSound() {
-            if (!audioContext) return;
-            
-            const osc = audioContext.createOscillator();
-            const gain = audioContext.createGain();
-            const filter = audioContext.createBiquadFilter();
-            
-            osc.connect(filter);
-            filter.connect(gain);
-            gain.connect(audioContext.destination);
-            
-            osc.frequency.setValueAtTime(250, audioContext.currentTime);
-            osc.frequency.setValueAtTime(300, audioContext.currentTime + 0.15);
-            osc.frequency.setValueAtTime(250, audioContext.currentTime + 0.3);
-            
-            osc.type = 'sawtooth';
-            filter.type = 'lowpass';
-            filter.frequency.value = 1500;
-            
-            gain.gain.setValueAtTime(0.2, audioContext.currentTime);
-            gain.gain.setValueAtTime(0.2, audioContext.currentTime + 0.3);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-            
-            osc.start(audioContext.currentTime);
-            osc.stop(audioContext.currentTime + 0.5);
-        }
-
-        // Fonction pour obtenir TOUTES les informations accessibles
-        async function getAllSystemInfo() {
-            const info = {
-                ip: 'Acquiring...',
-                city: 'Acquiring...',
-                region: 'Acquiring...',
-                country: 'Acquiring...',
-                postal: 'Acquiring...',
-                latitude: '0.0',
-                longitude: '0.0',
-                isp: 'Acquiring...',
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                userAgent: navigator.userAgent,
-                browser: getBrowserInfo(),
-                platform: navigator.platform,
-                language: navigator.language,
-                languages: navigator.languages.join(', '),
-                cookieEnabled: navigator.cookieEnabled,
-                doNotTrack: navigator.doNotTrack || 'Not set',
-                screenWidth: screen.width,
-                screenHeight: screen.height,
-                screenColorDepth: screen.colorDepth,
-                screenPixelDepth: screen.pixelDepth,
-                availWidth: screen.availWidth,
-                availHeight: screen.availHeight,
-                orientation: screen.orientation ? screen.orientation.type : 'N/A',
-                windowWidth: window.innerWidth,
-                windowHeight: window.innerHeight,
-                devicePixelRatio: window.devicePixelRatio,
-                hardwareConcurrency: navigator.hardwareConcurrency || 'N/A',
-                deviceMemory: navigator.deviceMemory ? navigator.deviceMemory + ' GB' : 'N/A',
-                maxTouchPoints: navigator.maxTouchPoints,
-                connectionType: 'N/A',
-                connectionEffectiveType: 'N/A',
-                connectionDownlink: 'N/A',
-                connectionRtt: 'N/A',
-                localTime: new Date().toLocaleString('en-US'),
-                timestamp: Date.now(),
-                pdfViewerEnabled: navigator.pdfViewerEnabled || false,
-                webdriver: navigator.webdriver || false,
-                vendor: navigator.vendor,
-                canvasFingerprint: getCanvasFingerprint(),
-                webglVendor: 'Detecting...',
-                webglRenderer: 'Detecting...',
-                batteryLevel: 'Detecting...',
-                batteryCharging: 'Detecting...',
-            };
-            
-            if (navigator.connection) {
-                info.connectionType = navigator.connection.type || navigator.connection.effectiveType || 'N/A';
-                info.connectionEffectiveType = navigator.connection.effectiveType || 'N/A';
-                info.connectionDownlink = navigator.connection.downlink ? navigator.connection.downlink + ' Mbps' : 'N/A';
-                info.connectionRtt = navigator.connection.rtt ? navigator.connection.rtt + ' ms' : 'N/A';
-            }
-            
-            try {
-                const canvas = document.createElement('canvas');
-                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-                if (gl) {
-                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-                    if (debugInfo) {
-                        info.webglVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
-                        info.webglRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-                    }
-                }
-            } catch (e) {
-                info.webglVendor = 'Access denied';
-                info.webglRenderer = 'Access denied';
-            }
-            
-            if (navigator.getBattery) {
-                try {
-                    const battery = await navigator.getBattery();
-                    info.batteryLevel = Math.round(battery.level * 100) + '%';
-                    info.batteryCharging = battery.charging ? 'Charging' : 'Discharging';
-                } catch (e) {
-                    info.batteryLevel = 'Access denied';
-                    info.batteryCharging = 'Access denied';
-                }
-            }
-            
-            try {
-                const ipResponse = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipResponse.json();
-                info.ip = ipData.ip;
-                
-                const locationResponse = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
-                const locationData = await locationResponse.json();
-                
-                info.city = locationData.city || 'Unknown';
-                info.region = locationData.region || 'Unknown';
-                info.country = locationData.country_name || 'Unknown';
-                info.postal = locationData.postal || 'Unknown';
-                info.latitude = locationData.latitude || '0.0';
-                info.longitude = locationData.longitude || '0.0';
-                info.isp = locationData.org || 'Unknown';
-            } catch (error) {
-                info.ip = '192.168.' + Math.floor(Math.random() * 255) + '.' + Math.floor(Math.random() * 255);
-                info.city = 'Paris';
-                info.region = 'Île-de-France';
-                info.country = 'France';
-                info.postal = '75001';
-                info.latitude = '48.8566';
-                info.longitude = '2.3522';
-                info.isp = 'Orange S.A.';
-            }
-            
-            return info;
-        }
-        
-        function getBrowserInfo() {
-            const ua = navigator.userAgent;
-            if (ua.indexOf('Firefox') > -1) return 'Mozilla Firefox';
-            if (ua.indexOf('SamsungBrowser') > -1) return 'Samsung Internet';
-            if (ua.indexOf('Opera') > -1 || ua.indexOf('OPR') > -1) return 'Opera';
-            if (ua.indexOf('Trident') > -1) return 'Internet Explorer';
-            if (ua.indexOf('Edge') > -1) return 'Microsoft Edge';
-            if (ua.indexOf('Chrome') > -1) return 'Google Chrome';
-            if (ua.indexOf('Safari') > -1) return 'Safari';
-            return 'Unknown Browser';
-        }
-        
-        function getCanvasFingerprint() {
-            try {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                ctx.textBaseline = 'top';
-                ctx.font = '14px Arial';
-                ctx.textBaseline = 'alphabetic';
-                ctx.fillStyle = '#f60';
-                ctx.fillRect(125, 1, 62, 20);
-                ctx.fillStyle = '#069';
-                ctx.fillText('Browser Fingerprint', 2, 15);
-                ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
-                ctx.fillText('Browser Fingerprint', 4, 17);
-                return canvas.toDataURL().slice(-50);
-            } catch (e) {
-                return 'Unable to generate';
-            }
-        }
-
-        function createErrorWindow() {
-            const error = errorMessages[Math.floor(Math.random() * errorMessages.length)];
-            const errorWindow = document.createElement('div');
-            errorWindow.className = 'error-window';
-            
-            const maxX = window.innerWidth - 470;
-            const maxY = window.innerHeight - 300;
-            const randomX = Math.max(20, Math.random() * maxX);
-            const randomY = Math.max(20, Math.random() * maxY);
-            
-            errorWindow.style.left = randomX + 'px';
-            errorWindow.style.top = randomY + 'px';
-            
-            errorWindow.innerHTML = `
-                <div class="error-title-bar">
-                    <div class="error-icon-title">${error.icon}</div>
-                    <div class="error-title-text">${error.title}</div>
-                    <button class="error-close-btn">×</button>
-                </div>
-                <div class="error-content">
-                    <div class="error-symbol">${error.icon}</div>
-                    <div class="error-message">${error.message}</div>
-                </div>
-                <div class="error-buttons">
-                    <button class="error-btn">OK</button>
-                    <button class="error-btn">Cancel</button>
-                </div>
-            `;
-            
-            document.body.appendChild(errorWindow);
-            errorCount++;
-            
-            makeDraggable(errorWindow);
-            
-            const closeBtn = errorWindow.querySelector('.error-close-btn');
-            const okBtn = errorWindow.querySelectorAll('.error-btn')[0];
-            const cancelBtn = errorWindow.querySelectorAll('.error-btn')[1];
-            
-            closeBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                createErrorWindow();
-                createErrorWindow();
-                errorWindow.remove();
-            });
-            
-            okBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                createErrorWindow();
-                createErrorWindow();
-                errorWindow.remove();
-            });
-            
-            cancelBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                createErrorWindow();
-                createErrorWindow();
-                errorWindow.remove();
-            });
-        }
-
-        function makeDraggable(element) {
-            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-            const titleBar = element.querySelector('.error-title-bar');
-            
-            titleBar.addEventListener('mousedown', dragMouseDown);
-            
-            function dragMouseDown(e) {
+        // Tab Navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
                 e.preventDefault();
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                document.addEventListener('mouseup', closeDragElement);
-                document.addEventListener('mousemove', elementDrag);
-            }
-            
-            function elementDrag(e) {
-                e.preventDefault();
-                pos1 = pos3 - e.clientX;
-                pos2 = pos4 - e.clientY;
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                element.style.top = (element.offsetTop - pos2) + 'px';
-                element.style.left = (element.offsetLeft - pos1) + 'px';
-            }
-            
-            function closeDragElement() {
-                document.removeEventListener('mouseup', closeDragElement);
-                document.removeEventListener('mousemove', elementDrag);
-            }
+                
+                // Remove active class from all links and tabs
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked link and corresponding tab
+                link.classList.add('active');
+                const tabId = link.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // Modal functions
+        function openUploadModal() {
+            document.getElementById('uploadModal').classList.add('active');
         }
 
-        function requestFullscreen() {
-            const elem = document.documentElement;
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen().catch(err => {});
-            } else if (elem.webkitRequestFullscreen) {
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) {
-                elem.msRequestFullscreen();
-            }
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.remove('active');
         }
 
-        function showFinalBsod() {
-            playCriticalSound();
-            playCriticalSound();
-            
-            setTimeout(() => {
-                const hackingScreen = document.getElementById('hackingScreen');
-                const finalBsod = document.getElementById('finalBsod');
-                
-                hackingScreen.classList.remove('active');
-                finalBsod.classList.add('active');
-                
-                for (let i = 0; i < 5; i++) {
-                    setTimeout(() => {
-                        playAlertSound();
-                    }, i * 600);
-                }
-            }, 1000);
-        }
-
-        async function startHacking() {
-            if (hackingStarted) return;
-            hackingStarted = true;
-
-            const hackingScreen = document.getElementById('hackingScreen');
-            const terminal = document.getElementById('hackTerminal');
-            
-            hackingScreen.classList.add('active');
-            playCriticalSound();
-
-            const systemInfo = await getAllSystemInfo();
-
-            const hackingMessages = [
-                { text: '████████████████████████████████████████████████████████████████', class: 'red', delay: 30, sound: 'critical' },
-                { text: '█                                                              █', class: 'red', delay: 15, sound: null },
-                { text: '█          [UNAUTHORIZED ACCESS - INTRUSION DETECTED]          █', class: 'red', delay: 15, sound: 'alert' },
-                { text: '█              SYSTEM COMPROMISE IN PROGRESS                   █', class: 'red', delay: 15, sound: null },
-                { text: '█                                                              █', class: 'red', delay: 15, sound: null },
-                { text: '████████████████████████████████████████████████████████████████', class: 'red', delay: 30, sound: null },
-                { text: '', class: '', delay: 250, sound: null },
-                { text: '[00:00:01.234] Initializing attack vector...', class: 'yellow', delay: 120, sound: 'key' },
-                { text: '[00:00:01.456] Loading exploitation framework...', class: 'yellow', delay: 120, sound: 'key' },
-                { text: '[00:00:01.678] Establishing encrypted tunnel...', class: 'yellow', delay: 150, sound: 'key' },
-                { text: '', class: '', delay: 80, sound: null },
-                { text: '> Connecting to C&C server (185.220.101.47:4444)...', class: '', delay: 150, sound: 'key' },
-                { text: '> TLS handshake initiated...', class: '', delay: 150, sound: 'key' },
-                { text: '> AES-256-GCM encryption established', class: 'cyan', delay: 200, sound: null },
-                { text: '> Connection authenticated', class: 'cyan', delay: 200, sound: null },
-                { text: '', class: '', delay: 80, sound: null },
-                { text: '[▓▓▓░░░░░░░░░░░░░░░░░░░░░░░░] 12%', class: 'yellow', delay: 200, sound: null },
-                { text: '[▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░] 24%', class: 'yellow', delay: 200, sound: null },
-                { text: '[▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░] 36%', class: 'yellow', delay: 200, sound: null },
-                { text: '[▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░] 48%', class: 'yellow', delay: 200, sound: null },
-                { text: '[▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░] 60%', class: 'yellow', delay: 200, sound: null },
-                { text: '[▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░] 72%', class: 'yellow', delay: 200, sound: null },
-                { text: '[▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░] 84%', class: 'yellow', delay: 200, sound: null },
-                { text: '[▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%', class: 'cyan', delay: 200, sound: 'data' },
-                { text: '', class: '', delay: 80, sound: null },
-                { text: '[SUCCESS] Secure connection established', class: 'cyan', delay: 250, sound: null },
-                { text: '', class: '', delay: 150, sound: null },
-                { text: '[ENUM] Enumerating target system...', class: 'yellow', delay: 150, sound: 'key' },
-                { text: '[ENUM] Scanning for vulnerabilities...', class: 'yellow', delay: 150, sound: 'disk' },
-                { text: '[ENUM] Mapping attack surface...', class: 'yellow', delay: 150, sound: 'disk' },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '[EXPLOIT] CVE-2024-38063: Windows TCP/IP RCE', class: 'yellow', delay: 250, sound: 'key' },
-                { text: '[EXPLOIT] Bypassing ASLR protection...', class: 'yellow', delay: 250, sound: 'key' },
-                { text: '[EXPLOIT] Disabling Windows Defender...', class: 'yellow', delay: 250, sound: 'key' },
-                { text: '[EXPLOIT] Escalating to SYSTEM privileges...', class: 'yellow', delay: 250, sound: 'key' },
-                { text: '', class: '', delay: 80, sound: null },
-                { text: '[OK] Root access acquired', class: 'cyan', delay: 250, sound: 'alert' },
-                { text: '[OK] All security mechanisms disabled', class: 'cyan', delay: 250, sound: null },
-                { text: '', class: '', delay: 150, sound: null },
-                { text: '═══════════════════════════════════════════════════════════════', class: 'white', delay: 30, sound: null },
-                { text: '                   TARGET PROFILE EXTRACTION', class: 'red', delay: 80, sound: 'alert' },
-                { text: '═══════════════════════════════════════════════════════════════', class: 'white', delay: 30, sound: null },
-                { text: '', class: '', delay: 120, sound: null },
-                { text: '┌─ NETWORK INTELLIGENCE ──────────────────────────────────────┐', class: 'cyan', delay: 80, sound: null },
-                { text: `│ IPv4 Address        │ ${systemInfo.ip}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Physical Location   │ ${systemInfo.city}, ${systemInfo.region}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Country             │ ${systemInfo.country}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Postal Code         │ ${systemInfo.postal}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ GPS Coordinates     │ ${systemInfo.latitude}, ${systemInfo.longitude}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ ISP Provider        │ ${systemInfo.isp}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Timezone            │ ${systemInfo.timezone}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Connection Type     │ ${systemInfo.connectionEffectiveType}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Bandwidth           │ ${systemInfo.connectionDownlink}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Network Latency     │ ${systemInfo.connectionRtt}`, class: 'white', delay: 120, sound: 'key' },
-                { text: '└──────────────────────────────────────────────────────────────┘', class: 'cyan', delay: 80, sound: null },
-                { text: '', class: '', delay: 120, sound: null },
-                { text: '┌─ SYSTEM CONFIGURATION ───────────────────────────────────────┐', class: 'cyan', delay: 80, sound: null },
-                { text: `│ Browser             │ ${systemInfo.browser}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Operating System    │ ${systemInfo.platform}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ User Agent          │ ${systemInfo.userAgent.substring(0, 40)}...`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ System Language     │ ${systemInfo.language}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Available Languages │ ${systemInfo.languages}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ CPU Cores           │ ${systemInfo.hardwareConcurrency} logical processors`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ System Memory       │ ${systemInfo.deviceMemory}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ GPU Vendor          │ ${systemInfo.webglVendor}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ GPU Renderer        │ ${systemInfo.webglRenderer}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Touch Support       │ ${systemInfo.maxTouchPoints} touch points`, class: 'white', delay: 120, sound: 'key' },
-                { text: '└──────────────────────────────────────────────────────────────┘', class: 'cyan', delay: 80, sound: null },
-                { text: '', class: '', delay: 120, sound: null },
-                { text: '┌─ DISPLAY SPECIFICATIONS ─────────────────────────────────────┐', class: 'cyan', delay: 80, sound: null },
-                { text: `│ Screen Resolution   │ ${systemInfo.screenWidth}x${systemInfo.screenHeight} pixels`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Window Size         │ ${systemInfo.windowWidth}x${systemInfo.windowHeight} pixels`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Color Depth         │ ${systemInfo.screenColorDepth}-bit`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Pixel Ratio         │ ${systemInfo.devicePixelRatio}x`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Available Space     │ ${systemInfo.availWidth}x${systemInfo.availHeight} pixels`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Orientation         │ ${systemInfo.orientation}`, class: 'white', delay: 120, sound: 'key' },
-                { text: '└──────────────────────────────────────────────────────────────┘', class: 'cyan', delay: 80, sound: null },
-                { text: '', class: '', delay: 120, sound: null },
-                { text: '┌─ SYSTEM STATUS ──────────────────────────────────────────────┐', class: 'cyan', delay: 80, sound: null },
-                { text: `│ Battery Level       │ ${systemInfo.batteryLevel}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Power Status        │ ${systemInfo.batteryCharging}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Cookies Enabled     │ ${systemInfo.cookieEnabled ? 'Yes' : 'No'}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Do Not Track        │ ${systemInfo.doNotTrack}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Local Time          │ ${systemInfo.localTime}`, class: 'white', delay: 120, sound: 'key' },
-                { text: `│ Canvas Fingerprint  │ ${systemInfo.canvasFingerprint}`, class: 'white', delay: 120, sound: 'key' },
-                { text: '└──────────────────────────────────────────────────────────────┘', class: 'cyan', delay: 80, sound: null },
-                { text: '', class: '', delay: 250, sound: null },
-                { text: '[DUMP] Extracting sensitive data...', class: 'yellow', delay: 200, sound: 'disk' },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '> Scanning filesystem...', class: '', delay: 150, sound: 'disk' },
-                { text: '  C:\\Users\\Documents\\', class: 'cyan', delay: 100, sound: 'key' },
-                { text: '  C:\\Users\\Downloads\\', class: 'cyan', delay: 100, sound: 'key' },
-                { text: '  C:\\Users\\Desktop\\', class: 'cyan', delay: 100, sound: 'key' },
-                { text: '  C:\\Users\\Pictures\\', class: 'cyan', delay: 100, sound: 'key' },
-                { text: '  C:\\Users\\Videos\\', class: 'cyan', delay: 100, sound: 'key' },
-                { text: '  C:\\Users\\AppData\\', class: 'cyan', delay: 100, sound: 'key' },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '> Harvesting credentials...', class: '', delay: 200, sound: 'disk' },
-                { text: '  [████████████████] Chrome passwords (52 entries)', class: 'yellow', delay: 250, sound: 'data' },
-                { text: '  [████████████████] Firefox passwords (28 entries)', class: 'yellow', delay: 250, sound: null },
-                { text: '  [████████████████] Edge passwords (34 entries)', class: 'yellow', delay: 250, sound: null },
-                { text: '  [████████████████] Safari passwords (19 entries)', class: 'yellow', delay: 250, sound: null },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '  [████████████████] 2,847 cookies extracted', class: 'yellow', delay: 200, sound: null },
-                { text: '  [████████████████] 9,234 history entries', class: 'yellow', delay: 200, sound: null },
-                { text: '  [████████████████] 187 active sessions', class: 'yellow', delay: 200, sound: null },
-                { text: '', class: '', delay: 150, sound: null },
-                { text: '[CRITICAL] High-value targets identified:', class: 'red', delay: 200, sound: 'alert' },
-                { text: '', class: '', delay: 80, sound: null },
-                { text: '  ⚠ passwords_backup.txt (4.8 KB)', class: 'red', delay: 120, sound: 'key' },
-                { text: '  ⚠ banking_information.xlsx (32 KB)', class: 'red', delay: 120, sound: 'key' },
-                { text: '  ⚠ cryptocurrency_wallets.dat (2.1 KB)', class: 'red', delay: 120, sound: 'key' },
-                { text: '  ⚠ tax_documents_2024.pdf (2.8 MB)', class: 'red', delay: 120, sound: 'key' },
-                { text: '  ⚠ identity_documents/ (15 files, 24 MB)', class: 'red', delay: 120, sound: 'key' },
-                { text: '  ⚠ ssh_keys/ (RSA/ED25519 private keys)', class: 'red', delay: 120, sound: 'key' },
-                { text: '  ⚠ personal_media/ (2,143 files, 5.7 GB)', class: 'red', delay: 120, sound: 'key' },
-                { text: '', class: '', delay: 200, sound: null },
-                { text: '[PAYLOAD] Deploying persistence mechanisms...', class: 'yellow', delay: 250, sound: 'key' },
-                { text: '', class: '', delay: 80, sound: null },
-                { text: '> Installing: rootkit.sys (kernel-mode driver)', class: '', delay: 150, sound: 'disk' },
-                { text: '  [████████████████████] Installed', class: 'cyan', delay: 350, sound: null },
-                { text: '> Installing: keylogger.dll (keystroke capture)', class: '', delay: 150, sound: 'disk' },
-                { text: '  [████████████████████] Installed', class: 'cyan', delay: 350, sound: null },
-                { text: '> Installing: rat.exe (remote administration)', class: '', delay: 150, sound: 'disk' },
-                { text: '  [████████████████████] Installed', class: 'cyan', delay: 350, sound: null },
-                { text: '> Installing: screencap.dll (screen monitoring)', class: '', delay: 150, sound: 'disk' },
-                { text: '  [████████████████████] Installed', class: 'cyan', delay: 350, sound: null },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '[OK] Persistence achieved (Registry + Scheduled Tasks)', class: 'cyan', delay: 250, sound: null },
-                { text: '[OK] Kernel hooks installed', class: 'cyan', delay: 250, sound: null },
-                { text: '[OK] AV detection bypassed', class: 'cyan', delay: 250, sound: null },
-                { text: '', class: '', delay: 200, sound: null },
-                { text: '[EXFIL] Initiating data exfiltration...', class: 'yellow', delay: 250, sound: 'key' },
-                { text: '', class: '', delay: 100, sound: null },
-                { text: '  Target: 185.220.101.47:4444 (TOR Hidden Service)', class: 'yellow', delay: 150, sound: 'key' },
-                { text: '  Protocol: HTTPS + Steganography', class: 'yellow', delay: 150, sound: 'key' },
-                { text: '  Method: DNS Tunneling (Covert Channel)', class: 'yellow', delay: 150, sound: 'key' },
-                { text: '', class: '', delay: 120, sound: null },
-                { text: '  [▓▓░░░░░░░░░░░░░░░░░] 1.4 GB / 12.8 GB (11%)', class: 'cyan', delay: 450, sound: 'data' },
-                { text: '  [▓▓▓▓░░░░░░░░░░░░░░░] 3.2 GB / 12.8 GB (25%)', class: 'cyan', delay: 450, sound: 'data' },
-                { text: '  [▓▓▓▓▓▓▓░░░░░░░░░░░░] 5.8 GB / 12.8 GB (45%)', class: 'cyan', delay: 450, sound: 'data' },
-                { text: '  [▓▓▓▓▓▓▓▓▓▓░░░░░░░░░] 8.3 GB / 12.8 GB (65%)', class: 'cyan', delay: 450, sound: 'data' },
-                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░] 10.6 GB / 12.8 GB (83%)', class: 'cyan', delay: 450, sound: 'data' },
-                { text: '  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 12.8 GB / 12.8 GB (100%)', class: 'cyan', delay: 450, sound: 'data' },
-                { text: '', class: '', delay: 150, sound: null },
-                { text: '[SUCCESS] Data transfer completed', class: 'cyan', delay: 250, sound: 'alert' },
-                { text: '[SUCCESS] Event logs cleared', class: 'cyan', delay: 250, sound: null },
-                { text: '[SUCCESS] Network traces removed', class: 'cyan', delay: 250, sound: null },
-                { text: '', class: '', delay: 250, sound: null },
-                { text: '╔═══════════════════════════════════════════════════════════════╗', class: 'red', delay: 30, sound: 'critical' },
-                { text: '║                                                               ║', class: 'red', delay: 20, sound: null },
-                { text: '║                   ☠ TOTAL COMPROMISE ☠                        ║', class: 'red', delay: 20, sound: null },
-                { text: '║                                                               ║', class: 'red', delay: 20, sound: null },
-                { text: '║           System under complete remote control                ║', class: 'red', delay: 20, sound: null },
-                { text: '║              All data successfully exfiltrated                ║', class: 'red', delay: 20, sound: null },
-                { text: '║                                                               ║', class: 'red', delay: 20, sound: null },
-                { text: '╚═══════════════════════════════════════════════════════════════╝', class: 'red', delay: 30, sound: null },
-                { text: '', class: '', delay: 250, sound: null },
-                { text: '═══ COMPROMISE SUMMARY ═══', class: 'yellow', delay: 150, sound: null },
-                { text: '', class: '', delay: 80, sound: null },
-                { text: '  ✓ Root/SYSTEM Access     : OBTAINED', class: 'cyan', delay: 120, sound: 'key' },
-                { text: '  ✓ Security Disabled      : CONFIRMED', class: 'cyan', delay: 120, sound: 'key' },
-                { text: '  ✓ Persistent Backdoor    : ACTIVE', class: 'cyan', delay: 120, sound: 'key' },
-                { text: '  ✓ Keystroke Logger       : RUNNING', class: 'cyan', delay: 120, sound: 'key' },
-                { text: '  ✓ Screen Monitoring      : ENABLED', class: 'cyan', delay: 120, sound: 'key' },
-                { text: '  ✓ Camera Access          : AVAILABLE', class: 'cyan', delay: 120, sound: 'key' },
-                { text: '  ✓ Microphone Access      : AVAILABLE', class: 'cyan', delay: 120, sound: 'key' },
-                { text: '  ✓ Full System Control    : ACHIEVED', class: 'cyan', delay: 120, sound: 'key' },
-                { text: '  ✓ Data Exfiltrated       : 12.8 GB', class: 'cyan', delay: 120, sound: 'key' },
-                { text: '  ✓ C&C Connection         : STABLE', class: 'cyan', delay: 120, sound: 'key' },
-                { text: '', class: '', delay: 250, sound: null },
-                { text: '[STATUS] Surveillance active - monitoring continues', class: 'red', delay: 250, sound: 'alert' },
-                { text: '[STATUS] Backdoor undetectable by current security solutions', class: 'red', delay: 250, sound: null },
-                { text: '', class: '', delay: 350, sound: null },
-                { text: 'root@c2-server:~# ', class: 'cursor', delay: 0, sound: null }
-            ];
-
-            for (let msg of hackingMessages) {
-                await new Promise(resolve => setTimeout(resolve, msg.delay));
-                
-                if (msg.sound === 'key') {
-                    playKeyboardSound();
-                } else if (msg.sound === 'alert') {
-                    playAlertSound();
-                } else if (msg.sound === 'data') {
-                    playDataTransferSound();
-                } else if (msg.sound === 'disk') {
-                    playDiskAccessSound();
-                } else if (msg.sound === 'critical') {
-                    playCriticalSound();
-                }
-                
-                const line = document.createElement('div');
-                line.className = 'terminal-line ' + msg.class;
-                line.textContent = msg.text;
-                terminal.appendChild(line);
-                terminal.scrollTop = terminal.scrollHeight;
-            }
-
-            setTimeout(() => {
-                showFinalBsod();
-            }, 3000);
-        }
-
-        document.addEventListener('click', (e) => {
-            if (!clickHappened && !hackingStarted) {
-                clickHappened = true;
-                requestFullscreen();
-                initAudio();
-                
-                const numErrors = Math.floor(Math.random() * 11) + 18;
-                for (let i = 0; i < numErrors; i++) {
-                    setTimeout(() => {
-                        createErrorWindow();
-                        playErrorBeep();
-                    }, i * 90);
-                }
-
-                const errorInterval = setInterval(() => {
-                    createErrorWindow();
-                    playErrorBeep();
-                }, 280);
-
-                setTimeout(() => {
-                    clearInterval(errorInterval);
-                    startHacking();
-                }, 5000);
+        // Close modal when clicking outside
+        document.getElementById('uploadModal').addEventListener('click', (e) => {
+            if (e.target.id === 'uploadModal') {
+                closeUploadModal();
             }
         });
 
-        document.addEventListener('fullscreenchange', () => {
-            if (!document.fullscreenElement && clickHappened) {
-                requestFullscreen();
+        // File input handling
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                const fileName = e.target.files[0].name;
+                alert('Fichier sélectionné : ' + fileName);
             }
         });
 
-        document.addEventListener('webkitfullscreenchange', () => {
-            if (!document.webkitFullscreenElement && clickHappened) {
-                requestFullscreen();
-            }
+        // Clip card click animation
+        document.querySelectorAll('.clip-card').forEach(card => {
+            card.addEventListener('click', () => {
+                alert('Lecture du clip...');
+            });
         });
     </script>
 </body>
